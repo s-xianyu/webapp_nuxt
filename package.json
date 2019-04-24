@@ -1,0 +1,37 @@
+{
+  "name": "webapp_nuxt",
+  "version": "1.0.0",
+  "description": "My kryptonian Nuxt.js project",
+  "author": "ss",
+  "private": true,
+  "scripts": {
+    "dev": "nuxt",
+    "build": "nuxt build",
+    "start": "nuxt start",
+    "generate": "nuxt generate",
+    "test": "ava"
+  },
+  "config": {
+    "nuxt": {
+      "host": "127.0.0.1",
+      "port": "2019"
+    }
+  },
+  "dependencies": {
+    "cross-env": "^5.2.0",
+    "css-loader": "^2.1.1",
+    "node-sass": "^4.11.0",
+    "nuxt": "^2.4.0",
+    "sass-loader": "^7.1.0",
+    "style-loader": "^0.23.1"
+  },
+  "devDependencies": {
+    "nodemon": "^1.18.9",
+    "@vue/test-utils": "^1.0.0-beta.27",
+    "ava": "^1.0.1",
+    "browser-env": "^3.2.5",
+    "require-extension-hooks": "^0.3.3",
+    "require-extension-hooks-babel": "^0.1.1",
+    "require-extension-hooks-vue": "^2.0.0"
+  }
+}

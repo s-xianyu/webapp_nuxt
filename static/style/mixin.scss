@@ -1,0 +1,50 @@
+$f60:#f60;
+$c333:#333;
+$c666:#666;
+$c999:#999;
+$bbb:#bbb;
+$ddd:#ddd;
+$fff:#fff;
+.f60{color:$f60}
+//背景图片
+@mixin bis($url) {
+  background: {
+    image: url($url);
+    repeat: no-repeat;
+    size: 100% 100%;
+  }
+}
+
+//圆角
+@mixin borRadius($radius){
+  border-radius: $radius;
+  -webkit-border-radius: $radius;
+  -moz-border-radius: $radius;
+  -ms-border-radius: $radius;
+  -o-border-radius: $radius;
+}
+//定位居中
+@mixin center{
+  position:absolute;
+  top:50%;
+  left:50%;
+  transform: translate(-50%,-50%);
+}
+
+//宽and高
+@mixin wh($width,$height){
+  width: $width;
+  height:$height;
+}
+
+//字体大小、行高、字体
+@mixin font($size, $line-height, $family: 'Microsoft YaHei') {
+  font: #{$size}/#{$line-height} $family;
+}
+
+//flex
+@mixin flexCenter{
+  display: flex;
+  justify-content: center;
+  align-items:center;
+}

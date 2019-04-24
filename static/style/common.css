@@ -1,0 +1,38 @@
+@charset"UTF-8";
+html *{outline:0;-webkit-text-size-adjust:none;-webkit-tap-highlight-color:transparent;font-family:"Helvetica Neue",Helvetica,Arial,sans-serif;margin:0 auto;padding:0}
+body{font-size:.4rem;width:12.4rem;height:100%;background-color:#f7f7f7;color:#333;margin:0 auto;padding:0}
+img{display:block;max-width:100%}
+dd,dl,dt,li,ol,ul{list-style:none;margin:0;padding:0}
+.clear:after{visibility:hidden;display:block;font-size:0;content:".";clear:both;height:0}
+* html .clear{zoom:1}a{text-decoration:none;outline:0;color:#666}
+a:not(href){cursor:pointer}
+a:visited{color:#333}
+::selection{background:#2566b8;color:#fff}
+i,em{font-style:normal}
+input,textarea{-webkit-appearance:none;border-radius:0;font-size:.22rem;padding:0}
+div,span,header,footer,nav,section,aside,article,ul,dl,dt,dd,
+li,p,h1,h2,h3,h4,h5,h6,i,b,textarea,button,input,select,
+figure,figcaption{padding:0;margin:0;list-style:none;font-style:normal;text-decoration:none;border:none;font-weight:normal;box-sizing:border-box;-webkit-tap-highlight-color:transparent;-webkit-font-smoothing:antialiased}
+body:hover,div:hover,span:hover,header:hover,footer:hover,nav:hover,
+section:hover,aside:hover,article:hover,ul:hover,dl:hover,dt:hover,
+dd:hover,li:hover,a:hover,p:hover,
+h1:hover,h2:hover,h3:hover,h4:hover,h5:hover,
+h6:hover,i:hover,b:hover,textarea:hover,button:hover,
+input:hover,select:hover,figure:hover,figcaption:hover{outline:none}
+.pad3{padding:0 .3rem}
+.textc{text-align:center}
+.fl{float:left}
+.fr{float:right}
+.hide{display:none}
+.show{display:block}
+.ellipse{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+#app {
+  position:relative;
+}
+.nav {
+  margin-bottom:1.5rem;
+}
+nav {
+  background: #fff;
+  padding-top:1.6rem;
+}
