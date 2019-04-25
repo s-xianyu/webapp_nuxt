@@ -42,12 +42,14 @@ export default {
   ** Global CSS
   */
   css: [
+    'mint-ui/lib/style.css'
   ],
 
   /*
   ** Plugins to load before mounting the App
   */
   plugins: [
+    {src:'~plugins/mint-ui',ssr:true}
   ],
 
   /*

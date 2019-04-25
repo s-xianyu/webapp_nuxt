@@ -12,6 +12,11 @@
   import FooterTab from '~/components/common/footer'
 
   export default {
+    head () {
+      return {
+        title:'我的个人中心'
+      }
+    },
     data () {
       return {
         loadingShow:true,

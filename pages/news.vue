@@ -12,6 +12,11 @@
   import FooterTab from '~/components/common/footer'
 
   export default {
+    head () {
+      return {
+        title:'咸鱼-买车第一站'
+      }
+    },
     data () {
       return {
         loadingShow:true,
@@ -25,7 +30,7 @@
       this.loadingShow = true;
       setTimeout(()=>{
         this.loadingShow = false;
-      },2000)
+      },1000)
     },
   }
 </script>

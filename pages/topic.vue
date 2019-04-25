@@ -12,6 +12,11 @@
   import FooterTab from '~/components/common/footer'
 
   export default {
+    head () {
+      return {
+        title:'咸鱼-批发快车道'
+      }
+    },
     data () {
       return {
         loadingShow:true,
