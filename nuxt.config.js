@@ -56,6 +56,26 @@ export default {
   ** Nuxt.js modules
   */
   modules: [
+    // Doc: https://github.com/nuxt-community/axios-module#usage
+    '@nuxtjs/axios',
+    '@nuxtjs/proxy'
+  ],
+  /*
+  ** Axios module configuration
+  */
+  axios: {
+    // See https://github.com/nuxt-community/axios-module#options
+    proxy: true
+  },
+  proxy: [
+    [
+      '/api',
+      {
+        // target:'https://www.hx2car.com.cn',
+        target:'http://www.2schome.net',
+        pathRewrite: { '^/api' : '/' }
+      }
+    ]
   ],
 
   /*

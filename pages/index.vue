@@ -11,7 +11,7 @@
 import loading from '~/components/common/loading'
 import Swiper from '~/components/common/swiper'
 import FooterTab from '~/components/common/footer'
-import axios from "../plugins/axios";
+import axios from '~/plugins/axios'
 
 export default {
   head () {
@@ -33,7 +33,8 @@ export default {
         ,
         {bussinessman : '',id : '0',name : '', href : 'http://m.hx2car.com/mobile/luckDrawHtm.htm?from=appClient&actMobile=13646821240', url : 'http://www.hx2car.com/upload/daily/normal/MobileIndexAds/MobileIndexTop/2018/20181204140616.jpg',smallUrl:'http://www.hx2car.com/upload/daily/normal/MobileIndexAds/MobileIndexTop/2018/20181204140616_0.jpg'}
 
-      ]
+      ],
+      type:'1'
     }
   },
   components: {
@@ -42,15 +43,17 @@ export default {
     FooterTab
   },
   mounted () {
+    this.getData()
+  },
+  computed:{
+    params (){
+      return {
+        type:this.type
+      }
+    },
   },
   methods:{
-    message () {
-      this.$toast('Hello world!')
-    },
-    okFun () {
-      this.$messagebox.alert("操作成功").then(action => {
-
-      });
+    getData () {
     }
   }
 }
