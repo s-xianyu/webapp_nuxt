@@ -1,36 +1,158 @@
 <template>
-  <transition name="index">
-    <div class="body">
-      <h1>topic</h1>
-      <FooterTab/>
-      <loading v-if="loadingShow"/>
-    </div>
-  </transition>
-</template>
-<script>
-  import loading from '~/components/common/loading'
-  import FooterTab from '~/components/common/footer'
+  <div class="page-loadmore">
+    <h1 class="page-title">Pull up</h1>
+    <p class="page-loadmore-desc">在列表底部, 按住 - 上拉 - 释放可以获取更多数据</p>
+    <div class="page-loadmore-wrapper" ref="wrapper" :style="{ height: wrapperHeight + 'px' }">
+      <mt-loadmore :top-method="loadTop" :bottom-method="loadBottom" ref="loadmore">
+        
+        <ul class="page-loadmore-list">
+          <li v-for="item in list" class="page-loadmore-listitem">{{ item }}</li>
+        </ul>
 
+
+       <div slot="top" class="mint-loadmore-top">
+          <span v-show="topStatus !== 'loading'" :class="{ 'is-rotate': topStatus === 'drop' }">↓</span>
+          <span v-show="topStatus === 'loading'">
+            <mt-spinner type="snake"></mt-spinner>
+          </span>
+        </div>    
+
+
+        <div slot="bottom" class="mint-loadmore-bottom">
+          <span v-show="bottomStatus !== 'loading'" :class="{ 'is-rotate': bottomStatus === 'drop' }">↑</span>
+          <span v-show="bottomStatus === 'loading'">
+            <mt-spinner type="snake"></mt-spinner>
+          </span>
+        </div>
+      </mt-loadmore>
+
+
+
+
+    </div>
+  </div>
+</template>
+
+<style>
+ 
+
+
+.loading-background, .mint-loadmore-top span {
+    -webkit-transition: .2s linear;
+    transition: .2s linear
+}
+.mint-loadmore-top span {
+    display: inline-block;
+    vertical-align: middle
+}
+
+.mint-loadmore-top span.is-rotate {
+    -webkit-transform: rotate(180deg);
+    transform: rotate(180deg)
+}
+
+.page-loadmore .mint-spinner {
+    display: inline-block;
+    vertical-align: middle
+}
+
+.page-loadmore-desc {
+    text-align: center;
+    color: #666;
+    padding-bottom: 5px
+}
+
+.page-loadmore-desc:last-of-type,
+.page-loadmore-listitem {
+    border-bottom: 1px solid #eee
+}
+
+.page-loadmore-listitem {
+    height: 50px;
+    line-height: 50px;
+    text-align: center
+}
+
+.page-loadmore-listitem:first-child {
+    border-top: 1px solid #eee
+}
+
+.page-loadmore-wrapper {
+    overflow: scroll
+}
+
+.mint-loadmore-bottom span {
+    display: inline-block;
+    -webkit-transition: .2s linear;
+    transition: .2s linear;
+    vertical-align: middle
+}
+
+.mint-loadmore-bottom span.is-rotate {
+    -webkit-transform: rotate(180deg);
+    transform: rotate(180deg)
+}
+
+</style>
+
+<script type="text/babel">
   export default {
-    head () {
+    data() {
       return {
-        title:'咸鱼-批发快车道'
+        list: [],
+        bottomStatus: '',
+        wrapperHeight: 0,
+        topStatus: '',
+      };
+    },
+
+    methods: {
+      loadBottom() {
+        debugger
+        setTimeout(() => {
+          let lastValue = this.list[this.list.length - 1];
+          if (lastValue < 40) {
+            for (let i = 1; i <= 10; i++) {
+              this.list.push(lastValue + i);
+            }
+          } else {
+            this.allLoaded = true;
+          }
+          this.$refs.loadmore.onBottomLoaded();
+        }, 1500);
+      },
+    
+
+
+
+
+
+
+
+      loadTop() {
+        debugger
+        setTimeout(() => {
+          let firstValue = this.list[0];
+          for (let i = 1; i <= 10; i++) {
+            this.list.unshift(firstValue - i);
+          }
+          this.$refs.loadmore.onTopLoaded();
+        }, 1500);
+      },
+    
+},
+
+
+
+
+    created() {
+      for (let i = 1; i <= 20; i++) {
+        this.list.push(i);
       }
     },
-    data () {
-      return {
-        loadingShow:true,
-      }
-    },
-    components: {
-      loading,
-      FooterTab
-    },
-    mounted () {
-      this.loadingShow = true;
-      setTimeout(()=>{
-        this.loadingShow = false;
-      },2000)
-    },
-  }
+
+    mounted() {
+      this.wrapperHeight = document.documentElement.clientHeight - this.$refs.wrapper.getBoundingClientRect().top;
+    }
+  };
 </script>

@@ -2,6 +2,9 @@ import pkg from './package'
 
 export default {
   mode: 'universal',
+  // router:{
+  //   base:'/app/'
+  // },
 
   /*
   ** Headers of the page
@@ -26,7 +29,8 @@ export default {
     ],
     link: [
       { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' },
-      { rel: 'stylesheet',  href: '/style/common.css' }
+      { rel: 'stylesheet',  href: '/style/common.css' },
+      { rel: 'stylesheet',  href: '/iconFont/iconfont.css' }
     ],
     script:[
       { src: '/js/rem.js' }
@@ -36,7 +40,7 @@ export default {
   /*
   ** Customize the progress-bar color
   */
-  loading: { color: '#fff' },
+  loading: { color: '#f60' },
 
   /*
   ** Global CSS
@@ -49,7 +53,9 @@ export default {
   ** Plugins to load before mounting the App
   */
   plugins: [
-    {src:'~plugins/mint-ui',ssr:true}
+    {src:'@/plugins/mint-ui',ssr:true},
+    {src:'@/plugins/router',ssr:true},
+    {src:'@/config/util/filters',ssr:false}
   ],
 
   /*
@@ -71,8 +77,8 @@ export default {
     [
       '/api',
       {
-        // target:'https://www.hx2car.com.cn',
-        target:'http://www.2schome.net',
+        target:'https://www.hx2car.com.cn',
+        // target:'http://www.2schome.net',
         pathRewrite: { '^/api' : '/' }
       }
     ]

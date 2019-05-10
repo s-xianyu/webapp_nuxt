@@ -1,8 +1,10 @@
+// 底部导航模块
+
 <template>
     <footer class="footer">
       <ul>
         <router-link tag="li" to="/"><div><span class="iconfont icon-shouye"></span><em>首页</em></div></router-link>
-        <router-link tag="li" to="/news"><div><span class="iconfont icon-yunshu"></span><em>买车</em></div></router-link>
+        <router-link tag="li" to="/carList"><div><span class="iconfont icon-yunshu"></span><em>买车</em></div></router-link>
         <router-link tag="li" to="/topic"><div><span class="iconfont icon-pengyouquan"></span><em>批发</em></div></router-link>
         <router-link tag="li" to="/home"><div><span class="iconfont icon-geren"></span><em>我的</em></div></router-link>
       </ul>

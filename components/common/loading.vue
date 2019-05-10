@@ -1,3 +1,5 @@
+//  加载loading图表
+ 
  <template>
 	<div class="loading_container">
     <div class="svg">
@@ -18,7 +20,11 @@ export default {
 <style lang="scss" scoped>
   @import '~static/style/mixin';
   .loading_container{
-    @include center;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    -webkit-transform: translate(-50%, -50%);
+    transform: translate(-50%, -50%);
     @include wh(2.3rem,2.3rem);
     @include borRadius(.2rem);
     background:rgba(0,0,0,.5);

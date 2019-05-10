@@ -1,7 +1,20 @@
+// 登录
+
 <template>
   <div class="body">
     <Header :heads="header"/>
-    <div v-if="isLogin" class="main">
+    <div v-if="!isLogin" class="main">
+      <mt-field label="用户名" placeholder="请输入用户名" v-model="username"></mt-field>
+      <mt-field label="密码" placeholder="请输入密码" type="password" v-model="password"></mt-field>
+      <mt-field label="手机号" placeholder="请输入手机号" type="tel" v-model="phone"></mt-field>
+      <mt-field label="自我介绍" placeholder="自我介绍" type="textarea" rows="4" v-model="introduction"></mt-field>
+      <div class="text">
+        <router-link to="/">忘记密码</router-link>
+        <router-link to="/">用户隐私</router-link>
+      </div>
+      <mt-button size="large" type="primary" @click.native="getLogin">登录</mt-button>
+    </div>
+    <div v-else class="main">
       <mt-button class="outLogin" size="large" type="primary" @click.native="outLogin">退出</mt-button>
     </div>
      <FooterTab/>
@@ -9,6 +22,7 @@
 </template>
 
 <script>
+  import { Toast } from 'mint-ui';
   import Header from '~/components/common/back_head';
   import FooterTab from '~/components/common/footer';
   import {mapMutations,mapState,mapActions} from 'vuex';
@@ -32,12 +46,22 @@
       ...mapState(['isLogin'])
     },
     mounted(){
+      this.getUserInfo();
     },
     methods:{
-      ...mapMutations(['OUT_USER']),
+      ...mapMutations(['GET_USER','OUT_USER']),
+      ...mapActions(['getUserInfo']),
+      getLogin(){
+        if(this.username === ''){
+          Toast('用户名不能为空!')
+        }else if(this.password === ''){
+          Toast('密码不能为空')
+        }else{
+          this.GET_USER(this.username);
+        }
+      },
       outLogin(){
         this.OUT_USER();
-        this.$router.push('/')
       }
     }
   }
