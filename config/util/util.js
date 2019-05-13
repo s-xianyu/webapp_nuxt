@@ -116,5 +116,10 @@ let phoneReg = (phone) =>{
     return true;
   }
 };
-Vue.prototype .$phoneReg =phoneReg;
+Vue.prototype.$phoneReg =phoneReg;
+
+let history = (val) =>{
+  window.history.go(val);
+};
+Vue.prototype.$history = history;
 

@@ -9,7 +9,7 @@
 </template>
 
 <script>
-  import Header from '~/components/common/back_head';
+  import Header from '~/components/common/title_head';
   import FooterTab from '~/components/common/footer';
   import {mapMutations,mapState,mapActions} from 'vuex';
   export default {

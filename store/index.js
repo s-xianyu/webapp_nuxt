@@ -6,7 +6,7 @@ Vue.use(Vuex)
 export const state = () => ({
 
   // 地区选择
-  city:'全国',
+  city:'怒江傈僳族自治州',
   // 登录弹框展示
   loginShow:false,
   //浏览器高度

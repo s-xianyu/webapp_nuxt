@@ -3,7 +3,7 @@
     <Header :heads="header"/>
     <img src="http://static.hx2cars.com/resource/web/mobpages/images/404.png" alt="">
     <div class="text">
-      <span @click="back">返回上一页</span>
+      <span @click="$history(-1)">返回上一页</span>
       <router-link tag="span" to="/">返回首页</router-link>
     </div>
   </div>
@@ -31,9 +31,6 @@
       Header
     },
     methods:{
-      back(){
-        history.go(-1);
-      }
     }
   }
 </script>

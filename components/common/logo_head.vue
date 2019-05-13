@@ -1,4 +1,4 @@
-// 带搜索logo的头部导航
+// 带logo的头部导航
 
 <template>
   <div class="header">
@@ -11,29 +11,11 @@
       <div class="mltSearch">
         <span>我要找车</span>
       </div>
-      <div class="mlRight" v-if="loginBtn">
+      <div class="mlRight">
         <div @click="getLogin" class="login" v-if="!isLogin">登录</div>
         <router-link tag="div" to="/home" v-else class="iconfont icon-yonghu home"></router-link>
       </div>
-      <div class="mlRight" v-else>
-        <div class="iconfont icon-yonghu home" @click="mlTopBoxFun"></div>
-      </div>
     </div>
-    <div v-if="!loginBtn" class="mlTopBox" :class="{back:backShow}">
-      <div class="content">
-          <ul>
-            <li>1</li>
-            <li>1</li>
-            <li>1</li>
-            <li>1</li>
-            <li>1</li>
-            <li>1</li>
-            <li>1</li>
-            <li>1</li>
-          </ul>
-        </div>
-    </div>
-    <div class="bg" v-if="backShow" @click="mlTopBoxFun"></div>
   </div>
 </template>
 <script>
@@ -44,10 +26,8 @@ export default {
       login:{
         state: false,
       },
-      backShow:false
     }
   },
-  props:['loginBtn'],
   mounted() {
 
   },
@@ -56,9 +36,6 @@ export default {
   },
   methods:{
     ...mapMutations(['LOGIN_SHOW']),
-    mlTopBoxFun(){
-      this.backShow = !this.backShow
-    },
     getLogin(){
       this.LOGIN_SHOW();
     }
@@ -71,7 +48,6 @@ export default {
   .header{
     .content{
       display: flex;
-      padding:0 .3rem;
       height:1.564rem;
       background:#f7f7f7;
       /*border-bottom: 1px solid #e1e1e1;*/
@@ -89,6 +65,7 @@ export default {
           background-size:.996rem auto;
           background-position: center center;
           background-color: #f7f7f7;
+          margin-left:.3rem;
         }
         &.station{
           span{
@@ -108,7 +85,7 @@ export default {
             display: flex;
             justify-content: flex-start;
             align-content: center;
-            @include wh(6rem ,1rem);
+            @include wh(6.8rem ,1rem);
             border:1px solid $c999;
             border-radius: .136rem;
             line-height: 1rem;
@@ -130,50 +107,6 @@ export default {
         }
       }
     }
-    .mlTopBox{
-      position:absolute;
-      top:0;
-      left:0;
-      right:0;
-      z-index: 28;
-      @include wh(100%,6rem);
-      margin-top:1.567rem;
-      -webkit-transition: all .5s;
-      transition: all .5s;
-      -webkit-transform: translate(0, -175%);
-      transform: translate(0, -175%);
-      &.back{
-        -webkit-transform: translate(0, 0);
-        transform: translate(0, 0);
-      }
-      .content{
-        background:$fff;
-        position:absolute;
-        top:0;
-        left:50%;
-        margin-left:-6.21rem;
-        @include wh(12.42rem,auto);
-        z-index: 12;
-        ul{
-          li{
-            float:left;
-            width:33.333%;
-            height:3rem;
-          }
-        }
-      }
-    }
-    .bg{
-        position: fixed;
-        z-index: 27;
-        top:0;
-        right:0;
-        bottom:0;
-        left:0;
-        background:rgba(0,0,0,.5);
-        -webkit-transition: all .5s;
-        transition: all .5s;
-      }
   }
   .fixed{
     .header{
@@ -186,12 +119,13 @@ export default {
           color:$fff;
           span{
             color:$fff;
+            margin-left: .2rem;
           }
         }
         .mltSearch{
           flex:5;
           span{
-            width:7rem;
+            width:7.5rem;
             background-color:$fff;
             border:1px solid $fff;
           }

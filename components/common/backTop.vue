@@ -44,8 +44,8 @@
     background:#fff;
     @include borRadius(50%);
     position: fixed;
-    bottom:4rem;
-    right:.5rem;
+    bottom:2.5rem;
+    right:1rem;
     box-shadow: 0 0 1rem #bbb;
     cursor: pointer;
     i{

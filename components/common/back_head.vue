@@ -1,63 +1,142 @@
-// header带返回上一步的模块
+// 带logo的头部导航
 
 <template>
-  <header :class="{cur : fixed}">
-    <h2>{{ heads.title }}</h2>
-    <span class="iconfont icon-prev" @click="back"></span>
-  </header>
+  <div class="header">
+    <div class="content">
+      <div class="back">
+        <span class="iconfont icon-prev" @click="$history(-1)"></span>
+      </div>
+      <div class="station">
+        <span><i class="iconfont icon-dingwei"></i>{{city}}</span>
+        <!--<i class="iconfont icon-jiantou9"></i>-->
+      </div>
+      <div class="mltSearch">
+        <span>我要找车</span>
+      </div>
+      <div class="mlRight" @click="mlTopBoxFun">
+        <div class="iconfont icon-daohang home"></div>
+      </div>
+    </div>
+    <headNav @backShowFun="backShowFun" :isShow="backShow"/>
+  </div>
 </template>
-
 <script>
+  import headNav from '~/components/common/head_nav'
+  import {mapState} from 'vuex'
   export default {
-    data() {
+    data () {
       return {
-        msg: 'header',
-        fixed:false,
+        login:{
+          state: false,
+        },
+        backShow:false
       }
     },
-    props:['heads'],
-    mounted(){
-      // 是否置顶header
-      if(this.heads.position === 'top'){
-        this.fixed = true;
-      }
+    mounted() {
+
+    },
+    components:{
+      headNav,
+    },
+    computed:{
+      ...mapState(['city'])
     },
     methods:{
-      back(){
-        history.go(-1);
+      mlTopBoxFun(){
+        this.backShow = !this.backShow;
+      },
+      backShowFun(data){
+        this.backShow = data;
+      }
+    },
+
+  }
+</script>
+<style lang="scss" scope>
+  @import '~static/style/mixin';
+  .header{
+    .content{
+      display: flex;
+      /*padding:0 .3rem;*/
+      height:1.564rem;
+      background:#f7f7f7;
+      /*border-bottom: 1px solid #e1e1e1;*/
+      position:relative;
+      z-index: 30;
+      & > div{
+        flex:1;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        &.back{
+          flex:.8;
+        }
+        &.station{
+          span{
+            display: flex;
+            width:2rem;
+            justify-content: center;
+            overflow: hidden;
+            line-height: 1.564rem;
+            height: 1.564rem;
+            font-size:.48rem;
+            color:$c666;
+          }
+        }
+        &.mltSearch{
+          flex:4;
+          span{
+            display: flex;
+            justify-content: flex-start;
+            align-content: center;
+            @include wh(6rem ,1rem);
+            border:1px solid $c999;
+            border-radius: .136rem;
+            line-height: 1rem;
+            padding-left:1.4rem;
+            font-size:.442rem;
+            color:$c999;
+            background-image: url('http://static.hx2cars.com/resource/web/dist/static/mobpages/images/mindex/topsearch.png');
+            background-repeat: no-repeat;
+            background-position:.51rem center;
+            background-size:.476rem auto;
+          }
+        }
+        &.mlRight{
+          flex:.8;
+          font-size:.48rem;
+          .home{
+            font-size:.7rem;
+          }
+        }
       }
     }
   }
-</script>
-
-<style lang="scss" scoped>
-@import "~static/style/mixin";
-  header{
-    position: relative;
-    z-index: 100;
-    @include wh(100%,1.8rem);
-    border-bottom:1px solid #e1e1e1;
-    background:$fff;
-    &.cur{
-      position: fixed;
-      top:0;
-      left:0;
-      right:0;
-    }
-    h2{
-      @include wh(100%,1.8rem);
-      @include flexCenter;
-      color:$c333;
-    }
-    span{
-      position:absolute;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      font-size:.7rem;
-      @include wh(1.6rem,1.8rem);
-      left:0;
-      top:0;
+  .fixed{
+    .header{
+      .content{
+        background:$f60;
+        .logo{
+          display: none;
+        }
+        .station{
+          color:$fff;
+          span{
+            color:$fff;
+          }
+        }
+        .mltSearch{
+          flex:5;
+          span{
+            width:7rem;
+            background-color:$fff;
+            border:1px solid $fff;
+          }
+        }
+        .mlRight{
+          color:$fff;
+        }
+      }
     }
   }
 </style>

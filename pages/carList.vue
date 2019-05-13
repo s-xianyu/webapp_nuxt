@@ -3,7 +3,7 @@
 
     <div class="body">
       <div class="fixedTop">
-        <logoHead  :isval="false"/>
+        <backHead/>
       </div>
       <div class="main">
         <div class="page-loadmore-wrapper" ref="wrapper" :style="{ height: wrapperHeight + 'px' }">
@@ -21,7 +21,7 @@
 <script>
   import loading from '~/components/common/loading'
   import list from '~/components/carList/list'
-  import logoHead from '~/components/common/logo_head'
+  import backHead from '~/components/common/back_head'
   import FooterTab from '~/components/common/footer'
   import axios from '~/plugins/axios'
 
@@ -53,7 +53,7 @@
     components: {
       loading,
       list,
-      logoHead,
+      backHead,
       FooterTab
     },
     mounted () {

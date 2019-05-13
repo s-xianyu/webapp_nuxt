@@ -77,8 +77,8 @@ export default {
     [
       '/api',
       {
-        // target:'https://www.hx2car.com.cn',
-        target:'http://www.2schome.net',
+        target:'https://www.hx2car.com.cn',
+        // target:'http://www.2schome.net',
         pathRewrite: { '^/api' : '/' }
       }
     ]

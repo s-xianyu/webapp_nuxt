@@ -3,7 +3,7 @@
     <div class="body" style="overflow: hidden" :style="{ height: windowHeight}">
       <AppLoad :show="true"/>
       <div :class="{fixed:isFixed}">
-        <logoHead :loginBtn="true"/>
+        <logoHead/>
       </div>
       <Swiper :imgList="swiperList"/>
       <MyActive :homeList="homeList.homerecommended"/>
@@ -91,7 +91,7 @@ export default {
     // this.getLike();
     this.getUserInfo();
 
-    window.addEventListener('scroll', this.scrollHead)
+    window.addEventListener('scroll', this.scrollHead);
     // 获取screen至页面顶部的距离
     // debugger
     this.offsetTop = document.querySelector('.header').offsetTop;

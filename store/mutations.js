@@ -18,7 +18,7 @@ export default {
       ] = [
         val,
         true,
-        !state.loginShow
+        false
       ];
       setStore('userInfo', val);
     } else {
