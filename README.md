@@ -1,6 +1,6 @@
-# hx_webapp
+# nuxt开发的wenapp项目
 
-> My kryptonian Nuxt.js project
+> 这是一个基于nuxt、vuex、vue2、mint-ui、开发的个人项目。
 
 ## 安装、启动
 
@@ -24,10 +24,10 @@ For detailed explanation on how things work, checkout [Nuxt.js docs](https://nux
 ## 组件
 
 ``` bash
-
-carList
+components
+  carList
     list.vue         //单列式列表
-common 
+  common 
     appload.vue      //app下载模块
     back_head.vue    //带返回得到头部的模块
     backTop.vue      //返回顶部通用模块
