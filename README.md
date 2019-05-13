@@ -2,7 +2,7 @@
 
 > My kryptonian Nuxt.js project
 
-## Build Setup
+## 安装、启动
 
 ``` bash
 # install dependencies
@@ -22,6 +22,9 @@ $ yarn run generate
 For detailed explanation on how things work, checkout [Nuxt.js docs](https://nuxtjs.org).
 
 ## 组件
+
+``` bash
+
 carList
     list.vue         //单列式列表
 common 
@@ -33,3 +36,4 @@ common
     login.vue        //通用登录模块
     logo_head.vue    //带登录的顶部模块
     swiper.vue       //首页轮播图模块
+```    
