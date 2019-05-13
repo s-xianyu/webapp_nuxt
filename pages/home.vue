@@ -32,9 +32,11 @@
       ...mapState(['isLogin'])
     },
     mounted(){
+      this.getUserInfo();
     },
     methods:{
       ...mapMutations(['OUT_USER']),
+      ...mapActions(['getUserInfo']),
       outLogin(){
         this.OUT_USER();
         this.$router.push('/')
