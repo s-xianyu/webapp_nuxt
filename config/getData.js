@@ -1,24 +1,26 @@
 import axios from '~/plugins/axios'
+const api = `/api`;
+// const api = ``;
 
 /**
  * 获取猜您喜欢列表
  */
-export const gainLike = (params) => get(`/api/mobile/guessYouLike.json`,params);
+export const gainLike = (params) => get(`${api}/mobile/guessYouLike.json`,params);
 
 /**
  * 详情页车辆信息
  */
-export  const carDetail = id => get(`/api/mobile/carDetail.json`,id);
+export  const carDetail = id => get(`${api}/mobile/carDetail.json`,id);
 
 /*
 * 获取验证码
 */
-export const outcodephones = mobile => get(`/api/code/outcodephones.json`,mobile);
+export const outcodephones = mobile => get(`${api}/code/outcodephones.json`,mobile);
 
 /*
-* 获取验证码
+* 验证码登录
 */
-export const smallprogramlogin = mobile => get(`/mobile/smallprogramlogin.json?phoNum=15872332160&code=7112`,mobile);
+export const smallprogramlogin = mobile => get(`${api}/mobile/smallprogramlogin.json`,mobile);
 
 
 

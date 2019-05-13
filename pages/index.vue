@@ -1,6 +1,6 @@
 <template>
   <transition name="index">
-    <div class="body">
+    <div class="body" style="overflow: hidden" :style="{ height: windowHeight}">
       <AppLoad :show="true"/>
       <div :class="{fixed:isFixed}">
         <logoHead :loginBtn="true"/>
@@ -9,9 +9,10 @@
       <MyActive :homeList="homeList.homerecommended"/>
       <information :information="homeList.information"/>
       <mylike/>
-      <FooterTab/>
+      <!--<FooterTab/>-->
       <backTop/>
       <loading v-if="loadingShow"/>
+      <Login/>
     </div>
   </transition>
 </template>
@@ -26,8 +27,9 @@ import MyActive from '~/components/index/myactive'
 import information from '~/components/index/information'
 import mylike from '~/components/index/mylike'
 import FooterTab from '~/components/common/footer'
+import Login from '~/components/common/Login'
 import axios from '~/plugins/axios'
-import {mapActions} from 'vuex'
+import {mapActions,mapState} from 'vuex'
 export default {
   head () {
     return{
@@ -64,9 +66,10 @@ export default {
     MyActive,
     information,
     mylike,
+    Login,
     FooterTab
   },
-   async asyncData () {
+  async asyncData () {
     let { data } = await axios.get(indexoeo);
     return {
       homeList: data
@@ -77,6 +80,7 @@ export default {
     // }
   },
   computed:{
+    ...mapState(['windowHeight']),
     params (){
       return {
         type:this.type
@@ -110,9 +114,6 @@ export default {
 </script>
 <style lang="scss" scope>
   @import '~static/style/mixin';
-  body{
-    margin-bottom:1.8rem;
-  }
   .fixed{
     position: fixed;
     top:0;

@@ -2,10 +2,10 @@
 
 <template>
   <div class="load" v-if="show">
-		<div class="bg"></div>
-		<div class="content">
+		<div class="load-bg"></div>
+		<div class="load-content">
 			<i @click="close"><img src="http://static.hx2cars.com/resource/web/dist/static/mobpages/images/close-org.png" style="width: 100%;margin:0;"></i>
-			<div class="right" @click="appLoad">快速下载</div>
+			<div class="load-right" @click="appLoad">快速下载</div>
 		</div>
   </div>
 </template>
@@ -26,20 +26,20 @@ export default {
   @import '~static/style/mixin';
   .load{
 	@include wh(100%,1.513rem);
-	.bg{
+	.load-bg{
 	  @include wh(100%,1.513rem);
 	  @include bis('http://static.hx2cars.com/resource/web/dist/static/mobpages/images/adsbg2.jpg');
 	  background-size: 100%;
 	  background-position: center center;
 	}
-	.content{
+	.load-content{
 	  i{
       @include wh(.4rem,.4rem);
       position: absolute;
       top:.3rem;
       right:.3rem;
 	  }
-    .right{
+    .load-right{
       @include wh(2.567rem,.992rem);
 			display: flex;
 			justify-content: center;

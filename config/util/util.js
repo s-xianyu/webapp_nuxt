@@ -8,7 +8,7 @@ export const setStore = (name, content) => {
     content = JSON.stringify(content)
   }
   window.localStorage.setItem(name, content)
-}
+};
 
 /**
  * 获取localStorage
@@ -16,7 +16,7 @@ export const setStore = (name, content) => {
 export const getStore = (name) => {
   if (!name) return
   return window.localStorage.getItem(name)
-}
+};
 
 /**
  * 删除localStorage
@@ -24,7 +24,7 @@ export const getStore = (name) => {
 export const removeStore = name => {
   if (!name) return
   window.localStorage.removeItem(name)
-}
+};
 
 /**
  *登录框
@@ -102,4 +102,19 @@ let hxBrowercheck = (keyword)=> {
   } else {
     return false;
   }
-}
+};
+Vue.prototype.$hxBrowercheck = hxBrowercheck;
+
+/**
+ * 手机号码11位验证
+ */
+let phoneReg = (phone) =>{
+  let reg =  /^1\d{10}$/;
+  if(reg.test(phone)){
+    return false;
+  }else{
+    return true;
+  }
+};
+Vue.prototype .$phoneReg =phoneReg;
+

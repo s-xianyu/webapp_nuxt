@@ -12,7 +12,7 @@
         <span>我要找车</span>
       </div>
       <div class="mlRight" v-if="loginBtn">
-        <router-link tag="div" to="/personage/logo" class="login" v-if="!isLogin">登录</router-link>
+        <div @click="getLogin" class="login" v-if="!isLogin">登录</div>
         <router-link tag="div" to="/home" v-else class="iconfont icon-yonghu home"></router-link>
       </div>
       <div class="mlRight" v-else>
@@ -37,7 +37,7 @@
   </div>
 </template>
 <script>
-import {mapState} from 'vuex'
+import {mapState,mapMutations} from 'vuex'
 export default {
   data () {
     return {
@@ -55,8 +55,12 @@ export default {
     ...mapState(['isLogin','city'])
   },
   methods:{
+    ...mapMutations(['LOGIN_SHOW']),
     mlTopBoxFun(){
       this.backShow = !this.backShow
+    },
+    getLogin(){
+      this.LOGIN_SHOW();
     }
   },
 

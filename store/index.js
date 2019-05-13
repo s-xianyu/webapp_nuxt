@@ -7,6 +7,10 @@ export const state = () => ({
 
   // 地区选择
   city:'全国',
+  // 登录弹框展示
+  loginShow:false,
+  //浏览器高度
+  windowHeight:'auto',
   // 登录状态
   isLogin:false,
   //登录信息保存

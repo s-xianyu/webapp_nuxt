@@ -1,15 +1,15 @@
 <template>
   <div class="information">
-    <div class="h2">
+    <div class="information-h2">
       <h2>行业资讯</h2>
-      <div class="right">查看更多<i class="iconfont icon-xiayiye"></i></div>
+      <div class="information-right">查看更多<i class="iconfont icon-xiayiye"></i></div>
     </div>
     <ul>
       <li @click="goLocation(item.url)" v-for="(item, index) in information" :key="index">
-        <div class="pic"><img :src="item.pic" alt=""></div>
-        <div class="text">
-          <span class="tit">{{item.title}}</span>
-          <span class="ndate">{{item.ndate}}</span>
+        <div class="information-pic"><img :src="item.pic" alt=""></div>
+        <div class="information-text">
+          <span class="information-tit">{{item.title}}</span>
+          <span class="information-ndate">{{item.ndate}}</span>
         </div>
       </li>
     </ul>
@@ -35,7 +35,7 @@ export default {
 .information{
   background:$fff;
   margin-top:.4rem;
-  .h2{
+  .information-h2{
     height:1.5rem;
     display: flex;
     justify-content: space-between;
@@ -56,7 +56,7 @@ export default {
         left: 0;
       }
     }
-    .right{
+    .information-right{
       color:$c666;
       .iconfont{
         font-size:.3rem;
@@ -69,7 +69,7 @@ export default {
       flex-direction: row;
       padding:.3rem;
       border-bottom:1px solid #f1f1f1;
-      .pic{
+      .information-pic{
         @include wh(4rem,3rem);
         min-width:4rem;
         height:3rem;
@@ -78,12 +78,12 @@ export default {
           height:100%;
         }
       }
-      .text{
+      .information-text{
         display:flex;
         flex-direction:column;
         justify-content: space-between;
         margin-left:.5rem;
-        .tit{
+        .information-tit{
           font-size:.5rem;
           display:-webkit-box;
           word-break:break-all;
@@ -91,7 +91,7 @@ export default {
           -webkit-box-orient:vertical;
           -webkit-line-clamp:2;
         }
-        .ndate{
+        .information-ndate{
           font-size:.45rem;
           color:$c666;
           margin-bottom:.2rem;

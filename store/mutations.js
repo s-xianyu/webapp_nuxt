@@ -2,7 +2,8 @@ import {
   GET_USER,
   OUT_USER,
   ADD_LIKE,
-  ADD_PAGE
+  ADD_PAGE,
+  LOGIN_SHOW
 } from './mutations-type';
 import {setStore,getStore,removeStore} from '../config/util/util';
 export default {
@@ -10,8 +11,16 @@ export default {
   // 登录保存信息和登录状态
   [GET_USER](state, val) {
     if (val) {
-      [state.userInfo,state.isLogin] = [val,true];
-      setStore('username', val);
+      [
+        state.userInfo,
+        state.isLogin,
+        state.loginShow
+      ] = [
+        val,
+        true,
+        !state.loginShow
+      ];
+      setStore('userInfo', val);
     } else {
       state.isLogin = false;
       state.userInfo = '';
@@ -22,7 +31,7 @@ export default {
   [OUT_USER](state) {
     state.isLogin = false;
     state.userInfo = '';
-    removeStore('username');
+    removeStore('userInfo');
   },
 
   // 猜您喜欢数据获取保存
@@ -43,9 +52,21 @@ export default {
     }
 
   },
+
+  // 猜您喜欢列表page
   [ADD_PAGE](state){
     state.page++;
     state.likePrevent = false;
+  },
+
+  // 登录弹框显示
+  [LOGIN_SHOW](state){
+    state.loginShow = !state.loginShow;
+    if(state.loginShow === true){
+      state.windowHeight = `${document.documentElement.clientHeight || document.body.clientHeight}px`
+    }else{
+      state.windowHeight = 'auto';
+    }
   }
 
 }

@@ -6,7 +6,7 @@
         <!-- <div class="right">查看更多<i class="iconfont icon-xiayiye"></i></div> -->
       </div>
     </div>
-    <mt-loadmore v-infinite-scroll="loadermore" infinite-scroll-immediate-check="false" class="coureslist_container">
+    <mt-loadmore v-infinite-scroll="loadermore" infinite-scroll-immediate-check="false">
       <ul v-if="likeList.length">
         <router-link
           tag="li"
