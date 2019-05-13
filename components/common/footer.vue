@@ -1,5 +1,4 @@
 // 底部导航模块
-
 <template>
     <footer class="footer">
       <ul>
