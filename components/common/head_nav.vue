@@ -2,7 +2,7 @@
   <div>
     <div class="mlTopBox" :class="{back:isShow}">
       <div class="swiper-nav">
-        <mt-swipe :auto="4000">
+        <mt-swipe :auto="40000">
           <mt-swipe-item v-for="(item,index) in nav" :key="index">
             <ul>
               <li @click="getPath(li.path)" v-for="(li,index) in item" :key="index">
@@ -47,14 +47,10 @@
     },
     props:['isShow'],
     mounted(){
-      this.info();
     },
     methods:{
       mlTopBoxFun(){
         this.$emit('backShowFun',!this.isShow)
-      },
-      info(){
-        console.log(this.nav)
       },
       getPath(path){
         // debugger

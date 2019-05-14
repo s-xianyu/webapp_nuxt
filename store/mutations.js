@@ -20,12 +20,20 @@ export default {
         true,
         false
       ];
+
+      // 获取到的用户信息去过头像为空，设置默认头像
+      if(state.userInfo.photo === ''){
+        state.userInfo.photo = 'http://img.hx2cars.com/upload/car/2015/6/5/14/89/38/27/32/1489382732.png';
+      }
+
+      // 添加到缓存
       setStore('userInfo', val);
     } else {
       state.isLogin = false;
       state.userInfo = '';
     }
 
+    // 获取到窗口高度并保存
     if(state.loginShow === true){
       state.windowHeight = `${document.documentElement.clientHeight || document.body.clientHeight}px`
     }else{

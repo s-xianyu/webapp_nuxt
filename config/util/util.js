@@ -95,6 +95,7 @@ Vue.prototype.$hxWaptoapp = hxWaptoapp;
  * 浏览器检测
  */
 let hxBrowercheck = (keyword)=> {
+  debugger
   let ua = navigator.userAgent.toLowerCase();
   let testreg = new RegExp(eval('/' + keyword + '/i'));
   if (ua.match(testreg) == keyword) {
@@ -118,8 +119,22 @@ let phoneReg = (phone) =>{
 };
 Vue.prototype.$phoneReg =phoneReg;
 
+/*
+*返回到指定一步
+*/
 let history = (val) =>{
   window.history.go(val);
 };
 Vue.prototype.$history = history;
+
+/*
+*获取URL参数
+*/
+let getQueryString = (name) =>{
+  var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)", "i");
+  var r = window.location.search.substr(1).match(reg);
+  if (r != null) return unescape(r[2]);
+  return null;
+};
+Vue.prototype.$getQueryString = getQueryString;
 

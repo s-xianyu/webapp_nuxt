@@ -13,7 +13,7 @@
       <div class="mltSearch">
         <span>我要找车</span>
       </div>
-      <div class="mlRight" @click="mlTopBoxFun">
+      <div class="mlRight" @click="navEvent">
         <div class="iconfont icon-daohang home"></div>
       </div>
     </div>
@@ -42,7 +42,7 @@
       ...mapState(['city'])
     },
     methods:{
-      mlTopBoxFun(){
+      navEvent(){
         this.backShow = !this.backShow;
       },
       backShowFun(data){
@@ -62,7 +62,7 @@
       background:#f7f7f7;
       /*border-bottom: 1px solid #e1e1e1;*/
       position:relative;
-      z-index: 30;
+      z-index: 120;
       & > div{
         flex:1;
         display: flex;
