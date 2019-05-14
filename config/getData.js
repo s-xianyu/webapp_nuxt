@@ -12,12 +12,12 @@ export const gainLike = (params) => get(`${api}/mobile/guessYouLike.json`,params
  */
 export  const carDetail = id => get(`${api}/mobile/carDetail.json`,id);
 
-/*
+/**
 * 获取验证码
 */
 export const outcodephones = mobile => get(`${api}/code/outcodephones.json`,mobile);
 
-/*
+/**
 * 验证码登录
 */
 export const smallprogramlogin = mobile => get(`${api}/mobile/smallprogramlogin.json`,mobile);

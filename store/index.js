@@ -19,6 +19,6 @@ export const state = () => ({
   likeList:[],
   // 猜您喜欢当前页数
   page:1,
-  // 猜您喜欢放置多次滚动
+  // 猜您喜欢防止多次滚动
   likePrevent:true,
 });
