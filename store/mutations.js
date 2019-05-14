@@ -25,6 +25,12 @@ export default {
       state.isLogin = false;
       state.userInfo = '';
     }
+
+    if(state.loginShow === true){
+      state.windowHeight = `${document.documentElement.clientHeight || document.body.clientHeight}px`
+    }else{
+      state.windowHeight = 'auto';
+    }
   },
 
   // 退出登录清除登录信息
@@ -68,5 +74,4 @@ export default {
       state.windowHeight = 'auto';
     }
   }
-
 }
