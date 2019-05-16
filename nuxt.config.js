@@ -30,6 +30,7 @@ export default {
     link: [
       { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' },
       { rel: 'stylesheet',  href: '/style/common.css' },
+      { rel: 'stylesheet',  href: '/style/animate.min.css' },
       { rel: 'stylesheet',  href: '/iconFont/iconfont.css' }
     ],
     script:[

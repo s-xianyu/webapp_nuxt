@@ -12,7 +12,7 @@
 
 <script>
 import { carDetail } from '~/config/getData'
-import Header from '~/components/common/back_head';
+import Header from '~/components/common/header/back_head';
 import axios from '~/plugins/axios'
 
   export default {

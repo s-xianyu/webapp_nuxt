@@ -1,4 +1,7 @@
 // 通用带标题header模块
+// 接收一个对象heads
+// title  -->标题
+// position  -->true/false.是否fixed顶部
 
 <template>
   <header :class="{cur : fixed}">

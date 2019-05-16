@@ -4,10 +4,10 @@
   <div class="header">
     <div class="content">
       <router-link tag="div" to="/" class="logo"></router-link>
-      <div class="station">
+      <router-link tag="div" to="/city/city" class="station">
         <span>{{city}}</span>
         <i class="iconfont icon-jiantou9"></i>
-      </div>
+      </router-link>
       <div class="mltSearch">
         <span>我要找车</span>
       </div>

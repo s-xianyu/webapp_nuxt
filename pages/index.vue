@@ -17,17 +17,17 @@
   </transition>
 </template>
 <script>
-const indexoeo = '/api/mobile/indexoeo.json'
+import {indexoeo} from '~/config/getData'
 import AppLoad from '~/components/common/appLoad'
 import backTop from '~/components/common/backTop'
-import logoHead from '~/components/common/logo_head'
+import logoHead from '~/components/common/header/logo_head'
 import loading from '~/components/common/loading'
 import Swiper from '~/components/common/swiper'
 import MyActive from '~/components/index/myactive'
 import information from '~/components/index/information'
 import mylike from '~/components/index/mylike'
-import FooterTab from '~/components/common/footer'
-import Login from '~/components/common/Login'
+import FooterTab from '~/components/common/footer/footer'
+import Login from '~/components/common/login/login'
 import axios from '~/plugins/axios'
 import {mapActions,mapState} from 'vuex'
 export default {
@@ -70,14 +70,8 @@ export default {
     FooterTab
   },
   async asyncData () {
-    let { data } = await axios.get(indexoeo);
-    return {
-      homeList: data
-    }
-    // let { like } = await axios.get('/api/mobile/guessYouLike.json')
-    // return {
-    //   likeList: data
-    // }
+    let { data } = await indexoeo();
+    return { homeList: data }
   },
   computed:{
     ...mapState(['windowHeight']),

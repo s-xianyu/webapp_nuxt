@@ -10,7 +10,7 @@
 </template>
 
 <script>
-  import Header from '~/components/common/back_head';
+  import Header from '~/components/common/header/back_head';
   export default {
     head(){
       return {

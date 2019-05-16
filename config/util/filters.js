@@ -20,7 +20,7 @@ let toFixedVal = val => {
 
 export const filters = {
     emptyVal,
-    toFixedVal
+    toFixedVal,
 };
 
 Object.keys(filters).forEach(key => {

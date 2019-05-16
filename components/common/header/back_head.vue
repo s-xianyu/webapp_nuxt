@@ -7,7 +7,7 @@
         <span class="iconfont icon-prev" @click="$history(-1)"></span>
       </div>
       <div class="station">
-        <span><i class="iconfont icon-dingwei"></i>{{city}}</span>
+        <router-link tag="span" to="/city/city"><i class="iconfont icon-dingwei"></i>{{city}}</router-link>
         <!--<i class="iconfont icon-jiantou9"></i>-->
       </div>
       <div class="mltSearch">
@@ -21,7 +21,7 @@
   </div>
 </template>
 <script>
-  import headNav from '~/components/common/head_nav'
+  import headNav from '~/components/common/header/head_nav'
   import {mapState} from 'vuex'
   export default {
     data () {

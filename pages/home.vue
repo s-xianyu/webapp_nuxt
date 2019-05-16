@@ -65,7 +65,7 @@
 </template>
 
 <script>
-  import headNav from '~/components/common/head_nav'
+  import headNav from '~/components/common/header/head_nav'
   import {mapMutations,mapState,mapActions} from 'vuex';
   export default {
     data() {

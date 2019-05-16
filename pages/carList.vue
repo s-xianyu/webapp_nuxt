@@ -9,10 +9,8 @@
         <div class="page-loadmore-wrapper" ref="wrapper" :style="{ height: wrapperHeight + 'px' }">
            <list :list="users"/>
         </div>
-        <div class="stick">
-          <i class="iconfont icon-cha" @click="backTop"></i>
-        </div>
       </div>
+      <backTop/>
       <!-- <FooterTab/> -->
       <loading v-if="loadingShow"/>
     </div>
@@ -21,8 +19,9 @@
 <script>
   import loading from '~/components/common/loading'
   import list from '~/components/carList/list'
-  import backHead from '~/components/common/back_head'
-  import FooterTab from '~/components/common/footer'
+  import backHead from '~/components/common/header/back_head'
+  import FooterTab from '~/components/common/footer/footer'
+  import backTop from '~/components/common/backTop'
   import axios from '~/plugins/axios'
 
   export default {
@@ -54,6 +53,7 @@
       loading,
       list,
       backHead,
+      backTop,
       FooterTab
     },
     mounted () {
@@ -148,25 +148,6 @@
   .main{
     .page-loadmore-wrapper{
       overflow: scroll;
-    }
-  }
-  .stick{
-    width:1.5rem;
-    height:1.5rem;
-    background:#fff;
-    @include borRadius(50%);
-    position: fixed;
-    bottom:4rem;
-    right:.5rem;
-    box-shadow: 0 0 1rem #bbb;
-    cursor: pointer;
-    i{
-      display: flex;
-      height:100%;
-      align-items: center;
-      justify-content: center;
-      padding-top:.2rem;
-      font-size:1rem;
     }
   }
 </style>

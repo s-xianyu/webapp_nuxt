@@ -74,8 +74,8 @@
     margin-top:1.567rem;
     -webkit-transition: all .5s;
     transition: all .5s;
-    -webkit-transform: translate(0, -175%);
-    transform: translate(0, -175%);
+    -webkit-transform: translate(0, -180%);
+    transform: translate(0, -180%);
     &.back{
       -webkit-transform: translate(0, 0);
       transform: translate(0, 0);
@@ -136,7 +136,7 @@
   .bg{
     position: fixed;
     z-index: 27;
-    top:0;
+    top:1.8rem;
     right:0;
     bottom:0;
     left:0;

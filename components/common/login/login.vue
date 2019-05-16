@@ -7,7 +7,7 @@
     </header>
     <div class="main">
       <div class="_login_box_logo">
-        <img src="../../static/img/checkmobile.png" alt="">
+        <img src="../../../static/img/checkmobile.png" alt="">
       </div>
       <div class="_login_box_form">
         <ul>
@@ -29,7 +29,7 @@
       <div class="_third_party">
         使用其他账号登录
         <div class="qqLogin" @click="qqLogin">
-          <img src="../../static/img/third_party_qq.png" alt="">QQ登录
+          <img src="../../../static/img/third_party_qq.png" alt="">QQ登录
         </div>
       </div>
     </div>
@@ -38,8 +38,8 @@
 
 <script>
   import { Toast } from 'mint-ui';
-  import Header from '~/components/common/back_head';
-  import FooterTab from '~/components/common/footer';
+  import Header from '~/components/common/header/back_head';
+  import FooterTab from '~/components/common/footer/footer';
   import {mapMutations,mapState,mapActions} from 'vuex';
   import {outcodephones,smallprogramlogin} from '~/config/getData'
   export default {

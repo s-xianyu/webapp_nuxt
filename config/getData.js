@@ -13,16 +13,34 @@ export const gainLike = (params) => get(`${api}/mobile/guessYouLike.json`,params
 export  const carDetail = id => get(`${api}/mobile/carDetail.json`,id);
 
 /**
-* 获取验证码
-*/
+ * 获取验证码
+ */
 export const outcodephones = mobile => get(`${api}/code/outcodephones.json`,mobile);
 
 /**
-* 验证码登录
-*/
+ * 验证码登录
+ */
 export const smallprogramlogin = mobile => get(`${api}/mobile/smallprogramlogin.json`,mobile);
 
+/**
+ *首页数据展示
+ */
+export const  indexoeo = () => get(`${api}/mobile/indexoeo.json`);
 
+/**
+ * 列表数据
+ */
+export const filteData = params => get(`${api}/mobile/filteData.json`,params);
+
+/**
+ *获取定位城市
+ */
+export const historyKeyAndHotKey = params => get(`${api}/car/historyKeyAndHotKey.json`,params);
+
+/**
+ *一级地区获取
+ */
+export const getprovinces = params => get(`${api}/tools/getprovinces.json`,params);
 
 
 /**
