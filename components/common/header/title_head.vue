@@ -4,7 +4,7 @@
 // position  -->true/false.是否fixed顶部
 
 <template>
-  <header :class="{cur : fixed}">
+  <header :class="{cur : heads.position}">
     <h2>{{ heads.title }}</h2>
     <span class="iconfont icon-prev" @click="$history(-1)"></span>
   </header>
@@ -15,15 +15,10 @@
     data() {
       return {
         msg: 'header',
-        fixed:false,
       }
     },
     props:['heads'],
     mounted(){
-      // 是否置顶header
-      if(this.heads.position === 'top'){
-        this.fixed = true;
-      }
     },
     methods:{
     }

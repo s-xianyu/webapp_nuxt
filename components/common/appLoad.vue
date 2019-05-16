@@ -26,6 +26,7 @@ export default {
   @import '~static/style/mixin';
   .load{
 	@include wh(100%,1.513rem);
+    position:relative;
 	.load-bg{
 	  @include wh(100%,1.513rem);
 	  @include bis('http://static.hx2cars.com/resource/web/dist/static/mobpages/images/adsbg2.jpg');

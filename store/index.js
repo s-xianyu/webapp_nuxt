@@ -11,6 +11,8 @@ export const state = () => ({
   historyCity:['北京','上海','杭州'],
   // 登录弹框展示
   loginShow:false,
+  // 登录弹框展示
+  cityShow:false,
   //浏览器高度
   windowHeight:'auto',
   // 登录状态

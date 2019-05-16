@@ -36,9 +36,10 @@ export default {
   },
   methods:{
     ...mapMutations(['LOGIN_SHOW']),
+    // 登录弹框
     getLogin(){
       this.LOGIN_SHOW();
-    }
+    },
   },
 
 }

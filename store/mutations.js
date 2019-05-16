@@ -3,7 +3,7 @@ import {
   OUT_USER,
   ADD_LIKE,
   ADD_PAGE,
-  LOGIN_SHOW
+  LOGIN_SHOW,
 } from './mutations-type';
 import {setStore,getStore,removeStore} from '../config/util/util';
 export default {
@@ -76,10 +76,9 @@ export default {
   // 登录弹框显示
   [LOGIN_SHOW](state){
     state.loginShow = !state.loginShow;
-    if(state.loginShow === true){
-      state.windowHeight = `${document.documentElement.clientHeight || document.body.clientHeight}px`
-    }else{
-      state.windowHeight = 'auto';
-    }
-  }
+    state.windowHeight = getHeight(state.loginShow)
+  },
 }
+let getHeight = (b)=>{
+  return b ? `${document.documentElement.clientHeight || document.body.clientHeight}px` : `auto`
+};

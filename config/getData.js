@@ -42,6 +42,17 @@ export const historyKeyAndHotKey = params => get(`${api}/car/historyKeyAndHotKey
  */
 export const getprovinces = params => get(`${api}/tools/getprovinces.json`,params);
 
+/**
+ *二级地区获取
+ */
+export const getAreaByCityCode = params => get(`${api}/tools/getAreaByCityCode.json`,params);
+
+/**
+ *三级地区获取
+ */
+export const getAreaLevel3 = params => get(`${api}/mobile/getAreaLevel3.json`,params);
+
+
 
 /**
  * get方法，对应get请求

@@ -111,9 +111,11 @@ export default {
   .fixed{
     position: fixed;
     top:0;
-    left:0;
-    right:0;
+    left: 50%;
+    right: 0;
     z-index: 20;
+    transform: translate(-50%,0);
+    width: 12.42rem;
     &+.swiper{
       margin-top:1.4rem;
     }
