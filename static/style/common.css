@@ -43,20 +43,3 @@ nav {
   background: #fff;
   padding-top:1.6rem;
 }
-@media screen and (max-width: 320px) {
-  html {
-    font-size: 25.76px;
-  }
-}
-
-@media screen and (max-width: 375px) {
-  html {
-    font-size: 30.2419px;
-  }
-}
-
-@media screen and (min-width: 376px) {
-  html {
-    font-size: 33.33px;
-  }
-}
