@@ -5,7 +5,7 @@
     <div class="content">
       <router-link tag="div" to="/" class="logo"></router-link>
       <router-link tag="div" to="/city/city" class="station">
-        <span>{{city}}</span>
+        <span>{{thisCity}}</span>
         <i class="iconfont icon-jiantou9"></i>
       </router-link>
       <div class="mltSearch">
@@ -32,7 +32,7 @@ export default {
 
   },
   computed:{
-    ...mapState(['isLogin','city'])
+    ...mapState(['isLogin','thisCity'])
   },
   methods:{
     ...mapMutations(['LOGIN_SHOW']),

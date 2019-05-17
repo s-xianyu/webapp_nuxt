@@ -83,7 +83,7 @@ export default {
   },
   mounted(){
     // this.getLike();
-    this.getUserInfo();
+    this.getCity();
 
     window.addEventListener('scroll', this.scrollHead);
     // 获取screen至页面顶部的距离
@@ -92,7 +92,7 @@ export default {
 
   },
   methods:{
-    ...mapActions(['getUserInfo']),
+    ...mapActions(['getCity']),
     scrollHead(){
       // debugger
       let scrollTop = window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop

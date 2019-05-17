@@ -1,14 +1,16 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 
-Vue.use(Vuex)
+Vue.use(Vuex);
 
 export const state = () => ({
 
-  // 地区选择
-  city:'怒江傈僳族自治州',
+  // 省市区县信息
+  cityInfo:[],
+  //市
+  thisCity:'全国',
   // 历史记录地区
-  historyCity:['北京','上海','杭州'],
+  historyCity:[],
   // 登录弹框展示
   loginShow:false,
   // 登录弹框展示

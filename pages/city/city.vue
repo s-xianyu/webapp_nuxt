@@ -5,17 +5,17 @@
       <div class="city-content">
         <div class="city-stair1">
           <div class="mzaLocation">
-            <i class="iconfont icon-dingwei"></i>您坐在的城市：
+            <i class="iconfont icon-dingwei"></i>您所在的城市：
             <span>{{locationCity.hotKeys[1]}}</span>
             <div class="allBtn" @click="allSelectFun">我要{{allSelectText}}</div>
           </div>
           <div class="mzaHistory" v-if="historyCity.length > 0">
             <p>历史记录：</p>
             <div class="history_content">
-              <span v-for="item in historyCity">{{item}}</span>
+              <span v-for="item in historyCity" :key="item.erea_code">{{item.area_name}}</span>
             </div>
           </div>
-          <div class="mzaHot">
+          <div class="mzaHot" v-if="hotList.length > 0">
             <p>热门城市</p>
             <div class="hot_content" v-for="(item,index) in hotList" :key="index">
               <span v-for="span in item">{{span}}</span>
@@ -27,7 +27,7 @@
               <div
                 class="city-lis"
                 v-if="upper === item.bxwName"
-                v-for="item in citystair1"
+                v-for="item in cityStair1"
                 :key="item.area_code">
                 <span @click="cityFun(item.area_code,item.area_name)">{{item.area_name}}</span>
                 <div class="leftBtn" v-if="selectShow">
@@ -42,15 +42,15 @@
           <div class="city-stair2-left" @click="stair2Show = !stair2Show"></div>
           <div class="city-stair2-content">
             <div class="city_title">
-              <span>{{thisCity}}</span>
+              <span>{{province.area_name}}</span>
               <i  @click="stair2Show = !stair2Show" class="close iconfont icon-close"></i>
             </div>
             <div class="line"></div>
-            <div class="all" id="全部">不限</div>
+            <div @click="unlimitedProvince" class="all">不限</div>
             <ul>
               <li
                 @click="city3Fun(item.area_code,item.area_name)"
-                v-for="item in citystair2"
+                v-for="item in cityStair2"
                 :key="item.area_code">{{item.area_name}}</li>
             </ul>
           </div>
@@ -59,23 +59,23 @@
           <div class="city-stair2-left" @click="stair3Show = !stair3Show"></div>
           <div class="city-stair2-content">
             <div class="city_title">
-              <span>{{thisCity}}</span>
+              <span @click="unlimitedCity">{{city.area_name}}</span>
               <i  @click="stair3Show = !stair3Show" class="close iconfont icon-close"></i>
             </div>
             <div class="line"></div>
-            <div class="all" id="全部">不限</div>
-            <div class="title" v-if="citystair3.motorList">二手车交易市场</div>
+            <div @click="unlimitedCity" class="all">不限</div>
+            <div class="title" v-if="cityStair3.motorList">二手车交易市场</div>
             <ul>
               <li
-                @click="city3Fun(item.area_code,item.area_name)"
-                v-for="item in citystair3.motorList"
+                @click="city4Fun(item.id)"
+                v-for="item in cityStair3.motorList"
                 :key="item.area_code">{{item.cityName}}</li>
             </ul>
-            <div class="title" v-if="citystair3.areas">市辖区|县</div>
+            <div class="title" v-if="cityStair3.areas">市辖区|县</div>
             <ul>
               <li
-                @click="city3Fun(item.area_code,item.area_name)"
-                v-for="item in citystair3.areas"
+                @click="city4Fun(item.id)"
+                v-for="item in cityStair3.areas"
                 :key="item.area_code"
                 v-if="item.area_name != ''">{{item.area_name}}</li>
             </ul>
@@ -96,7 +96,7 @@
 <script>
   import TitleHead from '~/components/common/header/title_head'
   import { historyKeyAndHotKey,getprovinces,getAreaByCityCode,getAreaLevel3} from '~/config/getData'
-  import {mapState} from 'vuex'
+  import {mapState,mapMutations} from 'vuex'
   export default {
     data() {
       return {
@@ -106,18 +106,20 @@
           position:true,
       },
         keymap: [], //首字母
-        citystair1:[], //城市列表一级
-        citystair2:[], //城市列表二级
-        citystair3:[], //城市列表三级
-        thisCity:'',  //当前选中的一级城市
+        province:'',  //当前选中的一级城市
+        city:'', //当前选中的二级城市
+        county:'', //当前选中的三级城市
+        cityStair1:[], //城市列表一级
+        cityStair2:[], //城市列表二级
+        cityStair3:[], //城市列表三级
         stair2Show:false, //二级显示
         stair3Show:false, //三级显示
         allSelectText:'多选', //多选按钮文字
         selectShow:false, //单选多选切换
         radioToggle:false, //多选城市按钮切换
         hotList:[
-          ['全国','北京','上海','广州','深圳','杭州'],
-          ['南京','天津','重庆','苏州','长沙','哈尔滨']
+          // ['全国','北京','上海','广州','深圳','杭州'],
+          // ['南京','天津','重庆','苏州','长沙','哈尔滨']
         ],  //热门城市，固定值
       }
     },
@@ -137,24 +139,28 @@
       this.getCityList();
     },
     methods:{
+      ...mapMutations(['CITY_SAVE',]),
+
       // 一级地区获取
       async getCityList(){
         let params = {};
         let { data } = await getprovinces(params);
-        this.citystair1=data.provinces;
+        this.cityStair1=data.provinces;
         this.upPerCaseFun();
       },
+
       // 获取到的一级地区处理
       upPerCaseFun(){
-        this.citystair1.forEach((k,i)=>{
+        this.cityStair1.forEach((k,i)=>{
           // debugger
           let bxwName = k.bxwName.toUpperCase().slice(0,1);
           // 改变bxwName为首字母大写;
-          this.$set(this.citystair1[i],'bxwName',bxwName);
+          this.$set(this.cityStair1[i],'bxwName',bxwName);
           // 数组合并，去重，排序，一步到位
           this.keymap = [...new Set([...this.keymap,...bxwName])].sort();
         });
       },
+
       // 单选，多选切换
       allSelectFun(){
         [
@@ -166,29 +172,97 @@
         ];
         this.allSelectText = this.selectShow ? '单选' : '多选';
       },
+
       // 选择城市切换
       radioFun(){
         this.radioToggle = !this.radioToggle;
       },
+
       // 二级地区获取
       async cityFun(code,city){
-        this.stair2Show = true;
+        //获取数据
         let params = {
           province:code
         };
-        this.thisCity = city;
-        let { data } = await getAreaByCityCode(params)
-         this.citystair2 = data.cityList
+        let { data } = await getAreaByCityCode(params);
+        this.cityStair2 = data.cityList;
+
+        // 保存数据
+        this.stair2Show = true;
+        this.province = this.forOFKey(this.cityStair1,code);
       },
+
       //三级地区获取
       async city3Fun(code,city){
-        debugger
-        this.stair3Show = true;
         let params = {
           areacode:code
+        };
+        let { data } = await getAreaLevel3(params);
+        this.cityStair3 = data;
+
+        // 保存数据
+        this.stair3Show = true;
+        this.city = this.forOFKey(this.cityStair2,code);
+      },
+
+      //三级地区选择
+      city4Fun(code){
+        //合并二手车市场和县辖区
+        // let arr = [...this.cityStair3.areas,...this.cityStair3.motorList];
+        //合并前判断是否为null，如果为null,则赋值为空数组
+        if(!this.cityStair3.areas){
+          this.$set(this.cityStair3,'areas',[]);
         }
-        let { data } = await getAreaLevel3(params)
-        this.citystair3 = data
+        if(!this.cityStair3.motorList){
+          this.$set(this.cityStair3,'motorList',[]);
+        }
+        //合并二手车市场和县辖区
+        let arr = [...this.cityStair3.areas,...this.cityStair3.motorList];
+        this.county = this.forOFKey2(arr,code);
+        let val = [this.province,this.city,this.county];
+        this.CITY_SAVE(val);
+      },
+
+      // 省级不限选择
+      unlimitedProvince(){
+        let val = [this.province];
+        this.CITY_SAVE(val);
+
+      },
+      // 省级不限选择
+      unlimitedCity(){
+        let val = [this.province,this.city];
+        this.CITY_SAVE(val);
+      },
+
+      // 返回当前地区信息
+      forOFKey(list,val){
+        let arr;
+        for(let key of list){
+         try {
+           if(+(key.area_code) === +val){
+             arr = key
+           }
+         }catch (e) {
+            arr = {};
+         }
+        }
+        return arr;
+      },
+
+      // 返回当前地区信息2
+      forOFKey2(list,val){
+        let arr;
+        for(let key of list){
+          try {
+            if(+(key.id) === +val){
+              arr = key
+            }
+          }catch (e) {
+            arr = {};
+          }
+        }
+        return arr;
       }
     }
   }
@@ -231,8 +305,7 @@
         .history_content,.hot_content{
           display: flex;
           span{
-            flex:1;
-            @include wh(auto,.99rem);
+            @include wh(33.333%,.99rem);
             @include flexCenter;
             margin:0 .6rem .6rem;
             border:1px solid #eee;
@@ -424,6 +497,7 @@
     bottom:0;
     left:0;
     right:0;
+    z-index:10;
     @include wh(100%,1.42rem);
     background:$f60;
     font-size:.56rem;

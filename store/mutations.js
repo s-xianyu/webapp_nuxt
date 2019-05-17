@@ -4,9 +4,42 @@ import {
   ADD_LIKE,
   ADD_PAGE,
   LOGIN_SHOW,
+  CITY_SAVE,
 } from './mutations-type';
 import {setStore,getStore,removeStore} from '../config/util/util';
 export default {
+
+  //城市保存
+  [CITY_SAVE](state,val){
+
+    // 保存选择城市信息
+    let city = '';
+    val.forEach((key,index) =>{
+
+      if(index > 1){
+        city = val[1].area_name;
+      }else{
+        city = key.area_name;
+      }
+    });
+    state.cityInfo = {...val};
+    state.thisCity = city;
+
+    //并保存选择城市到历史记录中
+    val.forEach((key,index) =>{
+      debugger
+      if(index > 1){
+        state.historyCity.push(val[1]);
+      }else{
+        state.historyCity.push(key);
+      }
+    });
+
+    // 保存地区到本地
+    setStore('cityInfo',val);
+    setStore('city',city);
+    window.history.go(-1);
+  },
 
   // 登录保存信息和登录状态
   [GET_USER](state, val) {
@@ -27,7 +60,7 @@ export default {
       }
 
       // 添加到缓存
-      setStore('userInfo', val);
+      setStore('userInfo', val.mobile);
     } else {
       state.isLogin = false;
       state.userInfo = '';
@@ -46,6 +79,7 @@ export default {
     state.isLogin = false;
     state.userInfo = '';
     removeStore('userInfo');
+    window.history.go(-1);
   },
 
   // 猜您喜欢数据获取保存
@@ -79,6 +113,6 @@ export default {
     state.windowHeight = getHeight(state.loginShow)
   },
 }
-let getHeight = (b)=>{
+let getHeight = b => {
   return b ? `${document.documentElement.clientHeight || document.body.clientHeight}px` : `auto`
 };

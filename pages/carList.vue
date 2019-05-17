@@ -23,6 +23,7 @@
   import FooterTab from '~/components/common/footer/footer'
   import backTop from '~/components/common/backTop'
   import axios from '~/plugins/axios'
+  import {filteData} from '~/config/getData'
 
   export default {
     head () {
@@ -46,8 +47,8 @@
       }
     },
     async asyncData () {
-      let { data } = await axios.get('/api/mobile/filteData.json');
-      return { users: data.carList }
+      let { data } = await filteData();
+       return { users : data.carList}
     },
     components: {
       loading,
