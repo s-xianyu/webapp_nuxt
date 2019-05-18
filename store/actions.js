@@ -1,6 +1,6 @@
 import {
   GET_USER,
-  CITY_SAVE,
+  GET_CITY,
 } from './mutations-type';
 import {getStore} from "../config/util/util";
 import {smallprogramlogin} from '~/config/getData'
@@ -16,6 +16,6 @@ export default {
     let name = JSON.parse(
       getStore('cityInfo')
     )
-    commit(CITY_SAVE,name);
+    commit(GET_CITY,name);
   }
 }

@@ -8,7 +8,7 @@ export const state = () => ({
   // 省市区县信息
   cityInfo:[],
   //市
-  thisCity:'全国',
+  thisCity:['全国'],
   // 历史记录地区
   historyCity:[],
   // 登录弹框展示

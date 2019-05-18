@@ -5,39 +5,68 @@ import {
   ADD_PAGE,
   LOGIN_SHOW,
   CITY_SAVE,
+  GET_CITY,
 } from './mutations-type';
 import {setStore,getStore,removeStore} from '../config/util/util';
 export default {
 
-  //城市保存
-  [CITY_SAVE](state,val){
+  //城市信息获取
+  [GET_CITY](state,val){
+    if(val){
+      // 保存选择城市信息
+      let city = [],position=[];
 
-    // 保存选择城市信息
-    let city = '';
-    val.forEach((key,index) =>{
-
-      if(index > 1){
-        city = val[1].area_name;
+      //如果所获取城市数组大于1，取中间的地名，否则取最后一位；
+      //0：省级，1：市级，2：县辖市
+      if(val.length>1){
+        city.push(val[1].area_name);
       }else{
-        city = key.area_name;
+        city.push(val[val.length-1].area_name);
       }
-    });
-    state.cityInfo = {...val};
-    state.thisCity = city;
+      if(val[val.length-1].area_name){
+        position.push(val[val.length-1].area_name)
+      }else{
+        position.push(val[val.length-1].cityName)
+      }
+      state.cityInfo = val;
+      state.thisCity = [...city,...position];
+    }
+  },
+
+  //选取地区详细信息保存
+  [CITY_SAVE](state,val){
+    debugger
+    // 保存选择城市信息
+    let city = [],position=[];
+
+    //如果所获取城市数组大于1，取中间的地名，否则取最后一位；
+    //0：省级，1：市级，2：县辖市
+    if(val.length>1){
+      city.push(val[1].area_name);
+    }else{
+      city.push(val[val.length-1].area_name);
+    }
+    if(val[val.length-1].area_name){
+      position.push(val[val.length-1].area_name)
+    }else{
+      position.push(val[val.length-1].cityName)
+    }
+    state.cityInfo = val;
+    state.thisCity = [...city,...position];
 
     //并保存选择城市到历史记录中
-    val.forEach((key,index) =>{
-      debugger
-      if(index > 1){
-        state.historyCity.push(val[1]);
-      }else{
-        state.historyCity.push(key);
-      }
-    });
+    // val.forEach((key,index) =>{
+    //   // debugger
+    //   if(index > 1){
+    //     state.historyCity.push(val[1]);
+    //   }else{
+    //     state.historyCity.push(key);
+    //   }
+    // });
 
     // 保存地区到本地
     setStore('cityInfo',val);
-    setStore('city',city);
+    setStore('city',state.thisCity);
     window.history.go(-1);
   },
 
@@ -60,7 +89,7 @@ export default {
       }
 
       // 添加到缓存
-      setStore('userInfo', val.mobile);
+      setStore('userInfo', val);
     } else {
       state.isLogin = false;
       state.userInfo = '';

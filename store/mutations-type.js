@@ -4,3 +4,4 @@ export const ADD_LIKE ='ADD_LIKE';
 export const ADD_PAGE ='ADD_PAGE';
 export const LOGIN_SHOW ='LOGIN_SHOW';
 export const CITY_SAVE ='CITY_SAVE';
+export const GET_CITY ='GET_CITY';

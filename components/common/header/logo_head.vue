@@ -5,7 +5,7 @@
     <div class="content">
       <router-link tag="div" to="/" class="logo"></router-link>
       <router-link tag="div" to="/city/city" class="station">
-        <span>{{thisCity}}</span>
+        <span>{{thisCity[0]}}</span>
         <i class="iconfont icon-jiantou9"></i>
       </router-link>
       <div class="mltSearch">
