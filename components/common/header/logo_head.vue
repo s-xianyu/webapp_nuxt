@@ -1,7 +1,7 @@
 // 带logo的头部导航
 
 <template>
-  <div class="header">
+  <div class="logo-header">
     <div class="content">
       <router-link tag="div" to="/" class="logo"></router-link>
       <router-link tag="div" to="/city/city" class="station">
@@ -35,10 +35,10 @@ export default {
     ...mapState(['isLogin','thisCity'])
   },
   methods:{
-    ...mapMutations(['LOGIN_SHOW']),
+    ...mapMutations(['WINHEIGHT']),
     // 登录弹框
     getLogin(){
-      this.LOGIN_SHOW();
+      this.WINHEIGHT();
     },
   },
 
@@ -46,7 +46,7 @@ export default {
 </script>
 <style lang="scss" scope>
   @import '~static/style/mixin';
-  .header{
+  .logo-header{
     .content{
       display: flex;
       height:1.564rem;
@@ -113,7 +113,7 @@ export default {
     }
   }
   .fixed{
-    .header{
+    .logo-header{
       .content{
         background:$f60;
         .logo{

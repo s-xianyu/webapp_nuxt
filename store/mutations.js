@@ -3,7 +3,7 @@ import {
   OUT_USER,
   ADD_LIKE,
   ADD_PAGE,
-  LOGIN_SHOW,
+  WINHEIGHT,
   CITY_SAVE,
   GET_CITY,
   GET_HISTORYCITY,
@@ -66,7 +66,7 @@ export default {
       [
         state.userInfo,
         state.isLogin,
-        state.loginShow
+        state.windowStatus
       ] = [
         val,
         true,
@@ -86,7 +86,7 @@ export default {
     }
 
     // 获取到窗口高度并保存
-    if(state.loginShow === true){
+    if(state.windowStatus === true){
       state.windowHeight = `${document.documentElement.clientHeight || document.body.clientHeight}px`
     }else{
       state.windowHeight = 'auto';
@@ -125,10 +125,10 @@ export default {
     state.likePrevent = false;
   },
 
-  // 登录弹框显示
-  [LOGIN_SHOW](state){
-    state.loginShow = !state.loginShow;
-    state.windowHeight = getHeight(state.loginShow)
+  // 全局浏览器高度设置、显示
+  [WINHEIGHT](state){
+    state.windowStatus = !state.windowStatus;
+    state.windowHeight = getHeight(state.windowStatus)
   },
 
   //搜索历史记录

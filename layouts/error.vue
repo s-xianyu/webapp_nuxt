@@ -1,6 +1,6 @@
 <template>
   <div class="err">
-    <Header :heads="header"/>
+    <titleHead :heads="header"/>
     <img src="http://static.hx2cars.com/resource/web/mobpages/images/404.png" alt="">
     <div class="text">
       <span @click="$history(-1)">返回上一页</span>
@@ -10,7 +10,7 @@
 </template>
 
 <script>
-  import Header from '~/components/common/header/back_head';
+  import titleHead from '~/components/common/header/title_head';
   export default {
     head(){
       return {
@@ -28,7 +28,7 @@
     },
 
     components:{
-      Header
+      titleHead
     },
     methods:{
     }

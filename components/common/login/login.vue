@@ -1,6 +1,6 @@
 <!--公用弹框登录模块-->
 <template>
-  <div class="logoFixed" ref="login" :class="{cur:loginShow}" :style="{ height: wrapperHeight + 'px' }">
+  <div class="logoFixed" ref="login" :class="{cur:windowStatus}" :style="{ height: wrapperHeight + 'px' }">
     <header>
       <h2>手机验证</h2>
       <span class="iconfont icon-prev" @click="back"></span>
@@ -58,7 +58,7 @@
       FooterTab
     },
     computed:{
-      ...mapState(['isLogin','loginShow'])
+      ...mapState(['isLogin','windowStatus'])
     },
     mounted(){
       this.getUserInfo();
@@ -72,7 +72,7 @@
       randomNum(){
         this.rnd = Math.random();
       },
-      ...mapMutations(['USER_SAVE','LOGIN_SHOW']),
+      ...mapMutations(['USER_SAVE','WINHEIGHT']),
       ...mapActions(['getUserInfo']),
 
       // 获取图片验证码
@@ -133,7 +133,7 @@
       },
       // 登录框返回
       back(){
-        this.LOGIN_SHOW();
+        this.WINHEIGHT();
       }
     }
   }

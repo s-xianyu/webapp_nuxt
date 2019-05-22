@@ -12,12 +12,12 @@ export const state = () => ({
   lastCity:'',
   // 历史记录地区
   historyCity:[],
-  // 登录弹框展示
-  loginShow:false,
-  // 登录弹框展示
-  cityShow:false,
+  // 全局body高度状态
+  windowStatus:false,
   //浏览器高度
   windowHeight:'auto',
+  // 登录弹框展示
+  cityShow:false,
   // 登录状态
   isLogin:false,
   //登录信息保存

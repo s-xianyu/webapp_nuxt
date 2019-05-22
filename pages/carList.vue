@@ -1,12 +1,10 @@
 <template>
   <transition name="index">
 
-    <div class="body">
-      <backHead :back="false"/>
-      <div class="main">
-        <div class="page-loadmore-wrapper" ref="wrapper" :style="{ height: wrapperHeight + 'px' }">
-           <list :list="users"/>
-        </div>
+    <div class="body" style="overflow: hidden" :style="{ height: windowHeight}">
+      <backHead :back="true"/>
+      <div class="main" ref="wrapper">
+        <list :list="users"/>
       </div>
       <backTop/>
       <!-- <FooterTab/> -->
@@ -22,6 +20,7 @@
   import backTop from '~/components/common/backTop'
   import axios from '~/plugins/axios'
   import {filteData} from '~/config/getData'
+  import {mapState} from 'vuex'
 
   export default {
     head () {
@@ -47,6 +46,9 @@
     async asyncData () {
       let { data } = await filteData();
        return { users : data.carList}
+    },
+    computed:{
+      ...mapState(['windowHeight'])
     },
     components: {
       loading,

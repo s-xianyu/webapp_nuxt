@@ -1,13 +1,13 @@
 // 带logo的头部导航
 // 接收参数
-// true -->返回上一页
-// false -->返回到首页
+// false -->返回上一页
+// true -->返回到首页
 
 <template>
-  <div class="header">
+  <div class="back-header">
     <div class="content">
       <div class="back">
-        <span v-if="back" class="iconfont icon-prev" @click="$history(-1)"></span>
+        <span v-if="!back" class="iconfont icon-prev" @click="$history(-1)"></span>
         <router-link to="/" v-else class="iconfont icon-prev" @click="$history(-1)"></router-link>
       </div>
       <div class="station">
@@ -21,12 +21,12 @@
         <div class="iconfont icon-daohang home"></div>
       </div>
     </div>
-    <headNav @backShowFun="backShowFun" :isShow="backShow"/>
+    <headNav/>
   </div>
 </template>
 <script>
   import headNav from '~/components/common/header/head_nav'
-  import {mapState} from 'vuex'
+  import {mapState,mapMutations} from 'vuex'
   export default {
     data () {
       return {
@@ -47,24 +47,22 @@
       ...mapState(['thisCity'])
     },
     methods:{
+      ...mapMutations(['WINHEIGHT']),
       navEvent(){
-        this.backShow = !this.backShow;
+        this.WINHEIGHT();
       },
-      backShowFun(data){
-        this.backShow = data;
-      }
     },
 
   }
 </script>
 <style lang="scss" scope>
   @import '~static/style/mixin';
-  .header{
+  .back-header{
     .content{
       display: flex;
       /*padding:0 .3rem;*/
       height:1.564rem;
-      background:#f7f7f7;
+      background:#fff;
       /*border-bottom: 1px solid #e1e1e1;*/
       position:relative;
       z-index: 120;

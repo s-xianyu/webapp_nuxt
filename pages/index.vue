@@ -88,7 +88,7 @@ export default {
     window.addEventListener('scroll', this.scrollHead);
     // 获取screen至页面顶部的距离
     // debugger
-    this.offsetTop = document.querySelector('.header').offsetTop;
+    this.offsetTop = document.querySelector('.logo-header').offsetTop;
 
   },
   methods:{

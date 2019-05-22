@@ -96,7 +96,7 @@
           this.HISTORYSEARCH_SAVE([name]);
         }
         this.$router.push({
-          path:`/carList/?keyword=${name}`,
+          path:`/carList/${name}`,
         })
       }
     }

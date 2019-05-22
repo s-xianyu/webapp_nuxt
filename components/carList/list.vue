@@ -14,7 +14,7 @@
       </router-link>
       <!--<li v-for="(item,index) in users.carList" :key="item.id" :id="item.id">{{item.id}}{{index}}</li>-->
     </ul>
-</template>    
+</template>
 <script>
 import axios from '~/plugins/axios'
 export default {
@@ -24,7 +24,7 @@ export default {
   },
   props:['list'],
   methods:{
-    
+
   }
 }
 </script>

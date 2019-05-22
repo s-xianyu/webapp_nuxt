@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div class="mlTopBox" :class="{back:isShow}">
+    <div class="mlTopBox" :class="{back:windowStatus}">
       <div class="swiper-nav">
         <mt-swipe :auto="40000">
           <mt-swipe-item v-for="(item,index) in nav" :key="index">
@@ -17,11 +17,12 @@
         </div>
       </div>
     </div>
-    <div class="bg" v-if="isShow" @click="mlTopBoxFun"></div>
+    <div class="bg" v-if="windowStatus" @click="mlTopBoxFun"></div>
   </div>
 </template>
 
 <script>
+  import {mapState,mapMutations} from 'vuex'
   export default {
     data() {
       return {
@@ -45,12 +46,15 @@
         ]
       }
     },
-    props:['isShow'],
     mounted(){
     },
+    computed:{
+      ...mapState(['windowStatus'])
+    },
     methods:{
+      ...mapMutations(['WINHEIGHT']),
       mlTopBoxFun(){
-        this.$emit('backShowFun',!this.isShow)
+        this.WINHEIGHT();
       },
       getPath(path){
         // debugger
