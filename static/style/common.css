@@ -7,7 +7,7 @@ html * {
   margin: 0 auto;
   padding: 0
 }
-body{font-size:.4rem;width:12.4rem;height:100%;background-color:#f6f6f6;color:#333;margin:0 auto;padding:0}
+body{font-size:.4rem;width:12.4rem;height:100%;background-color:#fff;color:#333;margin:0 auto;padding:0}
 img{display:block;max-width:100%}
 dd,dl,dt,li,ol,ul{list-style:none;margin:0;padding:0}
 .clear:after{visibility:hidden;display:block;font-size:0;content:".";clear:both;height:0}
@@ -33,16 +33,20 @@ input:hover,select:hover,figure:hover,figcaption:hover{outline:none}
 .hide{display:none}
 .show{display:block}
 .ellipse{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-#app {
-  position:relative;
+@media screen and (max-width: 320px) {
+  html {
+    font-size:25.76px
+  }
 }
-.nav {
-  margin-bottom:1.5rem;
-}
-nav {
-  background: #fff;
-  padding-top:1.6rem;
-}
-.rightCur{
 
+@media screen and (max-width: 375px) {
+  html {
+    font-size:30.1932px
+  }
+}
+
+@media screen and (min-width: 376px) {
+  html {
+    font-size:33.33px
+  }
 }

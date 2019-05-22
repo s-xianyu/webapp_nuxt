@@ -1,7 +1,10 @@
-export const GET_USER ='GET_USER';
-export const OUT_USER ='OUT_USER';
-export const ADD_LIKE ='ADD_LIKE';
-export const ADD_PAGE ='ADD_PAGE';
-export const LOGIN_SHOW ='LOGIN_SHOW';
-export const CITY_SAVE ='CITY_SAVE';
-export const GET_CITY ='GET_CITY';
+export const USER_SAVE ='USER_SAVE';                //登录信息保存
+export const OUT_USER ='OUT_USER';                  //退出登录
+export const ADD_LIKE ='ADD_LIKE';                  //猜你喜欢列表数据
+export const ADD_PAGE ='ADD_PAGE';                  //猜你喜欢列表页数
+export const LOGIN_SHOW ='LOGIN_SHOW';              //登录弹框显示
+export const CITY_SAVE ='CITY_SAVE';                //城市选中保存
+export const GET_CITY ='GET_CITY';                  //获取当前城市信息
+export const GET_HISTORYCITY ='GET_HISTORYCITY';    //获取历史记录
+export const ALL_CITY ='ALL_CITY';                  //多选地区
+export const HISTORYSEARCH_SAVE ='HISTORYSEARCH_SAVE';                  //多选地区

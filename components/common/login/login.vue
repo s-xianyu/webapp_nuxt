@@ -72,7 +72,7 @@
       randomNum(){
         this.rnd = Math.random();
       },
-      ...mapMutations(['GET_USER','LOGIN_SHOW']),
+      ...mapMutations(['USER_SAVE','LOGIN_SHOW']),
       ...mapActions(['getUserInfo']),
 
       // 获取图片验证码
@@ -108,7 +108,7 @@
         let { data } = await smallprogramlogin(params);
         // debugger;
         console.log(data);
-        this.GET_USER(data);
+        this.USER_SAVE(data);
 
       },
 

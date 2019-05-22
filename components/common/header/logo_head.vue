@@ -5,11 +5,11 @@
     <div class="content">
       <router-link tag="div" to="/" class="logo"></router-link>
       <router-link tag="div" to="/city/city" class="station">
-        <span>{{thisCity[0]}}</span>
+        <span>{{thisCity}}</span>
         <i class="iconfont icon-jiantou9"></i>
       </router-link>
       <div class="mltSearch">
-        <span>我要找车</span>
+        <router-link tag="span" to="/search/search">我要找车</router-link>
       </div>
       <div class="mlRight">
         <div @click="getLogin" class="login" v-if="!isLogin">登录</div>
@@ -79,6 +79,9 @@ export default {
             font-size:.48rem;
             color:$c666;
           }
+          i{
+            margin-right:.2rem;
+          }
         }
         &.mltSearch{
           flex:4;
@@ -100,7 +103,7 @@ export default {
           }
         }
         &.mlRight{
-          flex:.8;
+          flex:1;
           font-size:.48rem;
           .home{
             font-size:.7rem;

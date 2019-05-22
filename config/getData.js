@@ -3,7 +3,7 @@ const api = `/api`;
 // const api = ``;
 
 /**
- * 获取猜您喜欢列表
+ * 获取首页猜您喜欢列表
  */
 export const gainLike = (params) => get(`${api}/mobile/guessYouLike.json`,params);
 
@@ -51,6 +51,21 @@ export const getAreaByCityCode = params => get(`${api}/tools/getAreaByCityCode.j
  *三级地区获取
  */
 export const getAreaLevel3 = params => get(`${api}/mobile/getAreaLevel3.json`,params);
+
+/**
+ *热门搜索列表
+ */
+export const  gethotcar = () => get(`${api}/search/gethotcar.json`);
+
+/**
+ *搜索猜您喜欢列表
+ */
+export const  guessWhatYouLike = () => get(`${api}/mobile/guessWhatYouLike.json`);
+
+/**
+ *搜索
+ */
+export const  searchsuggest = params => get(`${api}/mobile/searchsuggest.json`,params);
 
 
 

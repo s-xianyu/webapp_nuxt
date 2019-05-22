@@ -2,9 +2,7 @@
   <transition name="index">
 
     <div class="body">
-      <div class="fixedTop">
-        <backHead/>
-      </div>
+      <backHead :back="false"/>
       <div class="main">
         <div class="page-loadmore-wrapper" ref="wrapper" :style="{ height: wrapperHeight + 'px' }">
            <list :list="users"/>

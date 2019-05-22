@@ -1,77 +1,67 @@
 import {
-  GET_USER,
+  USER_SAVE,
   OUT_USER,
   ADD_LIKE,
   ADD_PAGE,
   LOGIN_SHOW,
   CITY_SAVE,
   GET_CITY,
+  GET_HISTORYCITY,
+  ALL_CITY,
+  HISTORYSEARCH_SAVE
 } from './mutations-type';
 import {setStore,getStore,removeStore} from '../config/util/util';
 export default {
 
   //城市信息获取
   [GET_CITY](state,val){
-    if(val){
-      // 保存选择城市信息
-      let city = [],position=[];
+   if(val){
+     state.cityInfo = val;
+     state.thisCity = cityInfo(val)[0];
+     state.lastCity = cityInfo(val)[1];
+   }
+  },
 
-      //如果所获取城市数组大于1，取中间的地名，否则取最后一位；
-      //0：省级，1：市级，2：县辖市
-      if(val.length>1){
-        city.push(val[1].area_name);
-      }else{
-        city.push(val[val.length-1].area_name);
-      }
-      if(val[val.length-1].area_name){
-        position.push(val[val.length-1].area_name)
-      }else{
-        position.push(val[val.length-1].cityName)
-      }
-      state.cityInfo = val;
-      state.thisCity = [...city,...position];
+  //获取历史科记录信息
+  [GET_HISTORYCITY](state,val){
+    if(val){
+      state.historyCity = val;
     }
   },
 
   //选取地区详细信息保存
   [CITY_SAVE](state,val){
-    debugger
-    // 保存选择城市信息
-    let city = [],position=[];
-
-    //如果所获取城市数组大于1，取中间的地名，否则取最后一位；
-    //0：省级，1：市级，2：县辖市
-    if(val.length>1){
-      city.push(val[1].area_name);
-    }else{
-      city.push(val[val.length-1].area_name);
+    if(val){
+      state.cityInfo = val;
+      state.thisCity = cityInfo(val)[0];
+      state.lastCity = cityInfo(val)[1];
     }
-    if(val[val.length-1].area_name){
-      position.push(val[val.length-1].area_name)
-    }else{
-      position.push(val[val.length-1].cityName)
-    }
-    state.cityInfo = val;
-    state.thisCity = [...city,...position];
 
-    //并保存选择城市到历史记录中
-    // val.forEach((key,index) =>{
-    //   // debugger
-    //   if(index > 1){
-    //     state.historyCity.push(val[1]);
-    //   }else{
-    //     state.historyCity.push(key);
-    //   }
-    // });
+    //保存选择城市到历史记录中
+    let historyKey = val.length > 1 ? val[0] : val[val.length-1];
+    state.historyCity.unshift(historyKey);
+    //过滤重复
+    state.historyCity = [...new Set(state.historyCity)];
+    //切割前3条
+    if(state.historyCity.length >= 3){
+      state.historyCity=state.historyCity.splice(0,3);
+    }
 
     // 保存地区到本地
     setStore('cityInfo',val);
-    setStore('city',state.thisCity);
+    setStore('historyCity',state.historyCity);
+    window.history.go(-1);
+  },
+
+  //多选地区保存
+  [ALL_CITY](state,val){
+    state.cityInfo = val;
+    setStore('cityInfo',state.cityInfo);
     window.history.go(-1);
   },
 
   // 登录保存信息和登录状态
-  [GET_USER](state, val) {
+  [USER_SAVE](state, val) {
     if (val) {
       [
         state.userInfo,
@@ -106,7 +96,7 @@ export default {
   // 退出登录清除登录信息
   [OUT_USER](state) {
     state.isLogin = false;
-    state.userInfo = '';
+    state.userInfo = null;
     removeStore('userInfo');
     window.history.go(-1);
   },
@@ -127,7 +117,6 @@ export default {
       // 否则直接赋值就好了
       [state.likeList] = [val];
     }
-
   },
 
   // 猜您喜欢列表page
@@ -141,7 +130,41 @@ export default {
     state.loginShow = !state.loginShow;
     state.windowHeight = getHeight(state.loginShow)
   },
+
+  //搜索历史记录
+  [HISTORYSEARCH_SAVE](state,val){
+    if(val){
+      //合并，去重
+      state.historySearch = [...new Set([...val,...state.historySearch])];
+      //取8条数据
+      state.historySearch = state.historySearch.splice(0,8);
+      //存储
+      setStore('historySearch',state.historySearch);
+    }
+  }
 }
 let getHeight = b => {
   return b ? `${document.documentElement.clientHeight || document.body.clientHeight}px` : `auto`
+};
+let cityInfo = (val)=>{
+  let content;
+  // 保存选择城市信息
+  let city = [], //当前城市选中
+    position=[]; //最后一级名称保存
+
+  //如果所获取城市数组大于1，取中间的地名，否则取最后一位；
+  //0：省级，1：市级，2：县辖市
+  if(val.length>1){
+    city.push(val[0].area_name);
+  }else{
+    city.push(val[val.length-1].area_name);
+  }
+
+  if(val[val.length-1].area_name){
+    position.push(val[val.length-1].area_name)
+  }else{
+    position.push(val[val.length-1].cityName)
+  }
+  content = [...city,...position];
+  return content;
 };

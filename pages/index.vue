@@ -108,6 +108,9 @@ export default {
 </script>
 <style lang="scss" scope>
   @import '~static/style/mixin';
+  .body{
+    background:#f6f6f6;
+  }
   .fixed{
     position: fixed;
     top:0;

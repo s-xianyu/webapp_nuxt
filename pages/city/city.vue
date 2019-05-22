@@ -12,7 +12,7 @@
           <div class="mzaHistory" v-if="historyCity.length > 0">
             <p>历史记录：</p>
             <div class="history_content">
-              <span v-for="item in historyCity" :key="item.erea_code">{{item.area_name}}</span>
+              <span @click="historyCityFun(item)" v-for="item in historyCity" :key="item.erea_code">{{item.area_name}}</span>
             </div>
           </div>
           <div class="mzaHot" v-if="hotList.length > 0">
@@ -30,10 +30,10 @@
                 v-for="item in cityStair1"
                 :key="item.area_code">
                 <span @click="cityFun(item.area_code,item.area_name)">{{item.area_name}}</span>
-                <div class="leftBtn" v-if="selectShow">
-                  <b class="animated fadeInRight" :class="{cur:radioToggle}"></b>
+                <div class="leftBtn" v-show="selectShow">
+                  <b class="animated fadeInRight"></b>
                 </div>
-                <u v-if="selectShow" @click="radioFun" class="bg"></u>
+                <u v-show="selectShow" @click="radioFun($event,item)" class="bg"></u>
               </div>
             </div>
           </div>
@@ -46,7 +46,7 @@
               <i  @click="stair2Show = !stair2Show" class="close iconfont icon-close"></i>
             </div>
             <div class="line"></div>
-            <div @click="unlimitedProvince" class="all">不限</div>
+            <div @click="unlimitedCity" class="all">不限</div>
             <ul>
               <li
                 @click="city3Fun(item.area_code,item.area_name)"
@@ -59,11 +59,11 @@
           <div class="city-stair2-left" @click="stair3Show = !stair3Show"></div>
           <div class="city-stair2-content">
             <div class="city_title">
-              <span @click="unlimitedCity">{{city.area_name}}</span>
+              <span @click="unlimitedCounty">{{city.area_name}}</span>
               <i  @click="stair3Show = !stair3Show" class="close iconfont icon-close"></i>
             </div>
             <div class="line"></div>
-            <div @click="unlimitedCity" class="all">不限</div>
+            <div @click="unlimitedCounty" class="all">不限</div>
             <div class="title" v-if="cityStair3.motorList">二手车交易市场</div>
             <ul>
               <li
@@ -86,17 +86,18 @@
         <a v-for="item in keymap">{{item}}</a>
       </div>
       <div v-if="selectShow" class="allSelectBtn animated fadeInUp">
-        <span>取消</span>
-        <span>确定</span>
+        <span @click="allSelectFun">取消</span>
+        <span @click="allSelectOn">确定</span>
       </div>
     </div>
   </div>
 </template>
 
 <script>
+  import {Toast} from 'mint-ui'
   import TitleHead from '~/components/common/header/title_head'
   import { historyKeyAndHotKey,getprovinces,getAreaByCityCode,getAreaLevel3} from '~/config/getData'
-  import {mapState,mapMutations} from 'vuex'
+  import {mapState,mapMutations,mapActions} from 'vuex'
   export default {
     data() {
       return {
@@ -115,8 +116,9 @@
         stair2Show:false, //二级显示
         stair3Show:false, //三级显示
         allSelectText:'多选', //多选按钮文字
+        allOption:[], //多选保存数组
+        allOptionID:[], //多选ID数组
         selectShow:false, //单选多选切换
-        radioToggle:false, //多选城市按钮切换
         hotList:[
           // ['全国','北京','上海','广州','深圳','杭州'],
           // ['南京','天津','重庆','苏州','长沙','哈尔滨']
@@ -137,9 +139,11 @@
     },
     mounted(){
       this.getCityList();
+      this.getHistoryCity();
     },
     methods:{
-      ...mapMutations(['CITY_SAVE',]),
+      ...mapActions(['getHistoryCity']),
+      ...mapMutations(['CITY_SAVE','ALL_CITY']),
 
       // 一级地区获取
       async getCityList(){
@@ -159,23 +163,6 @@
           // 数组合并，去重，排序，一步到位
           this.keymap = [...new Set([...this.keymap,...bxwName])].sort();
         });
-      },
-
-      // 单选，多选切换
-      allSelectFun(){
-        [
-          this.selectShow, //切换按钮显示
-          this.radioToggle //切换时，清掉radio选中
-        ] = [
-          !this.selectShow,
-          false
-        ];
-        this.allSelectText = this.selectShow ? '单选' : '多选';
-      },
-
-      // 选择城市切换
-      radioFun(){
-        this.radioToggle = !this.radioToggle;
       },
 
       // 二级地区获取
@@ -219,20 +206,71 @@
         //合并二手车市场和县辖区
         let arr = [...this.cityStair3.areas,...this.cityStair3.motorList];
         this.county = this.forOFKey2(arr,code);
-        let val = [this.province,this.city,this.county];
+        let val = [this.city,this.county];
         this.CITY_SAVE(val);
       },
 
-      // 省级不限选择
-      unlimitedProvince(){
+      // 市级不限选择
+      unlimitedCity(){
         let val = [this.province];
         this.CITY_SAVE(val);
 
       },
-      // 省级不限选择
-      unlimitedCity(){
-        let val = [this.province,this.city];
+      // 县级不限选择
+      unlimitedCounty(){
+        let val = [this.city];
         this.CITY_SAVE(val);
+      },
+
+      //历史记录选择
+      historyCityFun(item){
+        this.CITY_SAVE([item]);
+      },
+
+      // 单选，多选切换
+      allSelectFun(){
+        [
+          this.selectShow, //切换按钮显示
+        ] = [
+          !this.selectShow,
+        ];
+        this.allSelectText = this.selectShow ? '单选' : '多选';
+        if(!this.selectShow){
+          document.querySelectorAll('.leftBtn').forEach(key =>{
+            key.classList.remove('cur');
+          })
+          this.allOption = [];
+          this.allOptionStr = [];
+        }
+      },
+
+      // 多选城市
+      radioFun(e,key){
+        if(this.allOptionID.includes(key.area_code) || this.allOption.length >= 5){
+          e.currentTarget.previousElementSibling.classList.remove('cur');
+          this.removeArray(this.allOption, key.area_code);
+          this.removeArray(this.allOptionID, key.area_code);
+        }else{
+          e.currentTarget.previousElementSibling.classList.add('cur');
+          this.allOption = this.allOption.concat( key);
+          this.allOptionID = this.allOptionID.concat( key.area_code);
+        }
+      },
+
+      //确认多选提交
+      allSelectOn(){
+        this.ALL_CITY(this.allOption);
+      },
+      removeArray(arr,val){
+        for (let i in arr) {
+          if (arr[i].area_code === val) {
+            //删除当前数组
+            arr.splice(i, 1);
+            //删除当前数组ID
+            this.allOptionID.splice(i,1);
+            break;
+          }
+        }
       },
 
       // 返回当前地区信息
@@ -270,6 +308,9 @@
 
 <style lang="scss" scoped>
 @import "~static/style/mixin";
+.city{
+  background:#f6f6f6;
+}
   .city-content{
     padding-top:1.8rem;
     .city-stair1{
@@ -360,15 +401,17 @@
               height:1.518rem;
               flex: 1;
               padding-right: .6rem;
-              b{
-                @include wh(.73rem,.73rem);
-                border:1px solid #ccc;
-                border-radius: 50%;
-                &.cur{
+              &.cur{
+                b{
                   border:none;
                   background: #f60 url(http://static.hx2cars.com/resource/web/dist/static/mobpages/images/mindex/brandselect.png) center center no-repeat;
                   background-size: .429rem auto;
                 }
+              }
+              b{
+                @include wh(.73rem,.73rem);
+                border:1px solid #ccc;
+                border-radius: 50%;
               }
             }
             .bg{

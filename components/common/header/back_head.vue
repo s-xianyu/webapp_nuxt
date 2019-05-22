@@ -1,17 +1,21 @@
 // 带logo的头部导航
+// 接收参数
+// true -->返回上一页
+// false -->返回到首页
 
 <template>
   <div class="header">
     <div class="content">
       <div class="back">
-        <span class="iconfont icon-prev" @click="$history(-1)"></span>
+        <span v-if="back" class="iconfont icon-prev" @click="$history(-1)"></span>
+        <router-link to="/" v-else class="iconfont icon-prev" @click="$history(-1)"></router-link>
       </div>
       <div class="station">
-        <router-link tag="span" to="/city/city"><i class="iconfont icon-dingwei"></i>{{city}}</router-link>
+        <router-link tag="span" to="/city/city"><i class="iconfont icon-dingwei"></i>{{thisCity}}</router-link>
         <!--<i class="iconfont icon-jiantou9"></i>-->
       </div>
       <div class="mltSearch">
-        <span>我要找车</span>
+        <router-link tag="span" to="/search/search">我要找车</router-link>
       </div>
       <div class="mlRight" @click="navEvent">
         <div class="iconfont icon-daohang home"></div>
@@ -35,11 +39,12 @@
     mounted() {
 
     },
+    props:['back'],
     components:{
       headNav,
     },
     computed:{
-      ...mapState(['city'])
+      ...mapState(['thisCity'])
     },
     methods:{
       navEvent(){
