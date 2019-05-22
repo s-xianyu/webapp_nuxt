@@ -3,6 +3,7 @@
 
     <div class="body" style="overflow: hidden" :style="{ height: windowHeight}">
       <backHead :back="true"/>
+      <listNav/>
       <div class="main" ref="wrapper">
         <list :list="users"/>
       </div>
@@ -15,6 +16,7 @@
 <script>
   import loading from '~/components/common/loading'
   import list from '~/components/carList/list'
+  import listNav from '~/components/carList/listNav'
   import backHead from '~/components/common/header/back_head'
   import FooterTab from '~/components/common/footer/footer'
   import backTop from '~/components/common/backTop'
@@ -55,7 +57,8 @@
       list,
       backHead,
       backTop,
-      FooterTab
+      FooterTab,
+      listNav
     },
     mounted () {
       // loading动画展示
