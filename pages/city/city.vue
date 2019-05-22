@@ -240,7 +240,7 @@
             key.classList.remove('cur');
           })
           this.allOption = [];
-          this.allOptionStr = [];
+          this.allOptionID = [];
         }
       },
 
