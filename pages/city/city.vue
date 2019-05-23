@@ -94,18 +94,22 @@
 </template>
 
 <script>
-  import {Toast} from 'mint-ui'
   import TitleHead from '~/components/common/header/title_head'
   import { historyKeyAndHotKey,getprovinces,getAreaByCityCode,getAreaLevel3} from '~/config/getData'
   import {mapState,mapMutations,mapActions} from 'vuex'
   export default {
+    head(){
+      return{
+        title:'地区选择'
+      }
+    },
     data() {
       return {
         msg: 'city',
         heads:{
           title:'地区选择',
           position:true,
-      },
+        },
         keymap: [], //首字母
         province:'',  //当前选中的一级城市
         city:'', //当前选中的二级城市
@@ -438,7 +442,7 @@
     }
     .city-stairTo{
       position:fixed;
-      top:0;
+      top:1.8rem;
       right:0;
       z-index: 120;
       @include wh(100%,100%);
@@ -453,13 +457,13 @@
       .city-stair2-left{
         @include wh(30%,100%);
         position:fixed;
-        top:1.8rem;
+        top:0;
         left:0;
         z-index: 130;
       }
       .city-stair2-content{
         position:fixed;
-        top:1.8rem;
+        top:0;
         right:0;
         @include wh(70%,100%);
         overflow: scroll;

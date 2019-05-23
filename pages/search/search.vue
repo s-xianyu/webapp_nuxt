@@ -48,6 +48,11 @@
   import { gethotcar,guessWhatYouLike,searchsuggest} from '~/config/getData'
   import {mapState,mapMutations,mapActions} from 'vuex'
   export default {
+    head(){
+      return {
+        title:'搜索页'
+      }
+    },
     data() {
       return {
         msg: 'search',
@@ -96,7 +101,7 @@
           this.HISTORYSEARCH_SAVE([name]);
         }
         this.$router.push({
-          path:`/carList/${name}`,
+          path:`/findCar/?keyword=${name}`,
         })
       }
     }

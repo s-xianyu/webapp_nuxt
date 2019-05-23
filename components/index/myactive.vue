@@ -2,7 +2,7 @@
   <div class="myactive">
     <div class="tab">
       <div class="">
-        <router-link class="mCar" tag="span" to="/carList">我要买车 <i class="iconfont icon-bianqian"></i></router-link>
+        <router-link class="mCar" tag="span" to="/findCar">我要买车 <i class="iconfont icon-bianqian"></i></router-link>
         <router-link class="mCar2" tag="span" to="/">我要卖车 <i class="iconfont icon-bianqian"></i></router-link>
       </div>
       <div class="">

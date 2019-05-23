@@ -86,11 +86,12 @@ export default {
     }
 
     // 获取到窗口高度并保存
-    if(state.windowStatus === true){
-      state.windowHeight = `${document.documentElement.clientHeight || document.body.clientHeight}px`
-    }else{
-      state.windowHeight = 'auto';
-    }
+    // if(state.windowStatus === true){
+    //   state.windowHeight = `${document.documentElement.clientHeight || document.body.clientHeight}px`
+    // }else{
+    //   state.windowHeight = 'auto';
+    // }
+    state.windowHeight = getHeight(state.windowStatus)
   },
 
   // 退出登录清除登录信息

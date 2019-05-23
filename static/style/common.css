@@ -7,13 +7,13 @@ html * {
   margin: 0 auto;
   padding: 0
 }
-body{font-size:.4rem;width:12.4rem;height:100%;background-color:#fff;color:#333;margin:0 auto;padding:0}
+body{font-size:.4rem;width:12.4rem;height:100%;background-color:#fff;color:#444;margin:0 auto;padding:0}
 img{display:block;max-width:100%}
 dd,dl,dt,li,ol,ul{list-style:none;margin:0;padding:0}
 .clear:after{visibility:hidden;display:block;font-size:0;content:".";clear:both;height:0}
 * html .clear{zoom:1}a{text-decoration:none;outline:0;color:#666}
 a:not(href){cursor:pointer}
-a:visited{color:#333}
+a:visited{color:#444}
 ::selection{background:#2566b8;color:#fff}
 i,em{font-style:normal}
 input,textarea{-webkit-appearance:none;border-radius:0;font-size:.22rem;padding:0}
@@ -49,4 +49,10 @@ input:hover,select:hover,figure:hover,figcaption:hover{outline:none}
   html {
     font-size:33.33px
   }
+}
+.fade-enter-active, .fade-leave-active {
+  transition: opacity .5s
+}
+.fade-enter, .fade-leave-active {
+  opacity: 0
 }

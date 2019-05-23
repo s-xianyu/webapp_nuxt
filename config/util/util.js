@@ -138,3 +138,10 @@ let getQueryString = (name) =>{
 };
 Vue.prototype.$getQueryString = getQueryString;
 
+/*
+* 当前年份获取
+*/
+let getYear = (year) =>{
+  return (new Date().getFullYear()-year);
+};
+Vue.prototype.$getYear = getYear;

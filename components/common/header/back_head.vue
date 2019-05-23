@@ -21,7 +21,7 @@
         <div class="iconfont icon-daohang home"></div>
       </div>
     </div>
-    <headNav/>
+    <headNav @navShow="navGetData" :navShow="navShow"/>
   </div>
 </template>
 <script>
@@ -30,10 +30,7 @@
   export default {
     data () {
       return {
-        login:{
-          state: false,
-        },
-        backShow:false
+        navShow:false,
       }
     },
     mounted() {
@@ -49,8 +46,12 @@
     methods:{
       ...mapMutations(['WINHEIGHT']),
       navEvent(){
+        this.navShow = !this.navShow;
         this.WINHEIGHT();
       },
+      navGetData(data){
+        this.navShow = data;
+      }
     },
 
   }

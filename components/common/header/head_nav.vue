@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div class="mlTopBox" :class="{back:windowStatus}">
+    <div class="mlTopBox" :class="{back:navShow}">
       <div class="swiper-nav">
         <mt-swipe :auto="40000">
           <mt-swipe-item v-for="(item,index) in nav" :key="index">
@@ -17,7 +17,7 @@
         </div>
       </div>
     </div>
-    <div class="bg" v-if="windowStatus" @click="mlTopBoxFun"></div>
+    <div class="bg" v-if="navShow" @click="mlTopBoxFun"></div>
   </div>
 </template>
 
@@ -43,17 +43,17 @@
             {title:'保养记录',img:'http://static.hx2cars.com/resource/web/dist/static/mobpages/images/mindex/tool1.png',path:'/carList'},
             {title:'保养记录',img:'http://static.hx2cars.com/resource/web/dist/static/mobpages/images/mindex/tool1.png',path:'/carList'}
           ]
-        ]
+        ],
       }
     },
-    mounted(){
-    },
+    props:['navShow'],
     computed:{
-      ...mapState(['windowStatus'])
+      ...mapState(['']),
     },
     methods:{
       ...mapMutations(['WINHEIGHT']),
       mlTopBoxFun(){
+        this.$emit('navShow',!this.navShow);
         this.WINHEIGHT();
       },
       getPath(path){
