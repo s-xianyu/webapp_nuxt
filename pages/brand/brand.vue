@@ -2,6 +2,9 @@
   <div class="brand">
     <div class="animated fadeInRight">
       <TitleHead :heads="heads"></TitleHead>
+      <div class="brand-content"></div>
+      <div class="brand-menu"></div>
+
     </div>
   </div>
 </template>
@@ -20,6 +23,7 @@
         heads:{
           title:'品牌选择',
           position:true,
+          brandMenu:['A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z']
         },
       }
     },

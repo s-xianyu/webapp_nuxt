@@ -20,7 +20,10 @@
             :class="item === nav[navIndex] ? 'cur' : ''"
             v-for="(item,index) in orderArr"
             @click="liClickSplice(item)"
-            :key="index">{{item}}</li>
+            :key="index">
+            <span>{{item}}</span>
+            <i v-if="item === nav[navIndex]" class="iconfont icon-gou1"></i>
+          </li>
         </ul>
         <div v-if="navIndex === 2"  class="price">
           <h2>自定义价格(万元)</h2>
@@ -225,15 +228,21 @@
       .listNav-layer-content{
         .order{
           li{
-            padding-left:.48rem;
+            padding:0 .48rem;
             border-top:1px solid #e1e1e1;
             @include wh(100%,1.34rem);
             display: flex;
-            justify-content: flex-start;
+            justify-content: space-between;
             align-items: center;
             font-size:.45rem;
             &.cur{
+              span{
+                color:$f60;
+              }
+            }
+            i{
               color:$f60;
+              font-size:.42rem;
             }
           }
         }
