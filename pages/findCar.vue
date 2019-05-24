@@ -1,26 +1,26 @@
 <template>
   <transition name="index">
     <div class="body" style="overflow: hidden" :style="{ height: windowHeight}">
-      <backHead :back="true"/>
+      <BackHead :back="true"/>
       <div :class="{fixeds:isFixed}">
-        <listNav/>
+        <ListNav/>
       </div>
       <div class="main">
-        <list :list="users"/>
+        <List/>
       </div>
-      <backTop/>
+      <BackTop/>
       <!-- <FooterTab/> -->
-      <loading v-if="loadingShow"/>
+      <Loading v-if="loadingShow"/>
     </div>
   </transition>
 </template>
 <script>
-  import loading from '~/components/common/loading'
-  import list from '~/components/findCar/list'
-  import listNav from '~/components/findCar/listNav'
-  import backHead from '~/components/common/header/back_head'
+  import Loading from '~/components/common/loading'
+  import List from '~/components/findCar/list'
+  import ListNav from '~/components/findCar/listNav'
+  import BackHead from '~/components/common/header/back_head'
   import FooterTab from '~/components/common/footer/footer'
-  import backTop from '~/components/common/backTop'
+  import BackTop from '~/components/common/backTop'
   import {filteData} from '~/config/getData'
   import {mapState,mapActions} from 'vuex'
 
@@ -45,20 +45,20 @@
       // debugger
       this.offsetTop = document.querySelector('.listNav').offsetTop;
     },
-    async asyncData () {
-      let { data } = await filteData();
-       return { users : data.carList}
-    },
+    // async asyncData () {
+    //   let { data } = await filteData();
+    //    return { users : data.carList}
+    // },
     computed:{
       ...mapState(['windowHeight'])
     },
     components: {
-      loading,
-      list,
-      backHead,
-      backTop,
+      Loading,
+      List,
+      BackHead,
+      BackTop,
       FooterTab,
-      listNav
+      ListNav
     },
     methods:{
       ...mapActions(['getCity']),

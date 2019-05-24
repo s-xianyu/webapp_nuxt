@@ -30,11 +30,11 @@
       </ul>
       <div v-else="this.likeList.length === 0" class="no-center">暂时没有推荐内容</div>
     </mt-loadmore>
-    <loading v-if="loadingShow"/>
+    <Loading v-if="loadingShow"/>
   </div>
 </template>
 <script>
-import loading from '~/components/common/loading'
+import Loading from '~/components/common/loading'
 import {mapState,mapMutations} from 'vuex'
 import {gainLike} from '~/config/getData'
 export default {
@@ -59,7 +59,7 @@ export default {
     }
   },
   components:{
-    loading
+    Loading
   },
   methods:{
     ...mapMutations(['ADD_LIKE','ADD_PAGE']),

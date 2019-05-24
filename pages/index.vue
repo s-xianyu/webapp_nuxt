@@ -3,15 +3,15 @@
     <div class="body" style="overflow: hidden" :style="{ height: windowHeight}">
       <AppLoad :show="true"/>
       <div :class="{fixed:isFixed}">
-        <logoHead/>
+        <LogoHead/>
       </div>
       <Swiper :imgList="swiperList"/>
       <MyActive :homeList="homeList.homerecommended"/>
-      <information :information="homeList.information"/>
-      <mylike/>
+      <Information :information="homeList.information"/>
+      <Mylike/>
       <!--<FooterTab/>-->
-      <backTop/>
-      <loading v-if="loadingShow"/>
+      <BackTop/>
+      <Loading v-if="loadingShow"/>
       <Login/>
     </div>
   </transition>
@@ -19,15 +19,15 @@
 <script>
 import {indexoeo} from '~/config/getData'
 import AppLoad from '~/components/common/appLoad'
-import backTop from '~/components/common/backTop'
-import logoHead from '~/components/common/header/logo_head'
-import loading from '~/components/common/loading'
+import LogoHead from '~/components/common/header/logo_head'
+import Loading from '~/components/common/loading'
 import Swiper from '~/components/common/swiper'
 import MyActive from '~/components/index/myactive'
-import information from '~/components/index/information'
-import mylike from '~/components/index/mylike'
+import Information from '~/components/index/information'
+import Mylike from '~/components/index/mylike'
 import FooterTab from '~/components/common/footer/footer'
 import Login from '~/components/common/login/login'
+import BackTop from '~/components/common/backTop'
 import axios from '~/plugins/axios'
 import {mapActions,mapState} from 'vuex'
 export default {
@@ -59,13 +59,13 @@ export default {
   },
   components: {
     AppLoad,
-    backTop,
-    logoHead,
-    loading,
+    BackTop,
+    LogoHead,
+    Loading,
     Swiper,
     MyActive,
-    information,
-    mylike,
+    Information,
+    Mylike,
     Login,
     FooterTab
   },
