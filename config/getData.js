@@ -67,6 +67,24 @@ export const  guessWhatYouLike = () => get(`${api}/mobile/guessWhatYouLike.json`
  */
 export const  searchsuggest = params => get(`${api}/mobile/searchsuggest.json`,params);
 
+/**
+ *pingpai 1
+ */
+export const  getonelevelbrand = params => get(`${api}/tools/getonelevelbrand.json`,params);
+/**
+ *pingpai 2
+ */
+export const  getCarSerialByParentIdJson = params => get(`${api}/mobile/appMatchRequire/getCarSerialByParentIdJson.json?pids=12817`,params);
+
+/**
+ *pingpai 3
+ */
+export const  getCarTypeByParentIdJson = params => get(`${api}/car/getCarTypeByParentIdJson.json?parentId=14978`,params);
+
+/**
+ *pingpai 4
+ */
+export const  getCarTypeByParentIdKuanxin = params => get(`${api}/car/getCarTypeByParentIdKuanxin.json?parentId=156&title=4.2L`,params);
 
 
 /**

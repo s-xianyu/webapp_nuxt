@@ -34,6 +34,9 @@ export default {
   computed:{
     ...mapState(['findCarVal']),
   },
+  watch:{
+
+  },
   components:{
     Loading
   },

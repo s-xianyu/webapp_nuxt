@@ -8,3 +8,4 @@ export const GET_CITY ='GET_CITY';                  //获取当前城市信息
 export const GET_HISTORYCITY ='GET_HISTORYCITY';    //获取历史记录
 export const ALL_CITY ='ALL_CITY';                  //多选地区
 export const HISTORYSEARCH_SAVE ='HISTORYSEARCH_SAVE';                  //多选地区
+export const FINDCARVAL ='FINDCARVAL';                  //找车页数据传值

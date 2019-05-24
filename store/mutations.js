@@ -8,7 +8,8 @@ import {
   GET_CITY,
   GET_HISTORYCITY,
   ALL_CITY,
-  HISTORYSEARCH_SAVE
+  HISTORYSEARCH_SAVE,
+  FINDCARVAL
 } from './mutations-type';
 import {setStore,getStore,removeStore} from '../config/util/util';
 export default {
@@ -141,6 +142,21 @@ export default {
       state.historySearch = state.historySearch.splice(0,8);
       //存储
       setStore('historySearch',state.historySearch);
+    }
+  },
+
+  //找车页传值
+
+  //val里包含2个值:
+  //nav --对应导航列表下标
+  //  0 ----排序
+  //  2 ----价格
+  //  3 ----车龄
+  //key --值
+  [FINDCARVAL](state,val){
+    // debugger
+    if(val.nav === 0){
+      state.findCarVal.order = val.key;
     }
   }
 }

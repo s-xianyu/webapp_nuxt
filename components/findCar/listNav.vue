@@ -17,9 +17,10 @@
       <div class="listNav-layer-content mPublicBox-bac" :data-type="navIndex">
         <ul class="order" v-if="navIndex === 0">
           <li
-            :class="item === nav[navIndex] ? 'cur' : ''"
             v-for="(item,index) in orderArr"
-            @click="liClickSplice(item)"
+            :class="item === nav[navIndex] ? 'cur' : ''"
+            :data-id="index"
+            @click="orderFun(item,index)"
             :key="index">
             <span>{{item}}</span>
             <i v-if="item === nav[navIndex]" class="iconfont icon-gou1"></i>
@@ -36,9 +37,9 @@
           <div class="line"></div>
           <div class="priceLi">
             <span
-              :class="item === nav[navIndex] ? 'cur' : ''"
-              @click="liClickSplice(item)"
               v-for="(item,index) in priceArr"
+              :class="item === nav[navIndex] ? 'cur' : ''"
+              @click="priceFun(item)"
               :key="index">{{item}}</span>
           </div>
         </div>
@@ -53,10 +54,11 @@
           <div class="line"></div>
           <div class="priceLi">
             <span
-              :class="item === nav[navIndex] ? 'cur' : ''"
-              @click="liClickSplice(item)"
               v-for="(item,index) in ageArr"
-              :key="index">{{item}}</span>
+              :class="item === nav[navIndex] ? 'cur' : ''"
+              :data-id="item.id"
+              @click="ageFun(item)"
+              :key="index">{{item.name}}</span>
             <span class="default"></span>
           </div>
         </div>
@@ -74,17 +76,17 @@
         orderArr:['默认排序', '最近更新', '信誉最高', '信誉最低', '价格最高', '价格最低', '车龄最高', '车龄最低','性价比最高'],
         priceArr: ['价格不限', '3万元以下', '3-5万', '5-10万', '10-15万', '15-20万', '20-50万', '50-100万', '100万以上'],
         ageArr: [
-          `不限车龄`,
-          `${this.$getYear(1)}年以内`,
-          `${this.$getYear(2)}年以内`,
-          `${this.$getYear(3)}年以内`,
-          `${this.$getYear(4)}年以内`,
-          `${this.$getYear(5)}年以内`,
-          `${this.$getYear(3)}-${this.$getYear(1)}年`,
-          `${this.$getYear(5)}-${this.$getYear(3)}年`,
-          `${this.$getYear(8)}-${this.$getYear(5)}年`,
-          `${this.$getYear(10)}-${this.$getYear(8)}年`,
-          `${this.$getYear(10)}年以前`
+          {name:`不限车龄`,id:''},
+          {name:`${this.$getYear(1)}年以内`,id:'0-1'},
+          {name:`${this.$getYear(2)}年以内`,id:'0-2'},
+          {name:`${this.$getYear(3)}年以内`,id:'0-3'},
+          {name:`${this.$getYear(4)}年以内`,id:'0-4'},
+          {name:`${this.$getYear(5)}年以内`,id:'0-5'},
+          {name:`${this.$getYear(3)}-${this.$getYear(1)}年`,id:'1-3'},
+          {name:`${this.$getYear(5)}-${this.$getYear(3)}年`,id:'3-4'},
+          {name:`${this.$getYear(8)}-${this.$getYear(5)}年`,id:'5-8'},
+          {name:`${this.$getYear(10)}-${this.$getYear(8)}年`,id:'8-10'},
+          {name:`${this.$getYear(10)}年以前`,id:'10-100'}
         ],
         navIndex:-1, //当前点击导航下标,默认-1. -->重要值。
         navShow:false, //排序弹框
@@ -100,7 +102,7 @@
     mounted(){
     },
     methods:{
-      ...mapMutations(['WINHEIGHT']),
+      ...mapMutations(['FINDCARVAL']),
 
       //列表导航切換
       navToggle(index){
@@ -112,7 +114,6 @@
           this.navShow = true;
         }else if(index === 1){  //为1跳转到品牌选择页
           this.navShow = false;
-          this.navShow = false;
           this.$router.push({
             path:'/brand/brand'
           })
@@ -123,11 +124,6 @@
           })
         }
       },
-      //关闭导航弹框
-      popupHide(){
-        this.navShow = !this.navShow;
-        this.navIndex= -1
-      },
       //输入确认按钮
       commitBtnFun(name){
         //金额返回true,否则false
@@ -137,9 +133,7 @@
           this.ageLow != '' && this.ageTall != '' && +this.ageLow < +this.ageTall){
 
           //提交数组所需要的值
-          let text = isPrice ?
-            `${this.priceLow}-${this.priceTall}万` :
-            `${this.ageLow}-${this.ageTall}年`;
+          let text = isPrice ? `${this.priceLow}-${this.priceTall}万` : `${this.ageLow}-${this.ageTall}年`;
 
           this.arrSplice(text)
         }else{
@@ -147,14 +141,56 @@
           Toast(`请您输入正确的${alertText}区间`)
         }
       },
-      liClickSplice(data){
+      //排序列表
+      orderFun(item,index){
+        let arr=[
+          {k:0,v:' '},
+          {k:1,v:'0'},
+          {k:2,v:'1'},
+          {k:3,v:'2'},
+          {k:4,v:'5'},
+          {k:5,v:'6'},
+          {k:6,v:'7'},
+          {k:7,v:'8'},
+          {k:8,v:'3'},
+      ];
+        this.arrSplice(item);
+        let newArr = arr.filter( key =>{
+          if(index === key.k){
+            return key;
+          };
+        });
+
+        //val
+        let val = {
+          nav:this.navIndex,
+          key:newArr[0].v
+        };
+        this.FINDCARVAL(val);
+        this.popupHide();
+      },
+      // 价格列表
+      priceFun(item){
+        this.arrSplice(item);
+      },
+      // 车龄列表
+      ageFun(item){
+        this.arrSplice(item.name);
+      },
+
+      // 导航表数据改变
+      arrSplice(data){
         //将值添加到nav数组里
         this.nav.splice(this.navIndex,0,data);
         //删除nav当前位置默认值
         this.nav.splice(this.navIndex+1,1);
-        console.log(this.nav);
-        this.popupHide();
-      }
+      },
+
+      //关闭导航弹框
+      popupHide(){
+        this.navShow = !this.navShow;
+        this.navIndex= -1
+      },
     }
   }
 </script>
