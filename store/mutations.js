@@ -154,9 +154,10 @@ export default {
   //  3 ----车龄
   //key --值
   [FINDCARVAL](state,val){
-    // debugger
+    debugger
     if(val.nav === 0){
       state.findCarVal.order = val.key;
+      setStore('findCarVal',state.findCarVal)
     }
   }
 }

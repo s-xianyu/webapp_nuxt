@@ -141,8 +141,12 @@
           Toast(`请您输入正确的${alertText}区间`)
         }
       },
-      //排序列表
+      //排序列表 ''为默认排序
+      // 根据下标传值；如，点击下标为2，传值为1
+      //   k:下标
+      //   v:传值
       orderFun(item,index){
+        debugger
         let arr=[
           {k:0,v:' '},
           {k:1,v:'0'},
@@ -153,7 +157,7 @@
           {k:6,v:'7'},
           {k:7,v:'8'},
           {k:8,v:'3'},
-      ];
+        ];
         this.arrSplice(item);
         let newArr = arr.filter( key =>{
           if(index === key.k){
@@ -171,11 +175,14 @@
       },
       // 价格列表
       priceFun(item){
+        debugger
         this.arrSplice(item);
+        this.popupHide();
       },
       // 车龄列表
       ageFun(item){
         this.arrSplice(item.name);
+        this.popupHide();
       },
 
       // 导航表数据改变
