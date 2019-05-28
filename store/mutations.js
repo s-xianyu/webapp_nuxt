@@ -154,11 +154,15 @@ export default {
   //  3 ----车龄
   //key --值
   [FINDCARVAL](state,val){
-    debugger
-    if(val.nav === 0){
-      state.findCarVal.order = val.key;
-      setStore('findCarVal',state.findCarVal)
+    switch (val.nav){
+      case 0 : state.findCarVal.order = val.key;
+      break;
+      case 2 : state.findCarVal.priceInterval = val.key;
+      break;
+      case 3 : state.findCarVal.year = val.key;
+      break;
     }
+    setStore('findCarVal',state.findCarVal);
   }
 }
 let getHeight = b => {

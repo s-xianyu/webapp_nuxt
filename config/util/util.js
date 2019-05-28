@@ -27,29 +27,6 @@ export const removeStore = name => {
 };
 
 /**
- *登录框
- */
-let wapLogin = function(obj){
-  debugger
-  let defaults = {
-    msg:'', //标题文案
-    beforeCallback:null, ////登陆前的回调,如果有,需要返回值true:继续登陆;false:停止后续登陆操作
-    checkedCallbac:null, //手机登陆回调
-    successCallback:null, //成功回调
-  };
-  let opt = Object.assign(defaults,obj);
-  if(typeof obj.beforeCallback === 'function'){
-    obj.beforeCallback();
-  }
-  setTimeout(()=>{
-    if(typeof obj.successCallback === 'function'){
-      obj.successCallback();
-    }
-  },10000)
-};
-Vue.prototype.$login = wapLogin;
-
-/**
  * APP下载
  */
 let hxWaptoapp = (options) =>{

@@ -17,12 +17,10 @@
       <div class="listNav-layer-content mPublicBox-bac" :data-type="navIndex">
         <ul class="order" v-if="navIndex === 0">
           <li
-            v-for="(item,index) in orderArr"
-            :class="item === nav[navIndex] ? 'cur' : ''"
-            :data-id="index"
-            @click="orderFun(item,index)"
-            :key="index">
-            <span>{{item}}</span>
+            v-for="item in orderArr"
+            :class="item.name === nav[navIndex] ? 'cur' : ''"
+            @click="orderFun(item)">
+            <span>{{item.name}}</span>
             <i v-if="item === nav[navIndex]" class="iconfont icon-gou1"></i>
           </li>
         </ul>
@@ -37,10 +35,9 @@
           <div class="line"></div>
           <div class="priceLi">
             <span
-              v-for="(item,index) in priceArr"
-              :class="item === nav[navIndex] ? 'cur' : ''"
-              @click="priceFun(item)"
-              :key="index">{{item}}</span>
+              v-for="item in priceArr"
+              :class="item.name === nav[navIndex] ? 'cur' : ''"
+              @click="priceFun(item)">{{item.name}}</span>
           </div>
         </div>
         <div v-if="navIndex === 3"  class="price">
@@ -57,8 +54,7 @@
               v-for="(item,index) in ageArr"
               :class="item === nav[navIndex] ? 'cur' : ''"
               :data-id="item.id"
-              @click="ageFun(item)"
-              :key="index">{{item.name}}</span>
+              @click="ageFun(item)">{{item.name}}</span>
             <span class="default"></span>
           </div>
         </div>
@@ -72,9 +68,35 @@
   export default {
     data() {
       return {
-        nav:['排序','品牌','价格','车龄','筛选'], //导航列表
-        orderArr:['默认排序', '最近更新', '信誉最高', '信誉最低', '价格最高', '价格最低', '车龄最高', '车龄最低','性价比最高'],
-        priceArr: ['价格不限', '3万元以下', '3-5万', '5-10万', '10-15万', '15-20万', '20-50万', '50-100万', '100万以上'],
+        nav:[
+          '排序',
+          '品牌',
+          '价格',
+          '车龄',
+          '筛选'
+        ], //导航列表
+        orderArr:[
+          {name:'默认排序',id:' '},
+          {name:'最近更新',id:'0'},
+          {name:'信誉最高',id:'1'},
+          {name:'信誉最低',id:'2'},
+          {name:'价格最高',id:'5'},
+          {name:'价格最低',id:'6'},
+          {name:'车龄最高',id:'7'},
+          {name:'车龄最低',id:'8'},
+          {name:'性价比最高',id:'3'},
+        ],
+        priceArr: [
+          {name:'价格不限',id:' '},
+          {name:'3万元以下',id:'0-3'},
+          {name:'3-5万',id:'3-5'},
+          {name:'5-10万',id:'5-10'},
+          {name:'10-15万',id:'10-15'},
+          {name:'15-20万',id:'15-20'},
+          {name:'20-50万',id:'20-50'},
+          {name:'50-100万',id:'50-100'},
+          {name:'100万以上',id:'100-10000'},
+        ],
         ageArr: [
           {name:`不限车龄`,id:''},
           {name:`${this.$getYear(1)}年以内`,id:'0-1'},
@@ -97,7 +119,7 @@
       }
     },
     computed:{
-      ...mapState([''])
+      ...mapState(['findCarVal'])
     },
     mounted(){
     },
@@ -145,43 +167,21 @@
       // 根据下标传值；如，点击下标为2，传值为1
       //   k:下标
       //   v:传值
-      orderFun(item,index){
-        debugger
-        let arr=[
-          {k:0,v:' '},
-          {k:1,v:'0'},
-          {k:2,v:'1'},
-          {k:3,v:'2'},
-          {k:4,v:'5'},
-          {k:5,v:'6'},
-          {k:6,v:'7'},
-          {k:7,v:'8'},
-          {k:8,v:'3'},
-        ];
-        this.arrSplice(item);
-        let newArr = arr.filter( key =>{
-          if(index === key.k){
-            return key;
-          };
-        });
-
-        //val
-        let val = {
-          nav:this.navIndex,
-          key:newArr[0].v
-        };
-        this.FINDCARVAL(val);
+      orderFun(item){
+        this.arrSplice(item.name);
+        this.findCarPushVuex(item.id)
         this.popupHide();
       },
       // 价格列表
       priceFun(item){
-        debugger
-        this.arrSplice(item);
+        this.arrSplice(item.name);
+        this.findCarPushVuex(item.id)
         this.popupHide();
       },
       // 车龄列表
       ageFun(item){
         this.arrSplice(item.name);
+        this.findCarPushVuex(item.id)
         this.popupHide();
       },
 
@@ -191,6 +191,14 @@
         this.nav.splice(this.navIndex,0,data);
         //删除nav当前位置默认值
         this.nav.splice(this.navIndex+1,1);
+      },
+      // 添加数据到vuex
+      findCarPushVuex(key){
+        let val = {
+          nav:this.navIndex,
+          key:key
+        };
+        this.FINDCARVAL(val);
       },
 
       //关闭导航弹框
