@@ -9,7 +9,10 @@ import {
   GET_HISTORYCITY,
   ALL_CITY,
   HISTORYSEARCH_SAVE,
-  FINDCARVAL
+  FINDCARVAL,
+  FINDCARMENU,
+  FINDCARVAL_SAVE,
+  ADD_LIST
 } from './mutations-type';
 import {setStore,getStore,removeStore} from '../config/util/util';
 export default {
@@ -20,14 +23,8 @@ export default {
      state.cityInfo = val;
      state.thisCity = cityInfo(val)[0];
      state.lastCity = cityInfo(val)[1];
+     state.areaCode = val[0].area_code
    }
-  },
-
-  //获取历史科记录信息
-  [GET_HISTORYCITY](state,val){
-    if(val){
-      state.historyCity = val;
-    }
   },
 
   //选取地区详细信息保存
@@ -36,6 +33,8 @@ export default {
       state.cityInfo = val;
       state.thisCity = cityInfo(val)[0];
       state.lastCity = cityInfo(val)[1];
+      state.findCarList = [];
+      state.areaCode = val[0].area_code
     }
 
     //保存选择城市到历史记录中
@@ -52,6 +51,13 @@ export default {
     setStore('cityInfo',val);
     setStore('historyCity',state.historyCity);
     window.history.go(-1);
+  },
+
+  //获取历史记录信息
+  [GET_HISTORYCITY](state,val){
+    if(val){
+      state.historyCity = val;
+    }
   },
 
   //多选地区保存
@@ -103,6 +109,17 @@ export default {
     window.history.go(-1);
   },
 
+  // 列表数据保存
+  [ADD_LIST](state,val){
+    //点击改变数据，直接赋值
+    if (parseInt(state.findCarList.length) !== 0) {
+      state.findCarList = [...state.findCarList,...val];
+    }else{
+      // 否则直接赋值就好了
+      [state.findCarList] = [val];
+    }
+  },
+
   // 猜您喜欢数据获取保存
   [ADD_LIKE](state,val){
     // 不是第一次加载就累加
@@ -121,9 +138,12 @@ export default {
     }
   },
 
-  // 猜您喜欢列表page
-  [ADD_PAGE](state){
-    state.page++;
+  // 列表page
+  [ADD_PAGE](state,val){
+    switch (val){
+      case 'like' :  state.likePage++;
+      case 'findCar' :  state.currPage+=1;
+    }
     state.likePrevent = false;
   },
 
@@ -145,7 +165,7 @@ export default {
     }
   },
 
-  //找车页传值
+  //找车页传值--筛选
 
   //val里包含2个值:
   //nav --对应导航列表下标
@@ -154,15 +174,44 @@ export default {
   //  3 ----车龄
   //key --值
   [FINDCARVAL](state,val){
+    // 赋值为空，否则getters监听不到改变
     switch (val.nav){
-      case 0 : state.findCarVal.order = val.key;
+      case 0 : state.order = val.key;
       break;
-      case 2 : state.findCarVal.priceInterval = val.key;
+      case 2 : state.priceInterval = val.key;
       break;
-      case 3 : state.findCarVal.year = val.key;
+      case 3 : state.year = val.key;
       break;
     }
-    setStore('findCarVal',state.findCarVal);
+    state.findCarList = [];
+    state.currPage = 1;
+  },
+  //找车页传值--menu
+  //  0 ----新车
+  //  1 ----4s维保
+  //  2 ----批发
+  [FINDCARMENU](state,val){
+    [
+      state.is4s,
+      state.newCar,
+      state.pifa,
+    ] = [];
+    switch (val.nav){
+      case 0 : state.newCar = val.key;
+      break;
+      case 1 : state.is4s = val.key;
+      break;
+      case 2 : state.pifa = val.key;
+      break;
+    }
+    state.findCarList = [];
+    state.currPage = 1;
+  },
+
+  [FINDCARVAL_SAVE](state,val){
+    if(val){
+      state.findCarVal = val;
+    }
   }
 }
 let getHeight = b => {

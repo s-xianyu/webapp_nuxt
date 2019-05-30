@@ -6,7 +6,9 @@
         <!-- <div class="right">查看更多<i class="iconfont icon-xiayiye"></i></div> -->
       </div>
     </div>
-    <mt-loadmore v-infinite-scroll="loadermore" infinite-scroll-immediate-check="false">
+    <div
+      v-infinite-scroll="loadermore"
+      infinite-scroll-distance="10">
       <ul v-if="likeList.length">
         <router-link
           tag="li"
@@ -29,7 +31,7 @@
         </router-link>
       </ul>
       <div v-else="this.likeList.length === 0" class="no-center">暂时没有推荐内容</div>
-    </mt-loadmore>
+    </div>
     <Loading v-if="loadingShow"/>
   </div>
 </template>
@@ -45,10 +47,10 @@ export default {
     }
   },
   computed:{
-    ...mapState(['likeList','page','likePrevent']),
+    ...mapState(['likeList','likePage','likePrevent']),
     params (){
       return{
-        currPage:this.page,
+        currPage:this.likePage,
         pageSize:20,
       }
     }
@@ -66,7 +68,7 @@ export default {
     loadermore(){
       // debugger
       this.loadingShow = true;
-      this.ADD_PAGE();
+      this.ADD_PAGE('like');
       this.likeLoadMore();
     },
     async likeLoadMore(){
@@ -75,10 +77,10 @@ export default {
       this.setData(data)
     },
     setData(data){
-      this.ADD_LIKE(data.carSearchInfos);
       setTimeout(()=>{
         this.loadingShow = false;
-      },1000);
+        this.ADD_LIKE(data.carSearchInfos);
+      },500);
     },
   }
 }

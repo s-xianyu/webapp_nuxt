@@ -122,3 +122,4 @@ let getYear = (year) =>{
   return (new Date().getFullYear()-year);
 };
 Vue.prototype.$getYear = getYear;
+

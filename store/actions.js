@@ -2,7 +2,8 @@ import {
   USER_SAVE,
   GET_CITY,
   GET_HISTORYCITY,
-  HISTORYSEARCH_SAVE
+  HISTORYSEARCH_SAVE,
+  FINDCARVAL_SAVE
 } from './mutations-type';
 import {getStore} from "../config/util/util";
 export default {
@@ -36,5 +37,11 @@ export default {
       getStore('historySearch')
     );
     commit(HISTORYSEARCH_SAVE,name)
+  },
+  async getFindCarVal({ commit }){
+    let name = JSON.parse(
+      getStore('findCarVal',name)
+    );
+    commit(FINDCARVAL_SAVE,name)
   }
 }

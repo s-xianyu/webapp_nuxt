@@ -8,9 +8,15 @@
           :key="index"
           @click="navToggle(index)">
           <span>{{item}}</span>
-          <i class="iconfont icon-jiantou9"></i>
+          <i class="iconfont icon-xiasanjiao1"></i>
         </li>
       </ul>
+    </div>
+    <div class="listNav-menu">
+      <span
+        @click="menuFun(item,index)"
+        :class="menuIndex === index ? 'cur' : ''"
+        v-for="(item,index) in menu">{{item.name}}</span>
     </div>
     <div class="listNav-layer mPublicBox" v-show="navShow">
       <div class="bg" @click="popupHide"></div>
@@ -36,7 +42,7 @@
           <div class="priceLi">
             <span
               v-for="item in priceArr"
-              :class="item.name === nav[navIndex] ? 'cur' : ''"
+              :class="item.id+'万' === nav[navIndex] ? 'cur' : ''"
               @click="priceFun(item)">{{item.name}}</span>
           </div>
         </div>
@@ -51,8 +57,8 @@
           <div class="line"></div>
           <div class="priceLi">
             <span
-              v-for="(item,index) in ageArr"
-              :class="item === nav[navIndex] ? 'cur' : ''"
+              v-for="item in ageArr"
+              :class="item.id+'年' === nav[navIndex] ? 'cur' : ''"
               :data-id="item.id"
               @click="ageFun(item)">{{item.name}}</span>
             <span class="default"></span>
@@ -64,17 +70,23 @@
 </template>
 <script>
   import { Toast } from 'mint-ui';
-  import {mapState,mapMutations} from 'vuex'
+  import {mapState,mapMutations,mapActions} from 'vuex'
+  import {removeStore} from '~/config/util/util'
   export default {
     data() {
       return {
         nav:[
-          '排序',
-          '品牌',
-          '价格',
-          '车龄',
-          '筛选'
+          {name:'排序',id:' '},
+          {name:'品牌',id:' '},
+          {name:'价格',id:' '},
+          {name:'车龄',id:' '},
+          {name:'筛选',id:' '},
         ], //导航列表
+        menu:[
+          {name:'新车 ',id:'1'},
+          {name:'4s维保',id:'4s'},
+          {name:'批发',id:'1'},
+        ],
         orderArr:[
           {name:'默认排序',id:' '},
           {name:'最近更新',id:'0'},
@@ -98,7 +110,7 @@
           {name:'100万以上',id:'100-10000'},
         ],
         ageArr: [
-          {name:`不限车龄`,id:''},
+          {name:`不限车龄`,id:' '},
           {name:`${this.$getYear(1)}年以内`,id:'0-1'},
           {name:`${this.$getYear(2)}年以内`,id:'0-2'},
           {name:`${this.$getYear(3)}年以内`,id:'0-3'},
@@ -110,37 +122,93 @@
           {name:`${this.$getYear(10)}-${this.$getYear(8)}年`,id:'8-10'},
           {name:`${this.$getYear(10)}年以前`,id:'10-100'}
         ],
+        menuIndex:-1,  //新车、4s、批发车下标
         navIndex:-1, //当前点击导航下标,默认-1. -->重要值。
         navShow:false, //排序弹框
         priceLow:'', //输入金额低价
         priceTall:'', //输入金额高价
         ageLow:'',  //输入年限低
-        ageTall:''  //输入年限高
+        ageTall:'',  //输入年限高
       }
     },
     computed:{
-      ...mapState(['findCarVal'])
+      ...mapState([
+        'isLogin',
+        'userInfo',
+        'areaCode',
+        'pageSize',
+        'currPage',
+        'order',
+        'priceInterval',
+        'year',
+        'serial',
+        'carType',
+        'standards',
+        'dayInterval',
+        'colors',
+        'gears',
+        'is4s',
+        'pifa',
+        'mileage',
+        'carKinds',
+        'bodType',
+        'factory',
+        'country',
+        'motor',
+        'devicetoken',
+        'newCar',
+        'appmobile',
+        'apptoken',
+      ])
     },
-    mounted(){
+    created(){
+      //排序
+      let getOrder = this.orderArr.filter(key=>{
+        if(key.id === this.order){
+          return key.name
+        }
+      });
+
+      //金额
+      let getPrice = this.priceInterval === ' ' ? '不限' :
+        this.priceInterval === '' ? '价格' :
+          `${this.priceInterval}万`;
+
+      //年龄
+      let getPYear = this.year === ' ' ? '不限' :
+        this.year === '' ? '车龄' :
+          `${this.year}年`;
+
+      // 从vux里获取值赋值到导航列表
+      let newNavArr = [
+        getOrder.length >= 1 ? getOrder[0].name :  '排序',
+        '品牌',
+        getPrice,
+        getPYear,
+        '筛选'
+      ];
+      //赋值给nav
+      this.nav = newNavArr;
     },
     methods:{
-      ...mapMutations(['FINDCARVAL']),
-
+      ...mapMutations(['FINDCARVAL','FINDCARMENU','WINHEIGHT']),
+      ...mapActions(['getFindCarVal']),
       //列表导航切換
       navToggle(index){
-        // this.navShow = !this.navShow;
+        if(this.navIndex === index){
+          [this.navShow,this.navIndex] = [!this.navShow, -1];
+        }else{
+          [this.navShow, this.navIndex] = [true,index];
+        }
         //当前导航下标
-        [this.navIndex] = [index];
         // debugger
         if(index === 0 || index === 2 || index === 3){  //下标为0、2、3弹框显示
-          this.navShow = true;
         }else if(index === 1){  //为1跳转到品牌选择页
           this.navShow = false;
           this.$router.push({
             path:'/brand/brand'
           })
         }else{ //否则为4跳转到筛选页
-          this.navShow = false;
           this.$router.push({
             path:'/filtrateCar/filtrateCar'
           })
@@ -150,14 +218,11 @@
       commitBtnFun(name){
         //金额返回true,否则false
         let isPrice = name === 'price' ? true : false;
-
         if(this.priceLow != '' && this.priceTall != '' && +this.priceLow < +this.priceTall ||
           this.ageLow != '' && this.ageTall != '' && +this.ageLow < +this.ageTall){
-
           //提交数组所需要的值
-          let text = isPrice ? `${this.priceLow}-${this.priceTall}万` : `${this.ageLow}-${this.ageTall}年`;
-
-          this.arrSplice(text)
+          let text = isPrice ? `${this.priceLow}-${this.priceTall}` : `${this.ageLow}-${this.ageTall}`;
+          this.arrSpliceId(text)
         }else{
           let alertText = isPrice ? '价格' : '车龄';
           Toast(`请您输入正确的${alertText}区间`)
@@ -168,29 +233,17 @@
       //   k:下标
       //   v:传值
       orderFun(item){
-        this.arrSplice(item.name);
+        this.arrSpliceName(item.name);
         this.findCarPushVuex(item.id)
         this.popupHide();
       },
       // 价格列表
       priceFun(item){
-        this.arrSplice(item.name);
-        this.findCarPushVuex(item.id)
-        this.popupHide();
+        this.arrSpliceId(item.id);
       },
       // 车龄列表
       ageFun(item){
-        this.arrSplice(item.name);
-        this.findCarPushVuex(item.id)
-        this.popupHide();
-      },
-
-      // 导航表数据改变
-      arrSplice(data){
-        //将值添加到nav数组里
-        this.nav.splice(this.navIndex,0,data);
-        //删除nav当前位置默认值
-        this.nav.splice(this.navIndex+1,1);
+        this.arrSpliceId(item.id);
       },
       // 添加数据到vuex
       findCarPushVuex(key){
@@ -200,13 +253,58 @@
         };
         this.FINDCARVAL(val);
       },
-
       //关闭导航弹框
       popupHide(){
         this.navShow = !this.navShow;
         this.navIndex= -1
       },
-    }
+      // 点击后导航表数据改变
+      arrSpliceName(name){
+        //将值赋值到nav数组里
+        this.nav.splice(this.navIndex,1,name);
+      },
+      arrSpliceId(id){
+        let text = id === ' ' ? '不限' : this.navIndex === 2 ? '万' : '年';
+        this.nav.splice(this.navIndex,1,id+text);
+        this.findCarPushVuex(id);
+        this.popupHide();
+      },
+      menuFun(item,index){
+        // debugger
+        if(item.name === '批发'){ //批发车辆
+          if(this.isLogin){ //登录状态
+            if(this.userInfo.vipState === 1){ //是否vip
+              this.findCarPushVuexMenu(item.id,index)
+            }else{ //否则跳会员购买页面
+              let type = '110';
+              this.$router.push({
+                path:`/weppersonalvipbuy/${type}`
+              })
+            }
+          }else{
+            this.findCarPushVuexMenu(item.id,index)
+          }
+
+        }else{ //否则
+          this.findCarPushVuexMenu(item.id,index)
+        }
+      },
+      findCarPushVuexMenu(key,index){
+        let isKey = '';
+        if(this.menuIndex === index){
+          this.menuIndex = -1;
+          isKey = ''
+        }else{
+          this.menuIndex = index;
+          isKey = key;
+        }
+        let val = {
+          nav:index,
+          key:isKey
+        };
+        this.FINDCARMENU(val);
+      }
+    },
   }
 </script>
 
@@ -238,26 +336,24 @@
 }
   .listNav{
     position:relative;
+    background:#fff;
     .listNav-head{
       background:$fff;
-      border-style: solid;
-      border-color: #eee;
-      border-width: 1px 0 1px 0;
       position: relative;
       z-index: 11;
       ul{
-        @include wh(100%,1.2rem);
+        @include wh(100%,1.53rem);
         @include flexCenter;
         flex-direction: row;
+        padding:  0 .3rem;
         li{
           @include flexCenter;
           flex:1;
           width:20%;
-          &+li{
-            border-left:1px solid #ccc;
-          }
           &.cur{
-            color:$f60;
+            span,i{
+              color:$f60;
+            }
           }
           span{
             display: inline-block;
@@ -266,11 +362,31 @@
             white-space:nowrap;
             text-overflow:ellipsis;
             font-size:.48rem;
+            color:$c666;
           }
           i{
-            font-size:.35rem;
-            margin-left:.1rem;
+            font-size:.5rem;
+            color:$c666;
           }
+        }
+      }
+    }
+    .listNav-menu{
+      background:#fff;
+      @include wh(100,auto);
+      padding: .2rem 0 .44rem;
+      display: flex;
+      justify-content: space-evenly;
+      span{
+        @include wh(3.06rem,.82rem);
+        background:#f0f2f6;
+        @include flexCenter;
+        font-size: .42rem;
+        color:$c666;
+        &.cur{
+          color: #f60;
+          background: #fbece8;
+          border: 1px solid #f60;
         }
       }
     }

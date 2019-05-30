@@ -100,6 +100,8 @@ export default {
             background-repeat: no-repeat;
             background-position:.51rem center;
             background-size:.476rem auto;
+            background-color: #f0f2f6;
+            @include borRadius(1rem);
           }
         }
         &.mlRight{

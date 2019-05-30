@@ -11,6 +11,7 @@
       <BackTop/>
       <!-- <FooterTab/> -->
       <Loading v-if="loadingShow"/>
+      <Login/>
     </div>
   </transition>
 </template>
@@ -21,6 +22,7 @@
   import BackHead from '~/components/common/header/back_head'
   import FooterTab from '~/components/common/footer/footer'
   import BackTop from '~/components/common/backTop'
+  import Login from '~/components/common/login/login'
   import {filteData} from '~/config/getData'
   import {mapState,mapActions} from 'vuex'
 
@@ -37,8 +39,10 @@
         isFixed:false,
       }
     },
-    mounted(){
+    created(){
       this.getCity();
+    },
+    mounted(){
       this.scrollHead();
       window.addEventListener('scroll', this.scrollHead);
       // 获取screen至页面顶部的距离
@@ -58,7 +62,8 @@
       BackHead,
       BackTop,
       FooterTab,
-      ListNav
+      ListNav,
+      Login
     },
     methods:{
       ...mapActions(['getCity']),
@@ -83,7 +88,7 @@
     right:0;
     z-index: 100;
     & + .main{
-      margin-top:1.21rem;
+      margin-top:3rem;
     }
   }
   .main{

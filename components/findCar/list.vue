@@ -1,12 +1,17 @@
 <template>
   <div class="carList">
-    <mt-loadmore v-infinite-scroll="loadermore" infinite-scroll-immediate-check="false">
-      <ul class="list">
-        <router-link :to="{path:'/detail/'+item.id}" tag="li" v-for="(item,index) in list" :key="item.id" :id="item.id">
+    <div
+      v-infinite-scroll="loadermore"
+      infinite-scroll-distance="10">
+      <ul v-if="findCarList.length" class="list">
+        <router-link :to="{path:'/detail/'+item.id}" tag="li" v-for="(item,index) in findCarList" :id="item.id">
           <div class="listLeft"><img v-lazy="item.photoAddress" alt=""></div>
           <div class="listRight">
             <h2>{{item.buyDate}}&nbsp;&nbsp;{{item.seriesBrandCarStyle | emptyVal}}</h2>
-            <p>{{item.location}}/{{item.mileAge | toFixedVal}}万公里/{{item.standard}}</p>
+            <div class="second">
+              <span>{{item.location}}/{{item.mileAge | toFixedVal}}万公里/{{item.standard}}</span>
+              <span v-if="item.is4s && item.is4s === 1" class="sign">有4S记录</span>
+            </div>
             <p>{{item.publishDate}}</p>
             <div class="money">
               <span class="price">￥{{item.price}}万</span>
@@ -16,50 +21,135 @@
         </router-link>
         <!--<li v-for="(item,index) in users.carList" :key="item.id" :id="item.id">{{item.id}}{{index}}</li>-->
       </ul>
-    </mt-loadmore>
+    </div>
     <Loading v-if="loadingShow"/>
   </div>
 </template>
 <script>
-  import {filteData} from '~/config/getData'
   import Loading from '~/components/common/loading'
-  import {mapState} from 'vuex'
+  import {mapState,mapGetters,mapMutations} from 'vuex'
+  import {filteData} from '~/config/getData'
 export default {
   data (){
     return {
-      list:[],
       loadingShow:false,
     }
   },
-  computed:{
-    ...mapState(['findCarVal']),
-  },
   watch:{
-
+    // 监听车龄
+    getList_year(){
+      this.thisGetters();
+    },
+    // 监听排序
+    getList_order(){
+      this.thisGetters();
+    },
+    // 监听价格
+    getList_priceInterval(){
+      this.thisGetters();
+    },
+    //监听4S
+    getList_is4s(){
+      this.thisGetters();
+    },
+    getList_newCar(){
+      // this.thisGetters();
+    }
+  },
+  computed:{
+    ...mapState([
+      'findCarList',
+      'areaCode',
+      'pageSize',
+      'currPage',
+      'order',
+      'priceInterval',
+      'year',
+      'serial',
+      'carType',
+      'standards',
+      'dayInterval',
+      'colors',
+      'gears',
+      'is4s',
+      'pifa',
+      'mileage',
+      'carKinds',
+      'bodType',
+      'factory',
+      'country',
+      'motor',
+      'devicetoken',
+      'newCar',
+      'appmobile',
+      'apptoken',
+    ]),
+    ...mapGetters([
+      'getList_year',
+      'getList_order',
+      'getList_priceInterval',
+      'getList_is4s',
+      'getList_newCar'
+    ]),
+    params (){
+      return{
+        areaCode:this.areaCode,
+        pageSize:this.pageSize,
+        currPage:this.currPage,
+        order:this.order,
+        priceInterval:this.priceInterval,
+        year:this.year,
+        serial:this.serial,
+        carType:this.carType,
+        standards:this.standards,
+        dayInterval:this.dayInterval,
+        colors:this.colors,
+        gears:this.gears,
+        is4s:this.is4s,
+        pifa:this.pifa,
+        mileage:this.mileage,
+        carKinds:this.carKinds,
+        bodType:this.bodType,
+        factory:this.factory,
+        country:this.country,
+        motor:this.motor,
+        devicetoken:this.devicetoken,
+        newCar:this.newCar,
+        appmobile:this.appmobile,
+        apptoken:this.apptoken,
+      }
+    }
   },
   components:{
     Loading
   },
-  mounted(){
-    this.LoadMore()
+  created(){
+    // this.LoadMore()
   },
   methods:{
-    loadermore(){
+    ...mapMutations(['ADD_LIST','ADD_PAGE']),
+    async loadermore(){
       this.loadingShow = !this.loadingShow;
+      await this.ADD_PAGE('findCar');
       this.LoadMore()
+    },
+    //监听改变后执行
+    thisGetters(){
+      this.loadingShow = !this.loadingShow;
+      this.LoadMore();
     },
 
     async LoadMore () {
-      let { data } = await filteData(this.findCarVal);
-      this.list = data.carList;
+      let { data } = await filteData(this.params);
+      this.ADD_LIST(data.carList);
       setTimeout(()=>{
         this.loadingShow = false;
-      },1000);
+      },500);
     },
   }
 }
 </script>
-<style lang="scss" scope>
+<style lang="scss" scoped>
   @import '~static/style/mixin';
   .list{
       li{
@@ -87,6 +177,20 @@ export default {
             -webkit-line-clamp: 2;
             line-clamp: 2;
             -webkit-box-orient: vertical;
+          }
+          .second{
+            color:$c999;
+            font-size:.37rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            .sign{
+              @include flexCenter;
+              @include wh(1.8rem,.61rem);
+              border:1px solid red;
+              color:red;
+              font-size:.3rem;
+            }
           }
           p{
             color:$c999;
