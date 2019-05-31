@@ -3,7 +3,8 @@
     <div class="animated fadeInRight">
       <TitleHead :heads="heads"></TitleHead>
       <div class="city-content">
-        <div class="city-stair1">
+        <!--一级-->
+        <div class="city-stair1" ref="mzaProvince">
           <div class="mzaLocation">
             <i class="iconfont icon-dingwei"></i>您所在的城市：
             <span>{{locationCity.hotKeys[1]}}</span>
@@ -38,6 +39,7 @@
             </div>
           </div>
         </div>
+        <!--二级-->
         <div class="city-stairTo city-stair2" :class="{cur:stair2Show}">
           <div class="city-stair2-left" @click="stair2Show = !stair2Show"></div>
           <div class="city-stair2-content">
@@ -55,6 +57,7 @@
             </ul>
           </div>
         </div>
+        <!--三级-->
         <div class="city-stairTo city-stair3" :class="{cur:stair3Show}">
           <div class="city-stair2-left" @click="stair3Show = !stair3Show"></div>
           <div class="city-stair2-content">
@@ -83,7 +86,7 @@
         </div>
       </div>
       <div class="city-menu">
-        <a v-for="item in keymap">{{item}}</a>
+        <a @click="Scrolls(item)" v-for="item in keymap">{{item}}</a>
       </div>
       <div v-if="selectShow" class="allSelectBtn animated fadeInUp">
         <span @click="allSelectFun">取消</span>
@@ -148,6 +151,13 @@
     methods:{
       ...mapActions(['getHistoryCity']),
       ...mapMutations(['CITY_SAVE','ALL_CITY']),
+
+      Scrolls(key){
+        let top = document.querySelector('#'+key).offsetTop- this.$refs.mzaProvince.offsetTop;
+        document.body.scrollTop = top;
+        document.documentElement.scrollTop = top;
+        window.pageYOffset = top;
+      },
 
       // 一级地区获取
       async getCityList(){
@@ -483,6 +493,7 @@
           i{
             flex:1;
             @include flexCenter;
+            @include wh(.5rem,100%);
           }
         }
         .line{

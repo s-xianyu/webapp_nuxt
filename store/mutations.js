@@ -3,7 +3,8 @@ import {
   OUT_USER,
   ADD_LIKE,
   ADD_PAGE,
-  WINHEIGHT,
+  LOGIN_STATUS,
+  WIN_HEIGHT,
   CITY_SAVE,
   GET_CITY,
   GET_HISTORYCITY,
@@ -23,7 +24,7 @@ export default {
      state.cityInfo = val;
      state.thisCity = cityInfo(val)[0];
      state.lastCity = cityInfo(val)[1];
-     state.areaCode = val[0].area_code
+     state.findCarVal.areaCode = val[0].area_code
    }
   },
 
@@ -34,7 +35,7 @@ export default {
       state.thisCity = cityInfo(val)[0];
       state.lastCity = cityInfo(val)[1];
       state.findCarList = [];
-      state.areaCode = val[0].area_code
+      state.findCarVal.areaCode = val[0].area_code
     }
 
     //保存选择城市到历史记录中
@@ -142,15 +143,22 @@ export default {
   [ADD_PAGE](state,val){
     switch (val){
       case 'like' :  state.likePage++;
-      case 'findCar' :  state.currPage+=1;
+      case 'findCar' :  state.findCarVal.currPage+=1;
     }
     state.likePrevent = false;
   },
-
-  // 全局浏览器高度设置、显示
-  [WINHEIGHT](state){
-    state.windowStatus = !state.windowStatus;
+  // 登录框显示状态
+  [LOGIN_STATUS](state){
+    state.windowStatus = !state.windowStatus
     state.windowHeight = getHeight(state.windowStatus)
+  },
+  // 全局浏览器高度设置、显示
+  [WIN_HEIGHT](state,isTrue){
+    if(isTrue){
+      state.windowHeight = getHeight(isTrue)
+    }else{
+      state.windowHeight = getHeight(isTrue)
+    }
   },
 
   //搜索历史记录
@@ -176,15 +184,16 @@ export default {
   [FINDCARVAL](state,val){
     // 赋值为空，否则getters监听不到改变
     switch (val.nav){
-      case 0 : state.order = val.key;
+      case 0 : state.findCarVal.order = val.key;
       break;
-      case 2 : state.priceInterval = val.key;
+      case 2 : state.findCarVal.priceInterval = val.key;
       break;
-      case 3 : state.year = val.key;
+      case 3 : state.findCarVal.year = val.key;
       break;
     }
     state.findCarList = [];
-    state.currPage = 1;
+    state.findCarVal.currPage = 1;
+    console.log(state.findCarVal)
   },
   //找车页传值--menu
   //  0 ----新车
@@ -197,15 +206,24 @@ export default {
       state.pifa,
     ] = [];
     switch (val.nav){
-      case 0 : state.newCar = val.key;
+      case 0 :
+        state.findCarVal.is4s = '';
+        state.findCarVal.pifa = '';
+        state.findCarVal.newCar = val.key;
       break;
-      case 1 : state.is4s = val.key;
+      case 1 :
+        state.findCarVal.newCar = '';
+        state.findCarVal.pifa = '';
+        state.findCarVal.is4s = val.key;
       break;
-      case 2 : state.pifa = val.key;
+      case 2 :
+        state.findCarVal.newCar = '';
+        state.findCarVal.is4s = '';
+        state.findCarVal.pifa = val.key;
       break;
     }
     state.findCarList = [];
-    state.currPage = 1;
+    state.findCarVal.currPage = 1;
   },
 
   [FINDCARVAL_SAVE](state,val){
@@ -216,6 +234,9 @@ export default {
 }
 let getHeight = b => {
   return b ? `${document.documentElement.clientHeight || document.body.clientHeight}px` : `auto`
+};
+let removeFindCarVal = () => {
+
 };
 let cityInfo = (val)=>{
   let content;

@@ -51,10 +51,10 @@
       ...mapState(['']),
     },
     methods:{
-      ...mapMutations(['WINHEIGHT']),
+      ...mapMutations(['WIN_HEIGHT']),
       mlTopBoxFun(){
         this.$emit('navShow',!this.navShow);
-        this.WINHEIGHT();
+        // this.WIN_HEIGHT();
       },
       getPath(path){
         // debugger

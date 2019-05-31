@@ -1,19 +1,23 @@
 <template>
-  <transition name="index">
-    <div class="body" style="overflow: hidden" :style="{ height: windowHeight}">
+  <div class="body" style="overflow: hidden" :style="{ height: windowHeight}">
+    <div class="animated fadeInRight">
       <BackHead :back="true"/>
       <div :class="{fixeds:isFixed}">
         <ListNav/>
       </div>
       <div class="main">
-        <List/>
+        <div class="carList"
+             v-infinite-scroll="loadermore"
+             infinite-scroll-distance="10">
+          <List :findCarList="findCarList"/>
+        </div>
       </div>
       <BackTop/>
       <!-- <FooterTab/> -->
       <Loading v-if="loadingShow"/>
       <Login/>
     </div>
-  </transition>
+  </div>
 </template>
 <script>
   import Loading from '~/components/common/loading'
@@ -24,7 +28,7 @@
   import BackTop from '~/components/common/backTop'
   import Login from '~/components/common/login/login'
   import {filteData} from '~/config/getData'
-  import {mapState,mapActions} from 'vuex'
+  import {mapState,mapActions,mapMutations,mapGetters} from 'vuex'
 
   export default {
     head () {
@@ -46,15 +50,16 @@
       this.scrollHead();
       window.addEventListener('scroll', this.scrollHead);
       // 获取screen至页面顶部的距离
-      // debugger
       this.offsetTop = document.querySelector('.listNav').offsetTop;
     },
-    // async asyncData () {
-    //   let { data } = await filteData();
-    //    return { users : data.carList}
-    // },
+    watch:{
+      getFindCarVal(){
+        this.thisGetters();
+      }
+    },
     computed:{
-      ...mapState(['windowHeight'])
+      ...mapState(['windowHeight','findCarList','findCarVal']),
+      ...mapGetters(['getFindCarVal']),
     },
     components: {
       Loading,
@@ -67,6 +72,26 @@
     },
     methods:{
       ...mapActions(['getCity']),
+      ...mapMutations(['ADD_LIST','ADD_PAGE']),
+      async loadermore(){
+        this.loadingShow = !this.loadingShow;
+        await this.ADD_PAGE('findCar');
+        this.LoadMore()
+      },
+      //监听改变后执行
+      thisGetters(){
+        this.loadingShow = !this.loadingShow;
+        this.LoadMore();
+      },
+
+      async LoadMore () {
+        let { data } = await filteData(this.findCarVal);
+        this.ADD_LIST(data.carList);
+        setTimeout(()=>{
+          this.loadingShow = false;
+        },500);
+      },
+
       scrollHead(){
         let scrollTop = window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop
         if (scrollTop > this.offsetTop) {
@@ -75,6 +100,10 @@
           this.isFixed = false
         }
       },
+      // 子组件改变后执行请求
+      doParent(){
+        this.LoadMore()
+      }
     }
   }
 </script>

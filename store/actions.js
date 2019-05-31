@@ -38,10 +38,4 @@ export default {
     );
     commit(HISTORYSEARCH_SAVE,name)
   },
-  async getFindCarVal({ commit }){
-    let name = JSON.parse(
-      getStore('findCarVal',name)
-    );
-    commit(FINDCARVAL_SAVE,name)
-  }
 }

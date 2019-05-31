@@ -72,7 +72,7 @@
       randomNum(){
         this.rnd = Math.random();
       },
-      ...mapMutations(['USER_SAVE','WINHEIGHT']),
+      ...mapMutations(['USER_SAVE','LOGIN_STATUS']),
       ...mapActions(['getUserInfo']),
 
       // 获取图片验证码
@@ -133,7 +133,7 @@
       },
       // 登录框返回
       back(){
-        this.WINHEIGHT();
+        this.LOGIN_STATUS();
       }
     }
   }
@@ -188,7 +188,7 @@
   }
   .main{
     background-color:$fff;
-    padding-bottom:2.8rem;
+    padding-bottom:1.5rem;
     ._login_box_logo{
       height:5.32rem;
       padding:1.2rem 0 .8rem 0;

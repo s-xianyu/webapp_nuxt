@@ -35,10 +35,10 @@ export default {
     ...mapState(['isLogin','thisCity'])
   },
   methods:{
-    ...mapMutations(['WINHEIGHT']),
+    ...mapMutations(['LOGIN_STATUS']),
     // 登录弹框
     getLogin(){
-      this.WINHEIGHT();
+      this.LOGIN_STATUS(true);
     },
   },
 

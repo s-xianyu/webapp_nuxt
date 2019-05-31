@@ -70,7 +70,7 @@
 </template>
 <script>
   import { Toast } from 'mint-ui';
-  import {mapState,mapMutations,mapActions} from 'vuex'
+  import {mapState,mapMutations} from 'vuex'
   import {removeStore} from '~/config/util/util'
   export default {
     data() {
@@ -135,49 +135,26 @@
       ...mapState([
         'isLogin',
         'userInfo',
-        'areaCode',
-        'pageSize',
-        'currPage',
-        'order',
-        'priceInterval',
-        'year',
-        'serial',
-        'carType',
-        'standards',
-        'dayInterval',
-        'colors',
-        'gears',
-        'is4s',
-        'pifa',
-        'mileage',
-        'carKinds',
-        'bodType',
-        'factory',
-        'country',
-        'motor',
-        'devicetoken',
-        'newCar',
-        'appmobile',
-        'apptoken',
+        'findCarVal'
       ])
     },
     created(){
       //排序
       let getOrder = this.orderArr.filter(key=>{
-        if(key.id === this.order){
+        if(key.id === this.findCarVal.order){
           return key.name
         }
       });
 
       //金额
-      let getPrice = this.priceInterval === ' ' ? '不限' :
-        this.priceInterval === '' ? '价格' :
-          `${this.priceInterval}万`;
+      let getPrice = this.findCarVal.priceInterval === ' ' ? '不限' :
+        this.findCarVal.priceInterval === '' ? '价格' :
+          `${this.findCarVal.priceInterval}万`;
 
       //年龄
-      let getPYear = this.year === ' ' ? '不限' :
-        this.year === '' ? '车龄' :
-          `${this.year}年`;
+      let getPYear = this.findCarVal.year === ' ' ? '不限' :
+        this.findCarVal.year === '' ? '车龄' :
+          `${this.findCarVal.year}年`;
 
       // 从vux里获取值赋值到导航列表
       let newNavArr = [
@@ -191,8 +168,7 @@
       this.nav = newNavArr;
     },
     methods:{
-      ...mapMutations(['FINDCARVAL','FINDCARMENU','WINHEIGHT']),
-      ...mapActions(['getFindCarVal']),
+      ...mapMutations(['FINDCARVAL','FINDCARMENU','WIN_HEIGHT']),
       //列表导航切換
       navToggle(index){
         if(this.navIndex === index){
@@ -252,6 +228,7 @@
           key:key
         };
         this.FINDCARVAL(val);
+        this.$parent.doParent(this.desc)
       },
       //关闭导航弹框
       popupHide(){
@@ -282,7 +259,7 @@
               })
             }
           }else{
-            this.findCarPushVuexMenu(item.id,index)
+            this.WIN_HEIGHT(true);
           }
 
         }else{ //否则
@@ -303,6 +280,7 @@
           key:isKey
         };
         this.FINDCARMENU(val);
+        this.$parent.doParent()
       }
     },
   }

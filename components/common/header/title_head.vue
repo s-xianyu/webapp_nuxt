@@ -4,7 +4,7 @@
 // position  -->true/false.是否fixed顶部
 
 <template>
-  <header :class="{cur : heads.position}">
+  <header ref="titleHearder" :class="{cur : heads.position}">
     <h2>{{ heads.title }}</h2>
     <span class="iconfont icon-prev" @click="$history(-1)"></span>
   </header>

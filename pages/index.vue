@@ -1,20 +1,18 @@
 <template>
-  <transition name="index">
-    <div class="body" style="overflow: hidden" :style="{ height: windowHeight}">
-      <AppLoad :show="true"/>
-      <div :class="{fixed:isFixed}">
-        <LogoHead/>
-      </div>
-      <Swiper :imgList="swiperList"/>
-      <MyActive :homeList="homeList.homerecommended"/>
-      <Information :information="homeList.information"/>
-      <Mylike/>
-      <!--<FooterTab/>-->
-      <BackTop/>
-      <Loading v-if="loadingShow"/>
-      <Login/>
+  <div class="body" style="overflow: hidden" :style="{ height: windowHeight}">
+    <AppLoad :show="true"/>
+    <div :class="{fixed:isFixed}">
+      <LogoHead/>
     </div>
-  </transition>
+    <Swiper :imgList="swiperList"/>
+    <MyActive :homeList="homeList.homerecommended"/>
+    <Information :information="homeList.information"/>
+    <Mylike/>
+    <!--<FooterTab/>-->
+    <BackTop/>
+    <Loading v-if="loadingShow"/>
+    <Login/>
+  </div>
 </template>
 <script>
 import {indexoeo} from '~/config/getData'

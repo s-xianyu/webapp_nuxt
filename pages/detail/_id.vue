@@ -1,13 +1,13 @@
 <template>
-<div class="">
-  <Header :heads="header"/>
-  <h2>
-    范围：{{assessPrice}}</br>
-    <hr>
-    车辆ID:{{car.carId}}</br>
-    车辆名称:{{car.brandFullName}}
-  </h2>
-</div>
+  <div class="animated fadeInRight">
+    <Header :heads="header"/>
+    <h2>
+      范围：{{assessPrice}}</br>
+      <hr>
+      车辆ID:{{car.carId}}</br>
+      车辆名称:{{car.brandFullName}}
+    </h2>
+  </div>
 </template>
 
 <script>

@@ -44,13 +44,14 @@
       ...mapState(['thisCity'])
     },
     methods:{
-      ...mapMutations(['WINHEIGHT']),
+      ...mapMutations(['WIN_HEIGHT']),
       navEvent(){
         this.navShow = !this.navShow;
-        this.WINHEIGHT();
+        this.WIN_HEIGHT(this.navShow);
       },
       navGetData(data){
         this.navShow = data;
+        this.WIN_HEIGHT(this.navShow);
       }
     },
 

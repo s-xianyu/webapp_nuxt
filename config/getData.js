@@ -74,12 +74,12 @@ export const  getonelevelbrand = params => get(`${api}/tools/getonelevelbrand.js
 /**
  *pingpai 2
  */
-export const  getCarSerialByParentIdJson = params => get(`${api}/mobile/appMatchRequire/getCarSerialByParentIdJson.json?pids=12817`,params);
+export const  getCarSerialByParentIdJson = params => get(`${api}/mobile/appMatchRequire/getCarSerialByParentIdJson.json`,params);
 
 /**
  *pingpai 3
  */
-export const  getCarTypeByParentIdJson = params => get(`${api}/car/getCarTypeByParentIdJson.json?parentId=14978`,params);
+export const  getCarTypeByParentIdJson = params => get(`${api}/car/getCarTypeByParentIdJson.json`,params);
 
 /**
  *pingpai 4
