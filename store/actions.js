@@ -38,4 +38,9 @@ export default {
     );
     commit(HISTORYSEARCH_SAVE,name)
   },
+  // 获取筛选信息
+  async getFindCarVal({commit}){
+    let name = JSON.parse(getStore('findCar'))
+    commit(FINDCARVAL_SAVE,name);
+  }
 }

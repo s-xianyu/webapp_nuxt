@@ -1,6 +1,6 @@
 <!--公用弹框登录模块-->
 <template>
-  <div class="logoFixed" ref="login" :class="{cur:windowStatus}" :style="{ height: wrapperHeight + 'px' }">
+  <div class="logoFixed" ref="login" :class="{cur:loginStatus}">
     <header>
       <h2>手机验证</h2>
       <span class="iconfont icon-prev" @click="back"></span>
@@ -58,7 +58,7 @@
       FooterTab
     },
     computed:{
-      ...mapState(['isLogin','windowStatus'])
+      ...mapState(['isLogin','loginStatus'])
     },
     mounted(){
       this.getUserInfo();
@@ -145,7 +145,7 @@
     z-index: 999;
     position: fixed;
     overflow-y: scroll;
-    width: 100%;
+    @include wh(100%,100%);
     background-color: #fff;
     left: 0;
     top: 0;

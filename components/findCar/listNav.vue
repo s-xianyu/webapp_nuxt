@@ -70,7 +70,7 @@
 </template>
 <script>
   import { Toast } from 'mint-ui';
-  import {mapState,mapMutations} from 'vuex'
+  import {mapState,mapMutations,mapActions} from 'vuex'
   import {removeStore} from '~/config/util/util'
   export default {
     data() {
@@ -139,6 +139,8 @@
       ])
     },
     created(){
+
+      this.getFindCarVal();
       //排序
       let getOrder = this.orderArr.filter(key=>{
         if(key.id === this.findCarVal.order){
@@ -168,22 +170,25 @@
       this.nav = newNavArr;
     },
     methods:{
-      ...mapMutations(['FINDCARVAL','FINDCARMENU','WIN_HEIGHT']),
+      ...mapMutations(['FINDCARVAL','FINDCARMENU','WIN_HEIGHT','BRAND_STATUS']),
+      ...mapActions(['getFindCarVal']),
       //列表导航切換
       navToggle(index){
         if(this.navIndex === index){
           [this.navShow,this.navIndex] = [!this.navShow, -1];
+          this.WIN_HEIGHT(false)
         }else{
           [this.navShow, this.navIndex] = [true,index];
+          this.WIN_HEIGHT(true)
         }
         //当前导航下标
         // debugger
         if(index === 0 || index === 2 || index === 3){  //下标为0、2、3弹框显示
         }else if(index === 1){  //为1跳转到品牌选择页
           this.navShow = false;
-          this.$router.push({
-            path:'/brand/brand'
-          })
+          this.WIN_HEIGHT(false);
+          this.BRAND_STATUS(false);
+
         }else{ //否则为4跳转到筛选页
           this.$router.push({
             path:'/filtrateCar/filtrateCar'
@@ -210,7 +215,7 @@
       //   v:传值
       orderFun(item){
         this.arrSpliceName(item.name);
-        this.findCarPushVuex(item.id)
+        this.findCarPushVuex(item.id);
         this.popupHide();
       },
       // 价格列表
@@ -233,6 +238,7 @@
       //关闭导航弹框
       popupHide(){
         this.navShow = !this.navShow;
+        this.WIN_HEIGHT(false);
         this.navIndex= -1
       },
       // 点击后导航表数据改变

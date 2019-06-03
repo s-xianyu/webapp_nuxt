@@ -4,6 +4,7 @@ import {
   ADD_LIKE,
   ADD_PAGE,
   LOGIN_STATUS,
+  BRAND_STATUS,
   WIN_HEIGHT,
   CITY_SAVE,
   GET_CITY,
@@ -13,6 +14,7 @@ import {
   FINDCARVAL,
   FINDCARMENU,
   FINDCARVAL_SAVE,
+  FINDCARVAL_REMOVE,
   ADD_LIST
 } from './mutations-type';
 import {setStore,getStore,removeStore} from '../config/util/util';
@@ -74,7 +76,7 @@ export default {
       [
         state.userInfo,
         state.isLogin,
-        state.windowStatus
+        state.loginStatus
       ] = [
         val,
         true,
@@ -94,12 +96,11 @@ export default {
     }
 
     // 获取到窗口高度并保存
-    // if(state.windowStatus === true){
+    // if(state.loginStatus === true){
     //   state.windowHeight = `${document.documentElement.clientHeight || document.body.clientHeight}px`
     // }else{
     //   state.windowHeight = 'auto';
     // }
-    state.windowHeight = getHeight(state.windowStatus)
   },
 
   // 退出登录清除登录信息
@@ -149,16 +150,17 @@ export default {
   },
   // 登录框显示状态
   [LOGIN_STATUS](state){
-    state.windowStatus = !state.windowStatus
-    state.windowHeight = getHeight(state.windowStatus)
+    state.loginStatus = !state.loginStatus;
+    preventDefault(state.loginStatus);
+  },
+  // 品牌选择
+  [BRAND_STATUS](state){
+    state.brandState = !state.brandState;
+    preventDefault(state.brandState);
   },
   // 全局浏览器高度设置、显示
   [WIN_HEIGHT](state,isTrue){
-    if(isTrue){
-      state.windowHeight = getHeight(isTrue)
-    }else{
-      state.windowHeight = getHeight(isTrue)
-    }
+    preventDefault(isTrue);
   },
 
   //搜索历史记录
@@ -193,7 +195,7 @@ export default {
     }
     state.findCarList = [];
     state.findCarVal.currPage = 1;
-    console.log(state.findCarVal)
+    setStore('findCar',state.findCarVal);
   },
   //找车页传值--menu
   //  0 ----新车
@@ -224,19 +226,53 @@ export default {
     }
     state.findCarList = [];
     state.findCarVal.currPage = 1;
+    setStore('findCar',state.findCarVal);
   },
 
   [FINDCARVAL_SAVE](state,val){
     if(val){
       state.findCarVal = val;
     }
-  }
+  },
+  [FINDCARVAL_REMOVE](state){
+      state.findCarVal.pageSize = 10;
+      state.findCarVal.currPage = 0;
+      state.findCarVal.order = '';
+      state.findCarVal.priceInterval = '';
+      state.findCarVal.year = '';
+      state.findCarVal.serial = '';
+      state.findCarVal.carType = '';
+      state.findCarVal.standards = '';
+      state.findCarVal.dayInterval = '';
+      state.findCarVal.colors = '';
+      state.findCarVal.gears = '';
+      state.findCarVal.is4s = '';
+      state.findCarVal.pifa = '';
+      state.findCarVal.mileage = '';
+      state.findCarVal.carKinds = '';
+      state.findCarVal.bodType = '';
+      state.findCarVal.factory = '';
+      state.findCarVal.country = '';
+      state.findCarVal.motor = '';
+      state.findCarVal.devicetoken = '';
+      state.findCarVal.newCar = '';
+      state.findCarVal.appmobile = '';
+      state.findCarVal.apptoken = '';
+    removeStore('findCar');
+  },
 }
+let preventDefault = isP =>{
+  let prevent=function(e){e.preventDefault();};
+  if(isP){
+    document.body.style.overflow='hidden';
+    document.addEventListener("touchmove",prevent,false);
+  }else{
+    document.body.style.overflow='';
+    document.removeEventListener("touchmove",prevent,false);
+  }
+};
 let getHeight = b => {
   return b ? `${document.documentElement.clientHeight || document.body.clientHeight}px` : `auto`
-};
-let removeFindCarVal = () => {
-
 };
 let cityInfo = (val)=>{
   let content;

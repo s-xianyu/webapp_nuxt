@@ -1,7 +1,10 @@
 <template>
-  <div class="brand" style="overflow: hidden">
-    <div class="animated fadeInRight">
-      <TitleHead :heads="heads"></TitleHead>
+  <section class="brand" :class="{cur:brandState}">
+    <div class="">
+      <header ref="titleHearder" class="cur">
+        <h2>品牌选择</h2>
+        <span class="iconfont icon-prev" @click="brandHide"></span>
+      </header>
       <div class="brand-content">
         <!--一级列表-->
         <div class="brand-stair1">
@@ -14,7 +17,7 @@
                 <span class="allSelect" @click="allSelect">多选</span>
               </div>
             </div>
-            <div class="brand-list" v-for="item in brandList">
+            <div class="brand-list" v-for="item in stair1List">
               <p :id="item.key">{{item.key}}</p>
               <div
                 class="brand-lis"
@@ -94,11 +97,11 @@
       </div>
       <!--menu-->
       <div class="brand-menu">
-        <a @click="Scrolls(item.key)" v-for="item in brandList">{{item.key}}</a>
+        <a @click="Scrolls(item.key)" v-for="item in stair1List">{{item.key}}</a>
       </div>
 
     </div>
-  </div>
+  </section>
 </template>
 
 <script>
@@ -119,15 +122,12 @@
     data() {
       return {
         msg: 'brand',
-        heads:{
-          title:'品牌选择',
-          position:true,
-        },
         brand:'', //一级品牌名
         brandImg:'', //一级品牌图片
         brandTo:'', //二级品牌名
         brandThe:'', //三级品牌名
         brandTheImg:'', //三级品牌图片
+        stair1List:[], //一级品牌列表
         stair2List:[], //二级品牌列表
         stair3List:[], //三级品牌列表
         stair2Show:false, //二级品牌显示
@@ -139,10 +139,6 @@
         selectShow:false, //一级多选显示
         allOptionName:[], //多选品牌名保存
       }
-    },
-    async asyncData(){
-      let { data } = await getonelevelbrand();
-      return { brandList:data.logoList };
     },
     beforeUpdate(){
       // 获取浏览器高度
@@ -156,13 +152,17 @@
       // 设置三级列表高度，用浏览器高度减去header高度再减title高度
       this.stair3Height = height-titleHeight-brandTitleHeight+'px';
     },
+    mounted(){
+      this.getBrandData();
+    },
     computed:{
+      ...mapState(['brandState']),
     },
     components:{
       TitleHead
     },
     methods:{
-      ...mapMutations(['WIN_HEIGHT']),
+      ...mapMutations(['WIN_HEIGHT','BRAND_STATUS']),
       //锚点事件
       Scrolls(key){
         let top = document.querySelector('#'+key).offsetTop - this.$refs.mbrBrand.offsetTop;
@@ -170,6 +170,16 @@
         document.documentElement.scrollTop = top;
         window.pageYOffset = top;
       },
+      brandHide(){
+        this.BRAND_STATUS(false);
+      },
+
+      // 一级品牌获取
+      async getBrandData(){
+        let { data } = await getonelevelbrand();
+        this.stair1List = data.logoList;
+      },
+
       // 二级品牌获取
       async brandFun(item){
         let params = {
@@ -260,7 +270,53 @@
 <style lang="scss" scoped>
   @import "~static/style/mixin";
   .brand{
+    overflow: hidden;
     background:#f6f6f6;
+    z-index: 999;
+    position: fixed;
+    overflow-y: scroll;
+    @include wh(100%,100%);
+    left: 0;
+    top: 0;
+    -webkit-transition: all .3s;
+    transition: all .3s;
+    /*-webkit-transform: translate(100%, 0);*/
+    /*transform: translate(100%, 0);*/
+    &.cur{
+      /*-webkit-transform: translate(0px, 0px);*/
+      /*transform: translate(0px, 0px);*/
+    }
+  }
+  header{
+    position: fixed;
+    top:0;
+    left:0;
+    right:0;
+    z-index: 100;
+    @include wh(100%,1.8rem);
+    border-bottom:1px solid #e1e1e1;
+    background:$fff;
+    &.cur{
+      position: fixed;
+      top:0;
+      left:0;
+      right:0;
+    }
+    h2{
+      @include wh(100%,1.8rem);
+      @include flexCenter;
+      color:$c333;
+    }
+    span{
+      position:absolute;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-size:.7rem;
+      @include wh(1.6rem,1.8rem);
+      left:0;
+      top:0;
+    }
   }
   .brand-content{
     padding-top: 1.8rem;

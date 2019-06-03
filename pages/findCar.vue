@@ -1,5 +1,5 @@
 <template>
-  <div class="body" style="overflow: hidden" :style="{ height: windowHeight}">
+  <div class="body">
     <div class="animated fadeInRight">
       <BackHead :back="true"/>
       <div :class="{fixeds:isFixed}">
@@ -16,6 +16,7 @@
       <!-- <FooterTab/> -->
       <Loading v-if="loadingShow"/>
       <Login/>
+      <Brand/>
     </div>
   </div>
 </template>
@@ -27,8 +28,10 @@
   import FooterTab from '~/components/common/footer/footer'
   import BackTop from '~/components/common/backTop'
   import Login from '~/components/common/login/login'
+  import Brand from '~/components/common/brand/brand'
   import {filteData} from '~/config/getData'
   import {mapState,mapActions,mapMutations,mapGetters} from 'vuex'
+  import {removeStore} from "../config/util/util";
 
   export default {
     head () {
@@ -52,6 +55,9 @@
       // 获取screen至页面顶部的距离
       this.offsetTop = document.querySelector('.listNav').offsetTop;
     },
+    destroyed(){
+      this.FINDCARVAL_REMOVE();
+    },
     watch:{
       getFindCarVal(){
         this.thisGetters();
@@ -68,11 +74,12 @@
       BackTop,
       FooterTab,
       ListNav,
-      Login
+      Login,
+      Brand
     },
     methods:{
       ...mapActions(['getCity']),
-      ...mapMutations(['ADD_LIST','ADD_PAGE']),
+      ...mapMutations(['ADD_LIST','ADD_PAGE','FINDCARVAL_REMOVE']),
       async loadermore(){
         this.loadingShow = !this.loadingShow;
         await this.ADD_PAGE('findCar');

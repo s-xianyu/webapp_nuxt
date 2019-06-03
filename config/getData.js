@@ -84,7 +84,7 @@ export const  getCarTypeByParentIdJson = params => get(`${api}/car/getCarTypeByP
 /**
  *pingpai 4
  */
-export const  getCarTypeByParentIdKuanxin = params => get(`${api}/car/getCarTypeByParentIdKuanxin.json?parentId=156&title=4.2L`,params);
+export const  getCarTypeByParentIdKuanxin = params => get(`${api}/car/getCarTypeByParentIdKuanxin.json`,params);
 
 
 /**

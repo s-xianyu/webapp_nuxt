@@ -1,5 +1,5 @@
 <template>
-  <div class="body" style="overflow: hidden" :style="{ height: windowHeight}">
+  <div class="body">
     <AppLoad :show="true"/>
     <div :class="{fixed:isFixed}">
       <LogoHead/>
@@ -72,7 +72,6 @@ export default {
     return { homeList: data }
   },
   computed:{
-    ...mapState(['windowHeight']),
     params (){
       return {
         type:this.type
