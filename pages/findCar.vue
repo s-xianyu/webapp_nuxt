@@ -57,6 +57,7 @@
     },
     destroyed(){
       this.FINDCARVAL_REMOVE();
+      this.WIN_HEIGHT(false);
     },
     watch:{
       getFindCarVal(){
@@ -79,7 +80,7 @@
     },
     methods:{
       ...mapActions(['getCity']),
-      ...mapMutations(['ADD_LIST','ADD_PAGE','FINDCARVAL_REMOVE']),
+      ...mapMutations(['ADD_LIST','ADD_PAGE','FINDCARVAL_REMOVE','WIN_HEIGHT']),
       async loadermore(){
         this.loadingShow = !this.loadingShow;
         await this.ADD_PAGE('findCar');

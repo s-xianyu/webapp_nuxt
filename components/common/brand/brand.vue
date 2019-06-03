@@ -1,6 +1,6 @@
 <template>
   <section class="brand" :class="{cur:brandState}">
-    <div class="">
+    <div class="brand-s">
       <header ref="titleHearder" class="cur">
         <h2>品牌选择</h2>
         <span class="iconfont icon-prev" @click="brandHide"></span>
@@ -280,11 +280,16 @@
     top: 0;
     -webkit-transition: all .3s;
     transition: all .3s;
-    /*-webkit-transform: translate(100%, 0);*/
-    /*transform: translate(100%, 0);*/
+    -webkit-transform: translate(100%, 0);
+    transform: translate(100%, 0);
+    .brand-s{
+      position: absolute;
+      @include wh(100%,100%);
+      padding:1.8rem 0 1.45rem;
+    }
     &.cur{
-      /*-webkit-transform: translate(0px, 0px);*/
-      /*transform: translate(0px, 0px);*/
+      -webkit-transform: translate(0px, 0px);
+      transform: translate(0px, 0px);
     }
   }
   header{
@@ -319,8 +324,8 @@
     }
   }
   .brand-content{
-    padding-top: 1.8rem;
-    padding-bottom:1.5rem;
+   @include wh(100%,100%);
+    overflow: scroll;
     .brand-stair1{
       .mbrBrand{
         width: 100%;
