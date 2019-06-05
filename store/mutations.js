@@ -4,15 +4,14 @@ import {
   ADD_LIKE,
   ADD_PAGE,
   LOGIN_STATUS,
-  BRAND_STATUS,
   WIN_HEIGHT,
   CITY_SAVE,
   GET_CITY,
   GET_HISTORYCITY,
   ALL_CITY,
   HISTORYSEARCH_SAVE,
-  FINDCARVAL,
-  FINDCARMENU,
+  FINDCARVAL_NAV,
+  FINDCARVAL_MENU,
   FINDCARVAL_SAVE,
   FINDCARVAL_REMOVE,
   ADD_LIST
@@ -26,6 +25,8 @@ export default {
      state.cityInfo = val;
      state.thisCity = cityInfo(val)[0];
      state.lastCity = cityInfo(val)[1];
+     // 设置为第一页
+     state.findCarVal.currPage = 0;
      state.findCarVal.areaCode = val[0].area_code
    }
   },
@@ -36,7 +37,11 @@ export default {
       state.cityInfo = val;
       state.thisCity = cityInfo(val)[0];
       state.lastCity = cityInfo(val)[1];
+
+      // 保存code到筛选数据
       state.findCarList = [];
+      // 设置为第一页
+      state.findCarVal.currPage = 0;
       state.findCarVal.areaCode = val[0].area_code
     }
 
@@ -53,6 +58,8 @@ export default {
     // 保存地区到本地
     setStore('cityInfo',val);
     setStore('historyCity',state.historyCity);
+    // 存储筛选数据
+    setStore('findCar',state.findCarVal);
     window.history.go(-1);
   },
 
@@ -153,11 +160,6 @@ export default {
     state.loginStatus = !state.loginStatus;
     preventDefault(state.loginStatus);
   },
-  // 品牌选择
-  [BRAND_STATUS](state){
-    state.brandState = !state.brandState;
-    preventDefault(state.brandState);
-  },
   // 全局浏览器高度设置、显示
   [WIN_HEIGHT](state,isTrue){
     preventDefault(isTrue);
@@ -175,57 +177,60 @@ export default {
     }
   },
 
-  //找车页传值--筛选
-
-  //val里包含2个值:
-  //nav --对应导航列表下标
-  //  0 ----排序
-  //  2 ----价格
-  //  3 ----车龄
+  //找车页传值--nav
+  //  order ----排序
+  //  priceInterval ----价格
+  //  year ----车龄
   //key --值
-  [FINDCARVAL](state,val){
+  [FINDCARVAL_NAV](state,val){
     // 赋值为空，否则getters监听不到改变
-    switch (val.nav){
-      case 0 : state.findCarVal.order = val.key;
+    switch (val.type){
+      case 'order' : state.findCarVal.order = val.key;
       break;
-      case 2 : state.findCarVal.priceInterval = val.key;
+      case 'priceInterval' : state.findCarVal.priceInterval = val.key;
       break;
-      case 3 : state.findCarVal.year = val.key;
+      case 'year' : state.findCarVal.year = val.key;
       break;
     }
+    // 清空列表
     state.findCarList = [];
-    state.findCarVal.currPage = 1;
+    // 设置为第一页
+    state.findCarVal.currPage = 0;
+    // 存储筛选数据
     setStore('findCar',state.findCarVal);
   },
   //找车页传值--menu
-  //  0 ----新车
-  //  1 ----4s维保
-  //  2 ----批发
-  [FINDCARMENU](state,val){
+  //  newCar ----新车
+  //  is4s ----4s维保
+  //  pifa ----批发
+  [FINDCARVAL_MENU](state,val){
     [
       state.is4s,
       state.newCar,
       state.pifa,
     ] = [];
-    switch (val.nav){
-      case 0 :
+    switch (val.type){
+      case 'newCar' :
         state.findCarVal.is4s = '';
         state.findCarVal.pifa = '';
         state.findCarVal.newCar = val.key;
       break;
-      case 1 :
+      case 'is4s' :
         state.findCarVal.newCar = '';
         state.findCarVal.pifa = '';
         state.findCarVal.is4s = val.key;
       break;
-      case 2 :
+      case 'pifa' :
         state.findCarVal.newCar = '';
         state.findCarVal.is4s = '';
         state.findCarVal.pifa = val.key;
       break;
     }
+    // 清空列表
     state.findCarList = [];
-    state.findCarVal.currPage = 1;
+    // 设置为第一页
+    state.findCarVal.currPage = 0;
+    // 存储筛选数据
     setStore('findCar',state.findCarVal);
   },
 

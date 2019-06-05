@@ -14,8 +14,6 @@ export const state = () => ({
   historyCity:[],
   // 登录框状态
   loginStatus:false,
-  // 品牌弹框状态
-  brandState:false,
   // 登录状态
   isLogin:false,
   //登录信息保存

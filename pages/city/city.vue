@@ -41,11 +41,11 @@
         </div>
         <!--二级-->
         <div class="city-stairTo city-stair2" :class="{cur:stair2Show}">
-          <div class="city-stair2-left" @click="stair2Show = !stair2Show"></div>
+          <div class="city-stair2-left" @click="stair2ShowFun"></div>
           <div class="city-stair2-content">
             <div class="city_title">
               <span>{{province.area_name}}</span>
-              <i  @click="stair2Show = !stair2Show" class="close iconfont icon-close"></i>
+              <i  @click="stair2ShowFun" class="close iconfont icon-close"></i>
             </div>
             <div class="line"></div>
             <div @click="unlimitedCity" class="all">不限</div>
@@ -150,7 +150,7 @@
     },
     methods:{
       ...mapActions(['getHistoryCity']),
-      ...mapMutations(['CITY_SAVE','ALL_CITY']),
+      ...mapMutations(['CITY_SAVE','ALL_CITY','WIN_HEIGHT']),
 
       Scrolls(key){
         let top = document.querySelector('#'+key).offsetTop- this.$refs.mzaProvince.offsetTop;
@@ -191,6 +191,11 @@
         // 保存数据
         this.stair2Show = true;
         this.province = this.forOFKey(this.cityStair1,code);
+        this.WIN_HEIGHT(true);
+      },
+      stair2ShowFun(){
+        this.stair2Show = !this.stair2Show;
+        this.WIN_HEIGHT(false);
       },
 
       //三级地区获取
@@ -243,16 +248,12 @@
 
       // 单选，多选切换
       allSelectFun(){
-        [
-          this.selectShow, //切换按钮显示
-        ] = [
-          !this.selectShow,
-        ];
+        this.selectShow = !this.selectShow;
         this.allSelectText = this.selectShow ? '单选' : '多选';
         if(!this.selectShow){
           document.querySelectorAll('.leftBtn').forEach(key =>{
             key.classList.remove('cur');
-          })
+          });
           this.allOption = [];
           this.allOptionID = [];
         }

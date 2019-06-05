@@ -11,7 +11,7 @@
               <p id="*">*</p>
               <div class="brand-lis brand-lis1">
                 <span class="astrict">不限品牌</span>
-                <span class="allSelect" @click="allSelect">多选</span>
+                <span class="allSelect" @click="allSelect">我要{{allSelectText}}</span>
               </div>
             </div>
             <div class="brand-list" v-for="item in brandList">
@@ -24,7 +24,7 @@
                   <img v-lazy="li.mobileLogo" src="" alt="">
                   <span>{{li.title}}</span>
                 </div>
-                <div class="rightBtn" v-show="selectShow">
+                <div class="rightBtn" v-if="selectShow">
                   <b class="animated fadeInRight"></b>
                 </div>
                 <u class="bg" @click="radioFun($event,li)" v-show="selectShow"></u>
@@ -40,25 +40,35 @@
         <div class="brand-stair2 brand-common" :class="{cur:stair2Show}">
           <!--<div class="brand-stair-left" @click="thisStair2Fun"></div>-->
           <div class="brand-stair-right" :style="{height:stair2Height}">
-            <div class="brand_title">
-              <span><img :src="brandImg" alt="">{{brand}}</span>
-              <i  @click="thisStair2Fun" class="close iconfont icon-close"></i>
+            <div class="brand-top">
+              <div class="brand_title" ref="brand2Title">
+                <span><img :src="brandImg" alt="">{{brand}}</span>
+                <i  @click="thisStair2Fun" class="close iconfont icon-close"></i>
+              </div>
+              <div class="line"></div>
+              <div class="all">
+                <div>不限</div>
+                <div @click="allSelectTo">{{allSelectTextTo}}</div>
+              </div>
+              <div class="brand-li"
+                   :key="key"
+                   v-for="(item,key) in stair2List">
+                <p class="title">{{key}}</p>
+                <ul>
+                  <li v-for="chi in item">
+                    <span @click.stop="brandVuex" class="name">{{chi.title}}</span>
+                    <span class="rightBtnTo" v-show="selectShowTo">
+                    <b class="animated fadeInRight"></b>
+                  </span>
+                    <u class="bg" @click="radioFun($event,chi)" v-show="selectShowTo"></u>
+                    <span @click="brandToFun(chi)" class="model" v-show="!selectShowTo">车型</span>
+                  </li>
+                </ul>
+              </div>
             </div>
-            <div class="line"></div>
-            <div class="all">
-              <div class="">不限</div>
-              <div class="">多选</div>
-            </div>
-            <div class="brand-li"
-                 :key="key"
-                 v-for="(item,key) in stair2List">
-              <p class="title">{{key}}</p>
-              <ul>
-                <li v-for="chi in item">
-                  <span @click.stop="brandVuex" class="name">{{chi.title}}</span>
-                  <span @click="brandToFun(chi)" class="model">车型</span>
-                </li>
-              </ul>
+            <div class="brand-bottom animated fadeInUp" v-if="selectShowTo">
+              <span @click="allSelectTo">取消</span>
+              <span>确认</span>
             </div>
           </div>
         </div>
@@ -66,9 +76,11 @@
         <div class="brand-stair3 brand-common" :class="{cur:stair3Show}">
           <div class="brand-stair-left" @click="stair3Show = !stair3Show"></div>
           <div class="brand-stair-right">
-            <div class="brand_title" ref="brand3Title">
-              <span><img :src="brandImg" alt="">{{brandTo}}</span>
-              <i @click="stair3Show = !stair3Show" class="close iconfont icon-close"></i>
+            <div class="brand-top">
+              <div class="brand_title" ref="brand3Title">
+                <span><img :src="brandImg" alt="">{{brandTo}}</span>
+                <i @click="stair3Show = !stair3Show" class="close iconfont icon-close"></i>
+              </div>
             </div>
             <div class="brand-model-content">
               <div class="left" :style="{height:stair3Height}">
@@ -137,7 +149,11 @@
         stair3Index: -1, //默认三级列表下标
         stair2Id:'', //二级ID
         selectShow:false, //一级多选显示
-        allOptionName:[], //多选品牌名保存
+        selectShowTo:false, //一级多选显示
+        allOptionName:[], //多选品牌名保存D
+        allOptionNameTo:[], //多选品牌名保存D
+        allSelectText:'多选', //一级列表单选多选切换
+        allSelectTextTo:'多选' //二级列表单选多选切换
       }
     },
     async asyncData(){
@@ -149,12 +165,14 @@
       let height = document.documentElement.clientHeight || document.body.clientHeight;
       // 获取header高度
       let titleHeight = this.$refs.mbrBrand.parentNode.parentNode.parentNode.childNodes[0].offsetHeight;
+      // 获取二级列表title高度
+      let brand2TitleHeight = this.$refs.brand2Title.offsetHeight;
       // 设置二级列表高度
       this.stair2Height = height-titleHeight+'px';
       //获取三级标题高度
-      let brandTitleHeight = this.$refs.brand3Title.offsetHeight;
+      let brand3TitleHeight = this.$refs.brand3Title.offsetHeight;
       // 设置三级列表高度，用浏览器高度减去header高度再减title高度
-      this.stair3Height = height-titleHeight-brandTitleHeight+'px';
+      this.stair3Height = height-titleHeight-brand3TitleHeight+'px';
     },
     computed:{
     },
@@ -188,6 +206,12 @@
       },
       // 二级弹框关闭后设置全局高度
       thisStair2Fun(){
+        this.selectShowTo = !this.selectShowTo;
+        document.querySelectorAll('.rightBtnTo').forEach(key =>{
+          key.classList.remove('cur');
+        });
+        this.allOptionNameTo = [];
+
         this.stair2Show = !this.stair2Show;
         // 关闭时清除brand
         this.brand = '';
@@ -229,20 +253,54 @@
       brandVuex(){
        debugger
       },
-      // 多选按钮显示切换
+      // 一级列表多选按钮显示切换
       allSelect(){
         this.selectShow = !this.selectShow;
+        // 切换文字
+        this.allSelectText = this.selectShow ? '单选' : '多选';
+        // 如果是一级多选状态删除选中样式并清空选中列表数组
+        if(!this.selectShow){
+          document.querySelectorAll('.rightBtn').forEach(key =>{
+            key.classList.remove('cur');
+          });
+          this.allOptionName = []
+        }
+      },
+      // 二级列表多选按钮显示切换
+      allSelectTo(){
+        this.selectShowTo = !this.selectShowTo;
+        // 切换文字
+        this.allSelectTextTo = this.selectShowTo ? '单选' : '多选';
+        // 如果是一级多选状态删除选中样式并清空选中列表数组
+        if(!this.selectShowTo){
+          document.querySelectorAll('.rightBtnTo').forEach(key =>{
+            key.classList.remove('cur');
+          });
+          this.allOptionNameTo = []
+        }
       },
       // 多选
       radioFun(e,item){
-        if(this.allOptionName.includes(item.title) || this.allOptionName.length >= 5){
+        // 如果allOptionName和allOptionNameTo不是空
+        if(this.allOptionName.includes(item.title) || this.allOptionNameTo.includes(item.title)){
+          // 删除class和当前选中值
           e.currentTarget.previousElementSibling.classList.remove('cur');
-          this.removeArray(this.allOptionName,item.title);
+          if(this.selectShow){ //利用 selectShow判断是一级还是二级
+            this.removeArray(this.allOptionName,item.title);
+          }else{
+            this.removeArray(this.allOptionNameTo,item.title);
+          }
+          // 否则添加class并把值添加进数组
         }else{
           e.currentTarget.previousElementSibling.classList.add('cur');
-          this.allOptionName = this.allOptionName.concat(item.title);
+          if(this.selectShow){ //利用 selectShow判断是一级还是二级
+            this.allOptionName = this.allOptionName.concat(item.title);
+          }else{
+            this.allOptionNameTo = this.allOptionNameTo.concat(item.title);
+          }
         }
-        console.log(this.allOptionName);
+        console.log('1'+this.allOptionName);
+        console.log('2'+this.allOptionNameTo);
       },
       // 删除重复
       removeArray(arr,val){
@@ -261,6 +319,30 @@
   @import "~static/style/mixin";
   .brand{
     background:#f6f6f6;
+  }
+  .allSelectBtn{
+    position:fixed;
+    bottom:0;
+    left:0;
+    right:0;
+    z-index:10;
+    @include wh(100%,1.42rem);
+    background:$f60;
+    font-size:.56rem;
+    color:$fff;
+    @include flexCenter;
+    span{
+      @include wh(100%,100%);
+      @include flexCenter;
+      &:first-child{
+        flex:1;
+        background:#f5f5f5;
+        color:#333;
+      }
+      &:last-child{
+        flex:2;
+      }
+    }
   }
   .brand-content{
     padding-top: 1.8rem;
@@ -354,28 +436,7 @@
         }
       }
       .allSelectBtn{
-        position:fixed;
-        bottom:0;
-        left:0;
-        right:0;
-        z-index:10;
-        @include wh(100%,1.42rem);
-        background:$f60;
-        font-size:.56rem;
-        color:$fff;
-        @include flexCenter;
-        span{
-          @include wh(100%,100%);
-          @include flexCenter;
-          &:first-child{
-            flex:1;
-            background:#f5f5f5;
-            color:#333;
-          }
-          &:last-child{
-            flex:2;
-          }
-        }
+        @extend .allSelectBtn;
       }
     }
     .brand-common{
@@ -394,6 +455,7 @@
         box-shadow:-.2rem 0 .2rem rgba(0, 0, 0, .1);
         .brand-stair-right{
           @include wh(100%,100%);
+          padding-bottom:1.5rem;
         }
       }
       &.cur{
@@ -415,93 +477,123 @@
         overflow: scroll;
         background:#fff;
         box-shadow:-.2rem 0 .2rem rgba(0, 0, 0, .1);
-        .brand_title{
-          @include flexCenter;
-          height:2rem;
-          padding-left: .5rem;
-          span{
-            flex:3;
+        .brand-top{
+          .brand_title{
             @include flexCenter;
-            justify-content: flex-start;
-            font-size:.495rem;
-            font-weight: bold;
-            img{
-              @include wh(1rem,1rem);
-              display: inline-block;
-              margin:0 .5rem 0 0;
-              padding:0;
+            height:2rem;
+            padding-left: .5rem;
+            span{
+              flex:3;
+              @include flexCenter;
+              justify-content: flex-start;
+              font-size:.495rem;
+              font-weight: bold;
+              img{
+                @include wh(1rem,1rem);
+                display: inline-block;
+                margin:0 .5rem 0 0;
+                padding:0;
+              }
+            }
+            i{
+              flex:1;
+              @include flexCenter;
+              justify-content: flex-end;
+              @include wh(.5rem,100%);
+              padding-right:.5rem;
             }
           }
-          i{
-            flex:1;
-            @include flexCenter;
-            justify-content: flex-end;
-            @include wh(.5rem,100%);
-            padding-right:.5rem;
-          }
-        }
-        .line{
-          background:#f6f6f6;
-          @include wh(100%,.35rem);
-        }
-        .all{
-          @include flexCenter;
-          @include wh(100%,1.518rem);
-          padding:0 .5rem;
-          & > div{
-            @include flexCenter;
-            flex:1;
-            height:100%;
-            font-size:.5rem;
-            &:first-child{justify-content: flex-start}
-            &:last-child{justify-content: flex-end;color:#f60;}
-          }
-        }
-        .brand-li{
-          .title{
-            @include wh(100%,1rem);
-            @include flexCenter;
-            justify-content: flex-start;
-            padding:0 .5rem;
+          .line{
             background:#f6f6f6;
-            color:$c999;
+            @include wh(100%,.35rem);
           }
-          ul{
-            li{
-              @include wh(100%,1.518rem);
+          .all{
+            @include flexCenter;
+            @include wh(100%,1.518rem);
+            padding:0 .5rem;
+            & > div{
               @include flexCenter;
-              justify-content: space-between;
-              border-bottom: 1px solid #e1e1e1;
-              &:first-child{
-                border-top: 1px solid #e1e1e1;
-              }
-              & > span{
+              flex:1;
+              height:100%;
+              font-size:.5rem;
+              &:first-child{justify-content: flex-start}
+              &:last-child{justify-content: flex-end;color:#f60;}
+            }
+          }
+          .brand-li{
+            .title{
+              @include wh(100%,1rem);
+              @include flexCenter;
+              justify-content: flex-start;
+              padding:0 .5rem;
+              background:#f6f6f6;
+              color:$c999;
+            }
+            ul{
+              li{
+                position:relative;
+                @include wh(100%,1.518rem);
                 @include flexCenter;
-                &.name{
-                  padding-left:.5rem;
-                  font-size:.5rem;
-                  @include wh(80%,100%);
-                  @include flexCenter;
-                  justify-content: flex-start;
+                justify-content: space-between;
+                border-bottom: 1px solid #e1e1e1;
+                &:first-child{
+                  border-top: 1px solid #e1e1e1;
                 }
-                &.model{
-                  @include wh(1.8rem,100%);
-                  position: relative;
-                  color:$c999;
-                  &::before{
-                    content: '';
-                    display: inline-block;
-                    @include wh(1px,.4rem);
-                    position: absolute;
-                    left:0;
-                    top:50%;
-                    margin-top:-.2rem;
-                    background-color: #e1e1e1;
+                & > span{
+                  @include flexCenter;
+                  &.name{
+                    padding-left:.5rem;
+                    font-size:.5rem;
+                    @include wh(80%,100%);
+                    @include flexCenter;
+                    justify-content: flex-start;
+                  }
+                  &.model{
+                    @include wh(1.8rem,100%);
+                    position: relative;
+                    color:$c999;
+                    &::before{
+                      content: '';
+                      display: inline-block;
+                      @include wh(1px,.4rem);
+                      position: absolute;
+                      left:0;
+                      top:50%;
+                      margin-top:-.2rem;
+                      background-color: #e1e1e1;
+                    }
+                  }
+                  &.rightBtnTo{
+                    @include wh(1.8rem,100%);
+                    &.cur{
+                      b{
+                        border: none;
+                        background: #f60 url(http://static.hx2cars.com/resource/web/dist/static/mobpages/images/mindex/brandselect.png) center center no-repeat;
+                        background-size: .429rem auto;
+                      }
+                    }
+                    b{
+                      @include wh(.73rem,.73rem);
+                      border: 1px solid #ccc;
+                      border-radius: 50%;
+                    }
                   }
                 }
+                .bg{
+                  position: absolute;
+                  top: 0;
+                  bottom: 0;
+                  right: 0;
+                  z-index: 10;
+                  @include wh(100%,100%);
+                }
               }
             }
           }
+        }
+        .brand-bottom{
+          @extend .allSelectBtn;
+          bottom:1.8rem;
         }
       }
     }

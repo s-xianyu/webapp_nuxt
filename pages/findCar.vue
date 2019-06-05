@@ -8,7 +8,7 @@
       <div class="main">
         <div class="carList"
              v-infinite-scroll="loadermore"
-             infinite-scroll-distance="10">
+             :infinite-scroll-distance="scrollDistance">
           <List :findCarList="findCarList"/>
         </div>
       </div>
@@ -16,7 +16,6 @@
       <!-- <FooterTab/> -->
       <Loading v-if="loadingShow"/>
       <Login/>
-      <Brand/>
     </div>
   </div>
 </template>
@@ -28,7 +27,6 @@
   import FooterTab from '~/components/common/footer/footer'
   import BackTop from '~/components/common/backTop'
   import Login from '~/components/common/login/login'
-  import Brand from '~/components/common/brand/brand'
   import {filteData} from '~/config/getData'
   import {mapState,mapActions,mapMutations,mapGetters} from 'vuex'
   import {removeStore} from "../config/util/util";
@@ -44,6 +42,7 @@
         loadingShow:false,
         offsetTop:0,
         isFixed:false,
+        scrollDistance:'1' //滚动加载更多阈值
       }
     },
     created(){
@@ -56,17 +55,11 @@
       this.offsetTop = document.querySelector('.listNav').offsetTop;
     },
     destroyed(){
-      this.FINDCARVAL_REMOVE();
       this.WIN_HEIGHT(false);
     },
-    watch:{
-      getFindCarVal(){
-        this.thisGetters();
-      }
-    },
+
     computed:{
       ...mapState(['windowHeight','findCarList','findCarVal']),
-      ...mapGetters(['getFindCarVal']),
     },
     components: {
       Loading,
@@ -76,7 +69,6 @@
       FooterTab,
       ListNav,
       Login,
-      Brand
     },
     methods:{
       ...mapActions(['getCity']),
@@ -86,12 +78,6 @@
         await this.ADD_PAGE('findCar');
         this.LoadMore()
       },
-      //监听改变后执行
-      thisGetters(){
-        this.loadingShow = !this.loadingShow;
-        this.LoadMore();
-      },
-
       async LoadMore () {
         let { data } = await filteData(this.findCarVal);
         this.ADD_LIST(data.carList);

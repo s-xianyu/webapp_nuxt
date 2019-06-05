@@ -1,14 +1,16 @@
 // 带logo的头部导航
 // 接收参数
 // false -->返回上一页
-// true -->返回到首页
+// true -->返回到首页并清除列表页筛选信息
 
 <template>
   <div class="back-header">
     <div class="content">
-      <div class="back">
-        <span v-if="!back" class="iconfont icon-prev" @click="$history(-1)"></span>
-        <router-link to="/" v-else class="iconfont icon-prev" @click="$history(-1)"></router-link>
+      <div v-if="!back" @click="$history(-1)" class="back">
+        <span class="iconfont icon-prev"></span>
+      </div>
+      <div  class="back" @click="backGo" v-else>
+        <span class="iconfont icon-prev"></span>
       </div>
       <div class="station">
         <router-link tag="span" to="/city/city"><i class="iconfont icon-dingwei"></i>{{thisCity}}</router-link>
@@ -44,7 +46,7 @@
       ...mapState(['thisCity'])
     },
     methods:{
-      ...mapMutations(['WIN_HEIGHT']),
+      ...mapMutations(['WIN_HEIGHT','FINDCARVAL_REMOVE']),
       navEvent(){
         this.navShow = !this.navShow;
         this.WIN_HEIGHT(this.navShow);
@@ -52,6 +54,10 @@
       navGetData(data){
         this.navShow = data;
         this.WIN_HEIGHT(this.navShow);
+      },
+      backGo(){
+        this.FINDCARVAL_REMOVE();
+        this.$history(-1);
       }
     },
 
