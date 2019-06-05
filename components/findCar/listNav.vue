@@ -1,73 +1,83 @@
 <template>
-  <div class="listNav">
-    <div class="listNav-head">
-      <ul>
-        <li
-          :class="navIndex === index ? 'cur' : ''"
-          v-for="(item,index) in nav"
-          :key="index"
-          @click="navToggle(index)">
-          <span>{{item}}</span>
-          <i class="iconfont icon-xiasanjiao1"></i>
-        </li>
-      </ul>
-    </div>
-    <!--新车、4s、批发-->
-    <div class="listNav-menu">
+  <div>
+    <div class="listNav">
+      <div class="listNav-head">
+        <ul>
+          <li
+            :class="navIndex === index ? 'cur' : ''"
+            v-for="(item,index) in nav"
+            :key="index"
+            @click="navToggle(index)">
+            <span>{{item}}</span>
+            <i class="iconfont icon-xiasanjiao1"></i>
+          </li>
+        </ul>
+      </div>
+      <!--新车、4s、批发-->
+      <div class="listNav-menu">
       <span
         @click="menuFun(item,index)"
         :class="menuIndex === index ? 'cur' : ''"
         v-for="(item,index) in menu">{{item.name}}</span>
-    </div>
-    <div class="listNav-layer mPublicBox" v-show="navShow">
-      <div class="bg" @click="popupHide"></div>
-      <div class="listNav-layer-content mPublicBox-bac" :data-type="navIndex">
-        <!--排序-->
-        <ul v-if="navIndex === 0" class="order">
-          <li
-            v-for="item in orderArr"
-            :class="item.name === nav[navIndex] ? 'cur' : ''"
-            @click="orderFun(item)">
-            <span>{{item.name}}</span>
-            <i v-if="item === nav[navIndex]" class="iconfont icon-gou1"></i>
-          </li>
-        </ul>
-        <!--价格-->
-        <div v-if="navIndex === 2"  class="price">
-          <h2>自定义价格(万元)</h2>
-          <div class="priceInput">
-            <input type="number" placeholder="最低价" v-model="priceLow">
-            <span>到</span>
-            <input type="number" placeholder="最高价" v-model="priceTall">
-            <button @click="commitBtnFun('price')">确认</button>
-          </div>
-          <div class="line"></div>
-          <div class="priceLi">
+      </div>
+      <div class="listNav-layer mPublicBox" v-show="navShow">
+        <div class="bg" @click="popupHide"></div>
+        <div class="listNav-layer-content mPublicBox-bac" :data-type="navIndex">
+          <!--排序-->
+          <ul v-if="navIndex === 0" class="order">
+            <li
+              v-for="item in orderArr"
+              :class="item.name === nav[navIndex] ? 'cur' : ''"
+              @click="orderFun(item)">
+              <span>{{item.name}}</span>
+              <i v-if="item === nav[navIndex]" class="iconfont icon-gou1"></i>
+            </li>
+          </ul>
+          <!--价格-->
+          <div v-if="navIndex === 2"  class="price">
+            <h2>自定义价格(万元)</h2>
+            <div class="priceInput">
+              <input type="number" placeholder="最低价" v-model="priceLow">
+              <span>到</span>
+              <input type="number" placeholder="最高价" v-model="priceTall">
+              <button @click="commitBtnFun('price')">确认</button>
+            </div>
+            <div class="line"></div>
+            <div class="priceLi">
             <span
               v-for="item in priceArr"
               :class="item.id+'万' === nav[navIndex] ? 'cur' : ''"
               @click="priceFun(item)">{{item.name}}</span>
+            </div>
           </div>
-        </div>
-        <!--车龄-->
-        <div v-if="navIndex === 3"  class="price">
-          <h2>自定义车龄</h2>
-          <div class="priceInput">
-            <input type="number" placeholder="请输入" v-model="ageLow">
-            <span>到</span>
-            <input type="number" placeholder="请输入" v-model="ageTall">
-            <button @click="commitBtnFun('year')">确认</button>
-          </div>
-          <div class="line"></div>
-          <div class="priceLi">
+          <!--车龄-->
+          <div v-if="navIndex === 3"  class="price">
+            <h2>自定义车龄</h2>
+            <div class="priceInput">
+              <input type="number" placeholder="请输入" v-model="ageLow">
+              <span>到</span>
+              <input type="number" placeholder="请输入" v-model="ageTall">
+              <button @click="commitBtnFun('year')">确认</button>
+            </div>
+            <div class="line"></div>
+            <div class="priceLi">
             <span
               v-for="item in ageArr"
               :class="item.id+'年' === nav[navIndex] ? 'cur' : ''"
               :data-id="item.id"
               @click="ageFun(item)">{{item.name}}</span>
-            <span class="default"></span>
+              <span class="default"></span>
+            </div>
           </div>
         </div>
+      </div>
+    </div>
+    <div class="subscription">
+      <div class="subLeft">
+        <span><i class="iconfont icon-xinhao"></i>订阅</span>
+      </div>
+      <div class="subRight">
+        <span>1</span>
       </div>
     </div>
   </div>
@@ -172,10 +182,14 @@
         let getPYear =
           findCarVal.year === ' ' ? '车龄' :
           findCarVal.year === '' ? '车龄' : `${findCarVal.year}年`;
+
+        // 品牌
+        let getSerial = findCarVal.serial === '' || findCarVal.serial === ' ' ? '品牌' : findCarVal.serial;
+
         // 从vux里获取值赋值到导航列表
         let newNavArr = [
           getOrder.length >= 1 ? getOrder[0].name :  '排序',
-          '品牌',
+          getSerial,
           getPrice,
           getPYear,
           '筛选'
@@ -341,30 +355,43 @@
 
 <style lang="scss" scoped>
 @import "~static/style/mixin";
-.mPublicBox{
-  position:absolute;
-  top:0;
-  left:0;
-  right:0;
-  bottom:0;
-  .bg{
-    background: rgba(0,0,0,.5);
-    position:fixed;
+  .fixeds{
+    .listNav{
+      @include wh(12.42rem,auto);
+      position:fixed;
+      top:0;
+      left:0;
+      right:0;
+      z-index: 100;
+    }
+    .subscription{
+      margin-top:3rem;
+    }
+  }
+  .mPublicBox{
+    position:absolute;
     top:0;
     left:0;
     right:0;
     bottom:0;
-    z-index: 10;
+    .bg{
+      background: rgba(0,0,0,.5);
+      position:fixed;
+      top:0;
+      left:0;
+      right:0;
+      bottom:0;
+      z-index: 10;
+    }
+    .mPublicBox-bac{
+      position:absolute;
+      top:1.21rem;
+      left:0;
+      right:0;
+      z-index:12;
+      background:$fff;
+    }
   }
-  .mPublicBox-bac{
-    position:absolute;
-    top:1.21rem;
-    left:0;
-    right:0;
-    z-index:12;
-    background:$fff;
-  }
-}
   .listNav{
     position:relative;
     background:#fff;
@@ -499,6 +526,27 @@
           }
         }
       }
+    }
+  }
+  .subscription{
+    @include flexCenter;
+    .subLeft{
+      flex:1;
+      @include flexCenter;
+      span{
+        @include flexCenter;
+        @include wh(2rem,.6rem);
+        @include borRadius(.3rem);
+        background:$f60;
+        color:$fff;
+        font-size:.4rem;
+        i{
+          font-size:.1rem;
+        }
+      }
+    }
+    .subRight{
+      flex:3;
     }
   }
 </style>

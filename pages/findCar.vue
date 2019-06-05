@@ -103,17 +103,6 @@
 </script>
 <style lang="scss" scoped>
   @import '~static/style/mixin';
-  .fixeds{
-    @include wh(12.42rem,auto);
-    position:fixed;
-    top:0;
-    left:0;
-    right:0;
-    z-index: 100;
-    & + .main{
-      margin-top:3rem;
-    }
-  }
   .main{
     .page-loadmore-wrapper{
       overflow: scroll;

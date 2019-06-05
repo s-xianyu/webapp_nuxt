@@ -10,8 +10,8 @@
             <div class="brand-list">
               <p id="*">*</p>
               <div class="brand-lis brand-lis1">
-                <span class="astrict">不限品牌</span>
-                <span class="allSelect" @click="allSelect">我要{{allSelectText}}</span>
+                <span class="astrict" @click="allUnlimited">不限品牌</span>
+                <span class="allSelect" @click="allSelectToggle">我要{{allSelectText}}</span>
               </div>
             </div>
             <div class="brand-list" v-for="item in brandList">
@@ -32,8 +32,8 @@
             </div>
           </div>
           <div class="allSelectBtn animated fadeInUp" v-show="selectShow">
-            <span @click="allSelect">取消</span>
-            <span>确认</span>
+            <span @click="allSelectToggle">取消</span>
+            <span @click="allSelectCommit">确认</span>
           </div>
         </div>
         <!--二级列表-->
@@ -47,8 +47,8 @@
               </div>
               <div class="line"></div>
               <div class="all">
-                <div>不限</div>
-                <div @click="allSelectTo">{{allSelectTextTo}}</div>
+                <div @click="twoUnlimited">不限车系</div>
+                <div @click="allSelectToggleTo">{{allSelectTextTo}}</div>
               </div>
               <div class="brand-li"
                    :key="key"
@@ -56,7 +56,7 @@
                 <p class="title">{{key}}</p>
                 <ul>
                   <li v-for="chi in item">
-                    <span @click.stop="brandVuex" class="name">{{chi.title}}</span>
+                    <span @click.stop="brandCommitVuex(chi)" class="name">{{chi.title}}</span>
                     <span class="rightBtnTo" v-show="selectShowTo">
                     <b class="animated fadeInRight"></b>
                   </span>
@@ -67,8 +67,8 @@
               </div>
             </div>
             <div class="brand-bottom animated fadeInUp" v-if="selectShowTo">
-              <span @click="allSelectTo">取消</span>
-              <span>确认</span>
+              <span @click="allSelectToggleTo">取消</span>
+              <span @click="allSelectCommit">确认</span>
             </div>
           </div>
         </div>
@@ -96,7 +96,7 @@
                 <div class="right-li" v-for="(item,index) in stair3List.maps">
                   <p>{{item.key}}</p>
                   <ul>
-                    <li v-for="chi in item.value">{{chi.subject}}</li>
+                    <li v-for="chi in item.value" @click="brandCommitVuexTo(chi)">{{chi.subject}}</li>
                   </ul>
                 </div>
               </div>
@@ -151,9 +151,12 @@
         selectShow:false, //一级多选显示
         selectShowTo:false, //一级多选显示
         allOptionName:[], //多选品牌名保存D
-        allOptionNameTo:[], //多选品牌名保存D
         allSelectText:'多选', //一级列表单选多选切换
-        allSelectTextTo:'多选' //二级列表单选多选切换
+        allSelectTextTo:'多选', //二级列表单选多选切换
+        vuexVal:{
+          key:' ',
+          type:'serial'
+        }
       }
     },
     async asyncData(){
@@ -180,7 +183,7 @@
       TitleHead
     },
     methods:{
-      ...mapMutations(['WIN_HEIGHT']),
+      ...mapMutations(['WIN_HEIGHT','FINDCARVAL_NAV']),
       //锚点事件
       Scrolls(key){
         let top = document.querySelector('#'+key).offsetTop - this.$refs.mbrBrand.offsetTop;
@@ -210,7 +213,7 @@
         document.querySelectorAll('.rightBtnTo').forEach(key =>{
           key.classList.remove('cur');
         });
-        this.allOptionNameTo = [];
+        this.allOptionName = [];
 
         this.stair2Show = !this.stair2Show;
         // 关闭时清除brand
@@ -249,12 +252,41 @@
           this.stair3List = data;
         }
       },
-
-      brandVuex(){
-       debugger
+      // 一级不限--恢复默认
+      allUnlimited(){
+        this.vuexVal.key = ' ';
+        this.FINDCARVAL_NAV(this.vuexVal);
+      },
+      // 二级不限
+      twoUnlimited(){
+        this.vuexVal.key = this.brand;
+        this.FINDCARVAL_NAV(this.vuexVal);
+      },
+      /* 一级确认提交
+       * 二级确认提交
+       * 根据selectShow判断是一级还是二级
+       */
+      allSelectCommit(){
+        if(this.allOptionName.length > 1){
+          this.vuexVal.key = (this.allOptionName+'').replace(/,/g,' or ');
+        }else{
+          this.vuexVal.key = (this.allOptionName+'')
+        }
+        console.log(this.vuexVal);
+        this.FINDCARVAL_NAV(this.vuexVal);
+      },
+      // 二级列表选择
+      brandCommitVuex(item){
+        this.vuexVal.key = item.completeCarSerial;
+        this.FINDCARVAL_NAV(this.vuexVal);
+      },
+      // 三级列表选择
+      brandCommitVuexTo(item){
+        this.vuexVal.key = this.brandTo+' '+item.subject;
+        this.FINDCARVAL_NAV(this.vuexVal);
       },
       // 一级列表多选按钮显示切换
-      allSelect(){
+      allSelectToggle(){
         this.selectShow = !this.selectShow;
         // 切换文字
         this.allSelectText = this.selectShow ? '单选' : '多选';
@@ -267,7 +299,7 @@
         }
       },
       // 二级列表多选按钮显示切换
-      allSelectTo(){
+      allSelectToggleTo(){
         this.selectShowTo = !this.selectShowTo;
         // 切换文字
         this.allSelectTextTo = this.selectShowTo ? '单选' : '多选';
@@ -276,31 +308,23 @@
           document.querySelectorAll('.rightBtnTo').forEach(key =>{
             key.classList.remove('cur');
           });
-          this.allOptionNameTo = []
+          this.allOptionName = []
         }
       },
-      // 多选
+      // 多选按钮
       radioFun(e,item){
-        // 如果allOptionName和allOptionNameTo不是空
-        if(this.allOptionName.includes(item.title) || this.allOptionNameTo.includes(item.title)){
+        // 如果allOptionName不是空
+        if(this.allOptionName.includes(item.title)){
           // 删除class和当前选中值
           e.currentTarget.previousElementSibling.classList.remove('cur');
-          if(this.selectShow){ //利用 selectShow判断是一级还是二级
-            this.removeArray(this.allOptionName,item.title);
-          }else{
-            this.removeArray(this.allOptionNameTo,item.title);
-          }
+          this.removeArray(this.allOptionName,item.title);
+
           // 否则添加class并把值添加进数组
         }else{
           e.currentTarget.previousElementSibling.classList.add('cur');
-          if(this.selectShow){ //利用 selectShow判断是一级还是二级
-            this.allOptionName = this.allOptionName.concat(item.title);
-          }else{
-            this.allOptionNameTo = this.allOptionNameTo.concat(item.title);
-          }
+          this.allOptionName = this.allOptionName.concat(item.title);
         }
-        console.log('1'+this.allOptionName);
-        console.log('2'+this.allOptionNameTo);
+        console.log(''+this.allOptionName);
       },
       // 删除重复
       removeArray(arr,val){

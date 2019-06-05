@@ -181,6 +181,7 @@ export default {
   //  order ----排序
   //  priceInterval ----价格
   //  year ----车龄
+  //  serial ----品牌
   //key --值
   [FINDCARVAL_NAV](state,val){
     // 赋值为空，否则getters监听不到改变
@@ -191,6 +192,11 @@ export default {
       break;
       case 'year' : state.findCarVal.year = val.key;
       break;
+      case 'serial' : state.findCarVal.serial = val.key
+    }
+    let navArr = ['serial','filtrate'];
+    if(navArr.includes(val.type)){
+      history.go(-1);
     }
     // 清空列表
     state.findCarList = [];
