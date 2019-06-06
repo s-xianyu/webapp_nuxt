@@ -238,13 +238,13 @@
             this.subscriptionArr.push(k);
           });
         }
-        if(keyword !== ''){
+        if(keyword !== '' && keyword !== ' '){
           this.subscriptionArr.push(keyword);
         }
-        if(year !== ''){
+        if(year !== '' && year !== ' '){
           this.subscriptionArr.push(year+'年');
         }
-        if(priceInterval !== ''){
+        if(priceInterval !== '' && priceInterval !== ' '){
           this.subscriptionArr.push(priceInterval+'万');
         }
       },
