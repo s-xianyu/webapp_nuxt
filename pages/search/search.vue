@@ -79,7 +79,7 @@
     },
     methods:{
       ...mapActions(['getHistorySearch']),
-      ...mapMutations(['HISTORYSEARCH_SAVE']),
+      ...mapMutations(['HISTORYSEARCH_SAVE','FINDCARVAL_NAV']),
       async thisKeyUp(){
         let params = {
           keyword:this.searchVal,
@@ -100,9 +100,11 @@
         if(isSave){
           this.HISTORYSEARCH_SAVE([name]);
         }
-        this.$router.push({
-          path:`/findCar/?keyword=${name}`,
-        })
+        let val = {
+          key:name,
+          type:'keyword'
+        };
+        this.FINDCARVAL_NAV(val);
       }
     }
   }

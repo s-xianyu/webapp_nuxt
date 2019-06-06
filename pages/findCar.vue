@@ -28,7 +28,7 @@
   import BackTop from '~/components/common/backTop'
   import Login from '~/components/common/login/login'
   import {filteData} from '~/config/getData'
-  import {mapState,mapActions,mapMutations,mapGetters} from 'vuex'
+  import {mapState,mapActions,mapMutations} from 'vuex'
   import {removeStore} from "../config/util/util";
 
   export default {
@@ -42,7 +42,7 @@
         loadingShow:false,
         offsetTop:0,
         isFixed:false,
-        scrollDistance:'1' //滚动加载更多阈值
+        scrollDistance:'1', //滚动加载更多阈值
       }
     },
     created(){
@@ -59,7 +59,7 @@
     },
 
     computed:{
-      ...mapState(['windowHeight','findCarList','findCarVal']),
+      ...mapState(['findCarList','findCarVal']),
     },
     components: {
       Loading,
@@ -106,6 +106,9 @@
   .main{
     .page-loadmore-wrapper{
       overflow: scroll;
+    }
+    .carList{
+      background:$fff;
     }
   }
 </style>

@@ -55,5 +55,6 @@ export const state = () => ({
     newCar:'',
     appmobile:'',
     apptoken:'',
+    keyword:''
   }
 });

@@ -182,9 +182,10 @@ export default {
   //  priceInterval ----价格
   //  year ----车龄
   //  serial ----品牌
+  //  keyword ----keyword筛选
+
   //key --值
   [FINDCARVAL_NAV](state,val){
-    // 赋值为空，否则getters监听不到改变
     switch (val.type){
       case 'order' : state.findCarVal.order = val.key;
       break;
@@ -192,9 +193,12 @@ export default {
       break;
       case 'year' : state.findCarVal.year = val.key;
       break;
-      case 'serial' : state.findCarVal.serial = val.key
+      case 'serial' : state.findCarVal.serial = val.key;
+      break;
+      case 'keyword' : state.findCarVal.serial = '';state.findCarVal.keyword = val.key
     }
-    let navArr = ['serial','filtrate'];
+    // 如果是品牌、筛选、搜索，赋值后回退上一步
+    let navArr = ['serial','filtrate','keyword'];
     if(navArr.includes(val.type)){
       history.go(-1);
     }

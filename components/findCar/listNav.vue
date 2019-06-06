@@ -72,12 +72,20 @@
         </div>
       </div>
     </div>
-    <div class="subscription">
+    <div class="subscription" v-if="subscriptionArr.length > 0">
       <div class="subLeft">
-        <span><i class="iconfont icon-xinhao"></i>订阅</span>
+        <span class="subBtn"><i class="iconfont icon-xinhao"></i>订阅</span>
+        <span><i class="iconfont icon-shanchu1"></i></span>
       </div>
       <div class="subRight">
-        <span>1</span>
+        <div class="right-w">
+          <div class="right-s" :style="{width:subscriptionWidth+'px'}">
+            <div class="subLi" v-for="(item,index) in subscriptionArr" ref="subScr">
+              <span>{{item}}</span>
+              <i class="iconfont icon-cha"></i>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   </div>
@@ -89,13 +97,7 @@
   export default {
     data() {
       return {
-        nav:[
-          {name:'排序',id:' ',type:'order'},
-          {name:'品牌',id:' ',type:'serial'},
-          {name:'价格',id:' ',type:'priceInterval'},
-          {name:'车龄',id:' ',type:'year'},
-          {name:'筛选',id:' ',type:'filtrate'},
-        ], //导航列表
+        nav:['排序','品牌','价格','车龄','筛选'], //导航列表
         menu:[
           {name:'新车 ',id:'1',type:'newCar'},
           {name:'4s维保',id:'4s',type:'is4s'},
@@ -143,6 +145,8 @@
         priceTall:'', //输入金额高价
         ageLow:'',  //输入年限低
         ageTall:'',  //输入年限高
+        subscriptionArr:[], //筛选后的数组表
+        subscriptionWidth:1000,
       }
     },
     computed:{
@@ -155,16 +159,26 @@
     created(){
       //获取到storage
       this.getFindCarVal();
-      // 赋值到页面数据上
-      this.assignmentPage();
+      // 赋值到页面上渲染
+      this.assignmentNav();
+      this.assignmentFiltrate();
     },
     mounted(){
-      console.log(this.navIndex);
+      let s = this.$refs.subScr;
+      if(s){
+        this.subscriptionWidth = 100;
+        s.forEach(k=>{
+          this.subscriptionWidth+=k.offsetWidth;
+        });
+        console.log(this.subscriptionWidth);
+      }
     },
     methods:{
       ...mapMutations(['FINDCARVAL_NAV','FINDCARVAL_MENU','WIN_HEIGHT']),
       ...mapActions(['getFindCarVal']),
-      assignmentPage(){
+
+      //渲染导航条数据
+      assignmentNav(){
         let findCarVal = this.findCarVal;
         //排序
         let getOrder = this.orderArr.filter(key=>{
@@ -206,6 +220,32 @@
           this.menuIndex = 2;
         }else{
           this.menuIndex = -1;
+        }
+      },
+      //渲染筛选数据
+      assignmentFiltrate(){
+        let findCarVal = this.findCarVal;
+        let keyword = findCarVal.keyword;
+        let year = findCarVal.year;
+        let serial = findCarVal.serial;
+        let priceInterval = findCarVal.priceInterval;
+        if(serial !== '' && serial !== ' '){
+          let arr  = serial.split('or');
+          let serialArr = arr.map(k=>{
+            return k.replace(/(^\s*)|(\s*$)/g, "");
+          });
+          serialArr.forEach(k=>{
+            this.subscriptionArr.push(k);
+          });
+        }
+        if(keyword !== ''){
+          this.subscriptionArr.push(keyword);
+        }
+        if(year !== ''){
+          this.subscriptionArr.push(year+'年');
+        }
+        if(priceInterval !== ''){
+          this.subscriptionArr.push(priceInterval+'万');
         }
       },
       //列表导航切換
@@ -529,24 +569,62 @@
     }
   }
   .subscription{
+    background-color: #f6f6f6;
+    position:relative;
     @include flexCenter;
+    @include wh(100%,1.5rem);
+    flex-direction: row;
     .subLeft{
-      flex:1;
+      position:absolute;
+      top:0;
+      left:0;
+      @include wh(40%,100%);
       @include flexCenter;
-      span{
+      .subBtn{
         @include flexCenter;
         @include wh(2rem,.6rem);
         @include borRadius(.3rem);
         background:$f60;
         color:$fff;
         font-size:.4rem;
+        margin-right:.5rem;
         i{
           font-size:.1rem;
         }
       }
     }
     .subRight{
-      flex:3;
+      padding-left:35%;
+      position:relative;
+      @include wh(100%,1.5rem);
+      @include flexCenter;
+      .right-w{
+        width: 100%;
+        height: 100%;
+        overflow-x: scroll;
+        .right-s{
+         @include wh(100%,1.5rem);
+          @include flexCenter;
+          overflow: hidden;
+          flex-wrap: nowrap;
+        }
+        .subLi{
+          min-width: 2rem;
+          @include flexCenter;
+          padding:.1rem .2rem;
+          border: 1px solid #eaeaea;
+          background:$fff;
+          margin:0 .2rem;
+          span{
+            display: inline-block;
+            padding:0 .2rem;
+          }
+          i{
+            font-size:.3rem;
+            color:#837979;
+          }
+        }
+      }
     }
   }
 </style>
