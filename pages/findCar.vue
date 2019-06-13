@@ -95,7 +95,7 @@
       },
       // 子组件改变后执行请求
       doParent(){
-        this.LoadMore()
+        this.loadermore()
       }
     }
   }

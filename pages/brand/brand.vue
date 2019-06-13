@@ -254,7 +254,7 @@
       },
       // 一级不限--恢复默认
       allUnlimited(){
-        this.vuexVal.key = ' ';
+        this.vuexVal.key = '';
         this.FINDCARVAL_NAV(this.vuexVal);
       },
       // 二级不限

@@ -1,6 +1,6 @@
 <template>
   <div class="range" ref="range">
-    <div class="mileageTitle">
+    <div class="mileageTitle" :style="{width:width+'%'}">
       <span v-for="item in dataArr">{{item}}</span>
       <span>不限</span>
     </div>
@@ -59,9 +59,11 @@
       'step':{
         type:Number,
       },
-      'value':{
-        type:String,
-        default:'0'
+      'width':{
+        type:Number,
+      },
+      'afterFun':{
+        type:Function,
       }
     },
     methods: {
@@ -140,7 +142,7 @@
       },
       scrollFromVal(val,d){
         d === 'end' ? this.tallVal = val : this.lowVal = val;
-        this.$parent.$parent.mileageValFun(this.lowVal,this.tallVal)
+        this.afterFun(this.lowVal,this.tallVal)
       },
     }
   }

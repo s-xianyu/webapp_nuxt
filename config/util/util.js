@@ -25,6 +25,17 @@ export const removeStore = name => {
   if (!name) return
   window.localStorage.removeItem(name)
 };
+/**
+ * 删除数组中当前对象
+ */
+let removeArrSame = (arr,val) =>{
+  arr.map( (key,index) =>{
+    if(key === val){
+      return arr.splice(index, 1);
+    }
+  })
+};
+Vue.prototype.$removeArrSame = removeArrSame;
 
 /**
  * APP下载

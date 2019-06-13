@@ -109,7 +109,7 @@
           {name:'批发',id:'1',type:'pifa'},
         ],
         orderArr:[
-          {name:'默认排序',id:' ',type:'order'},
+          {name:'默认排序',id:'',type:'order'},
           {name:'最近更新',id:'0',type:'order'},
           {name:'信誉最高',id:'1',type:'order'},
           {name:'信誉最低',id:'2',type:'order'},
@@ -120,7 +120,7 @@
           {name:'性价比最高',id:'3',type:'order'},
         ],
         priceArr: [
-          {name:'价格不限',id:' ',type:'priceInterval'},
+          {name:'价格不限',id:'',type:'priceInterval'},
           {name:'3万元以下',id:'0-3',type:'priceInterval'},
           {name:'3-5万',id:'3-5',type:'priceInterval'},
           {name:'5-10万',id:'5-10',type:'priceInterval'},
@@ -131,7 +131,7 @@
           {name:'100万以上',id:'100-10000',type:'priceInterval'},
         ],
         ageArr: [
-          {name:`不限车龄`,id:' ',type:'year'},
+          {name:`不限车龄`,id:'',type:'year'},
           {name:`${this.$getYear(1)}年以内`,id:'0-1',type:'year'},
           {name:`${this.$getYear(2)}年以内`,id:'0-2',type:'year'},
           {name:`${this.$getYear(3)}年以内`,id:'0-3',type:'year'},
@@ -188,27 +188,25 @@
         let findCarVal = this.findCarVal;
         //排序
         let getOrder = this.orderArr.filter(key=>{
-          if(key.id === findCarVal.order){
+          if(key.id === findCarVal.order && key.id !== ''){
             return key.name
           }
         });
 
         //金额
         let getPrice =
-          findCarVal.priceInterval === ' ' ? '价格' :
           findCarVal.priceInterval === '' ? '价格' : `${findCarVal.priceInterval}万`;
 
         //年龄
         let getPYear =
-          findCarVal.year === ' ' ? '车龄' :
           findCarVal.year === '' ? '车龄' : `${findCarVal.year}年`;
 
         // 品牌
-        let getSerial = findCarVal.serial === '' || findCarVal.serial === ' ' ? '品牌' : findCarVal.serial;
+        let getSerial = findCarVal.serial === '' ? '品牌' : findCarVal.serial;
 
         // 从vux里获取值赋值到导航列表
         let newNavArr = [
-          getOrder.length >= 1 ? getOrder[0].name :  '排序',
+          getOrder.length > 0 ? getOrder[0].name :  '排序',
           getSerial,
           getPrice,
           getPYear,
@@ -373,14 +371,15 @@
       // 点击后导航表数据改变
       arrSpliceName(name){
         //将值赋值到nav数组里
-        this.nav.splice(this.navIndex,1,name);
+        let defaultName = name === '默认排序' ? '排序' : name;
+        this.nav.splice(this.navIndex,1,defaultName);
       },
       arrSpliceId(item){
         // let text = item.id === ' ' ? '不限' : this.navIndex === 2 ? '万' : '年';
         let text = '';
-        if(item.id === ' ' && this.navIndex === 2){
+        if(item.id === '' && this.navIndex === 2){
           text = '价格'
-        }else if(item.id === ' ' && this.navIndex === 3){
+        }else if(item.id === '' && this.navIndex === 3){
           text = '车龄'
         }else{
           text = this.navIndex === 2 ? '万' : '年'
@@ -454,7 +453,7 @@
           this.removeSubArr.key = key.length > 1 ? (key+'').replace(/,/g,' or ') : key+'';
           this.removeSubArr.type = type;
         }else if(type === 'year' || type === 'priceInterval'){
-          this.removeSubArr.key = ' ';
+          this.removeSubArr.key = '';
           this.removeSubArr.type = type;
         }
         // 赋值到vuex,更新页面,重新请求数据
