@@ -41,7 +41,7 @@
   import Header from '~/components/common/header/back_head';
   import FooterTab from '~/components/common/footer/footer';
   import {mapMutations,mapState,mapActions} from 'vuex';
-  import {outcodephones,smallprogramlogin} from '~/config/getData'
+  import {outcodephones,smallprogramlogin} from '~/config/Ajax'
   export default {
     data() {
       return {

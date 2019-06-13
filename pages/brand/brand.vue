@@ -58,8 +58,8 @@
                   <li v-for="chi in item">
                     <span @click.stop="brandCommitVuex(chi)" class="name">{{chi.title}}</span>
                     <span class="rightBtnTo" v-show="selectShowTo">
-                    <b class="animated fadeInRight"></b>
-                  </span>
+                      <b class="animated fadeInRight"></b>
+                    </span>
                     <u class="bg" @click="radioFun($event,chi)" v-show="selectShowTo"></u>
                     <span @click="brandToFun(chi)" class="model" v-show="!selectShowTo">车型</span>
                   </li>
@@ -120,7 +120,7 @@
     getCarSerialByParentIdJson,
     getCarTypeByParentIdJson,
     getCarTypeByParentIdKuanxin
-  } from '~/config/getData'
+  } from '~/config/Ajax'
   import {mapMutations,mapState} from 'vuex'
   export default {
     head(){
@@ -209,7 +209,7 @@
       },
       // 二级弹框关闭后设置全局高度
       thisStair2Fun(){
-        this.selectShowTo = !this.selectShowTo;
+        this.selectShowTo = false;
         document.querySelectorAll('.rightBtnTo').forEach(key =>{
           key.classList.remove('cur');
         });
@@ -308,7 +308,8 @@
           document.querySelectorAll('.rightBtnTo').forEach(key =>{
             key.classList.remove('cur');
           });
-          this.allOptionName = []
+          this.allOptionName = [];
+          // this.stair2Show = false;
         }
       },
       // 多选按钮

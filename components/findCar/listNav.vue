@@ -75,13 +75,18 @@
     <div class="subscription" v-if="subscriptionArr.length > 0">
       <div class="subLeft">
         <span class="subBtn"><i class="iconfont icon-xinhao"></i>订阅</span>
-        <span><i class="iconfont icon-shanchu1"></i></span>
+        <span @click="allremoveSome"><i class="iconfont icon-shanchu1"></i></span>
       </div>
       <div class="subRight">
         <div class="right-w">
           <div class="right-s" :style="{width:subscriptionWidth+'px'}">
-            <div class="subLi" v-for="(item,index) in subscriptionArr" ref="subScr">
-              <span>{{item}}</span>
+            <div class="subLi"
+                 v-for="(item,index) in subscriptionArr"
+                 ref="subScr"
+                 @click="removeSome(item,index)">
+              <span data-type="1" v-if="item.type === 'year'">{{item.id}}年</span>
+              <span data-type="2" v-else-if="item.type === 'priceInterval'">{{item.id}}万</span>
+              <span data-type="3" v-else>{{item.id}}</span>
               <i class="iconfont icon-cha"></i>
             </div>
           </div>
@@ -147,6 +152,10 @@
         ageTall:'',  //输入年限高
         subscriptionArr:[], //筛选后的数组表
         subscriptionWidth:1000,
+        removeSubArr:{ //删除筛选传值
+          type:'',
+          key:null,
+        }
       }
     },
     computed:{
@@ -161,20 +170,17 @@
       this.getFindCarVal();
       // 赋值到页面上渲染
       this.assignmentNav();
-      this.assignmentFiltrate();
     },
     mounted(){
-      let s = this.$refs.subScr;
-      if(s){
-        this.subscriptionWidth = 100;
-        s.forEach(k=>{
-          this.subscriptionWidth+=k.offsetWidth;
-        });
-        console.log(this.subscriptionWidth);
+      this.subRightWidth();
+    },
+    watch:{
+      nav(){
+        this.assignmentFiltrate();
       }
     },
     methods:{
-      ...mapMutations(['FINDCARVAL_NAV','FINDCARVAL_MENU','WIN_HEIGHT']),
+      ...mapMutations(['FINDCARVAL_NAV','FINDCARVAL_MENU','WIN_HEIGHT','FINDCARVAL_REMOVE']),
       ...mapActions(['getFindCarVal']),
 
       //渲染导航条数据
@@ -224,29 +230,68 @@
       },
       //渲染筛选数据
       assignmentFiltrate(){
+        this.subscriptionArr = [];
         let findCarVal = this.findCarVal;
         let keyword = findCarVal.keyword;
         let year = findCarVal.year;
         let serial = findCarVal.serial;
         let priceInterval = findCarVal.priceInterval;
+        let sybArr = {};
+        // 品牌
         if(serial !== '' && serial !== ' '){
           let arr  = serial.split('or');
           let serialArr = arr.map(k=>{
             return k.replace(/(^\s*)|(\s*$)/g, "");
           });
           serialArr.forEach(k=>{
-            this.subscriptionArr.push(k);
+            sybArr = {
+              type:'removeSerial',
+              id:k
+            };
+            this.subscriptionArr.push(sybArr);
           });
         }
+        // keyword
         if(keyword !== '' && keyword !== ' '){
-          this.subscriptionArr.push(keyword);
+          sybArr = {
+            type:'keyword',
+            id:keyword
+          };
+          this.subscriptionArr.push(sybArr);
         }
+        // 车龄
         if(year !== '' && year !== ' '){
-          this.subscriptionArr.push(year+'年');
+          sybArr = {
+            type:'year',
+            id:year
+          };
+          this.subscriptionArr.push(sybArr);
         }
+        // 价格
         if(priceInterval !== '' && priceInterval !== ' '){
-          this.subscriptionArr.push(priceInterval+'万');
+          sybArr = {
+            type:'priceInterval',
+            id:priceInterval
+          };
+          this.subscriptionArr.push(sybArr);
         }
+        this.subRightWidth();
+      },
+      // 筛选宽度设置
+      subRightWidth(){
+        setTimeout(()=>{
+          let s = this.$refs.subScr;
+          if(s){
+            if(s.length < 5){
+              this.subscriptionWidth = 40 * s.length;
+            }else{
+              this.subscriptionWidth = 25 * s.length;
+            }
+            s.forEach(k=>{
+              this.subscriptionWidth+=k.offsetWidth;
+            });
+          }
+        },50)
       },
       //列表导航切換
       navToggle(index){
@@ -370,7 +415,7 @@
           key:item.id
         };
         this.FINDCARVAL_NAV(val);
-        this.$parent.doParent(this.desc)
+        this.$parent.doParent()
       },
       // menu添加数据到vuex
       findCarPushVuexMenu(item,index){
@@ -388,6 +433,44 @@
         };
         this.FINDCARVAL_MENU(val);
         this.$parent.doParent()
+      },
+      // 筛选单个删除
+      removeSome(item,index){
+        // 获取type
+        let type = item.type;
+        // 获取参数信息
+        let findCarVal = this.findCarVal;
+        if(type === 'removeSerial'){ //品牌
+          let serial = findCarVal.serial,
+            arr = serial.split('or'),
+            key = arr.map( l =>{
+              return l.replace(/(^\s*)|(\s*$)/g, "");
+            });
+          for(let i in key){
+            if(item.id === key[i]){
+              key.splice(i,1);
+            }
+          }
+          this.removeSubArr.key = key.length > 1 ? (key+'').replace(/,/g,' or ') : key+'';
+          this.removeSubArr.type = type;
+        }else if(type === 'year' || type === 'priceInterval'){
+          this.removeSubArr.key = ' ';
+          this.removeSubArr.type = type;
+        }
+        // 赋值到vuex,更新页面,重新请求数据
+        this.FINDCARVAL_NAV(this.removeSubArr);
+        // 更新视图
+        this.upDtatView();
+      },
+      // 筛选全部删除
+      allremoveSome(){
+        this.FINDCARVAL_REMOVE();
+        this.upDtatView();
+      },
+      upDtatView(){
+        this.assignmentFiltrate();
+        this.assignmentNav();
+        this.$parent.doParent();
       }
     },
   }
@@ -580,6 +663,7 @@
       left:0;
       @include wh(40%,100%);
       @include flexCenter;
+      z-index:11;
       .subBtn{
         @include flexCenter;
         @include wh(2rem,.6rem);

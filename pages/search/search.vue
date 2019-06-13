@@ -45,7 +45,7 @@
 </template>
 
 <script>
-  import { gethotcar,guessWhatYouLike,searchsuggest} from '~/config/getData'
+  import { gethotcar,guessWhatYouLike,searchsuggest} from '~/config/Ajax'
   import {mapState,mapMutations,mapActions} from 'vuex'
   export default {
     head(){

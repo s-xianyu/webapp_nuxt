@@ -3,10 +3,10 @@
     <div class="tab">
       <div class="">
         <router-link class="mCar" tag="span" to="/findCar">我要买车 <i class="iconfont icon-bianqian"></i></router-link>
-        <router-link class="mCar2" tag="span" to="/">我要卖车 <i class="iconfont icon-bianqian"></i></router-link>
+        <router-link class="mCar2" tag="span" to="/sellCar">我要卖车 <i class="iconfont icon-bianqian"></i></router-link>
       </div>
       <div class="">
-        <router-link class="m4s" tag="span" to="/">4S记录 <i class="iconfont icon-yunshu"></i></router-link>
+        <router-link class="m4s" tag="span" to="/record4s">4S记录 <i class="iconfont icon-yunshu"></i></router-link>
         <router-link class="mpg" tag="span" to="/">免费评估 <i class="iconfont icon-yunshu"></i></router-link>
       </div>
     </div>

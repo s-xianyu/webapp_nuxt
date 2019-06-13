@@ -38,7 +38,7 @@
 <script>
 import Loading from '~/components/common/loading'
 import {mapState,mapMutations} from 'vuex'
-import {gainLike} from '~/config/getData'
+import {gainLike} from '~/config/Ajax'
 export default {
   data () {
     return {

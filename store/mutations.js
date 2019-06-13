@@ -27,7 +27,12 @@ export default {
      state.lastCity = cityInfo(val)[1];
      // 设置为第一页
      state.findCarVal.currPage = 0;
-     state.findCarVal.areaCode = val[0].area_code
+
+     let code = val.map(i=>{
+       return i.area_code || i.areaCode
+     });
+     state.findCarVal.areaCode = code+'';
+     console.log( state.findCarVal.areaCode)
    }
   },
 
@@ -42,7 +47,10 @@ export default {
       state.findCarList = [];
       // 设置为第一页
       state.findCarVal.currPage = 0;
-      state.findCarVal.areaCode = val[0].area_code
+
+      let code = val.map(i=>{ return i.area_code });
+      state.findCarVal.areaCode = code+'';
+      console.log( state.findCarVal.areaCode)
     }
 
     //保存选择城市到历史记录中
@@ -183,6 +191,7 @@ export default {
   //  year ----车龄
   //  serial ----品牌
   //  keyword ----keyword筛选
+  //  removeSerial ----删除品牌
 
   //key --值
   [FINDCARVAL_NAV](state,val){
@@ -195,7 +204,10 @@ export default {
       break;
       case 'serial' : state.findCarVal.serial = val.key;
       break;
-      case 'keyword' : state.findCarVal.serial = '';state.findCarVal.keyword = val.key
+      case 'keyword' : state.findCarVal.serial = '';state.findCarVal.keyword = val.key;
+      break;
+      case 'removeSerial' : state.findCarVal.serial = val.key;
+      break;
     }
     // 如果是品牌、筛选、搜索，赋值后回退上一步
     let navArr = ['serial','filtrate','keyword'];
@@ -273,17 +285,30 @@ export default {
       state.findCarVal.newCar = '';
       state.findCarVal.appmobile = '';
       state.findCarVal.apptoken = '';
+      state.findCarVal.keyword = '';
+      state.findCarList = [];
     removeStore('findCar');
   },
 }
 let preventDefault = isP =>{
+  let opts=null;
+  let supportsPassive = false;
   let prevent=function(e){e.preventDefault();};
+  try{
+    opts = Object.defineProperty({}, 'passive', {
+      get: function() {
+        supportsPassive = true;
+      }
+    });
+  }catch (e) {
+    console.log(e)
+  }
   if(isP){
-    document.body.style.overflow='hidden';
-    document.addEventListener("touchmove",prevent,false);
+    document.body.style.overflow = 'hidden';
+    // document.addEventListener("touchstart",prevent,opts);
   }else{
-    document.body.style.overflow='';
-    document.removeEventListener("touchmove",prevent,false);
+    document.body.style.overflow = '';
+    document.removeEventListener("touchstart",prevent,opts);
   }
 };
 let getHeight = b => {

@@ -11,7 +11,7 @@
 </template>
 
 <script>
-import { carDetail } from '~/config/getData'
+import { carDetail } from '~/config/Ajax'
 import Header from '~/components/common/header/back_head';
 import axios from '~/plugins/axios'
 

@@ -27,9 +27,8 @@
   import FooterTab from '~/components/common/footer/footer'
   import BackTop from '~/components/common/backTop'
   import Login from '~/components/common/login/login'
-  import {filteData} from '~/config/getData'
+  import {filteData} from '~/config/Ajax'
   import {mapState,mapActions,mapMutations} from 'vuex'
-  import {removeStore} from "../config/util/util";
 
   export default {
     head () {

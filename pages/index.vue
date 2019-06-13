@@ -15,7 +15,7 @@
   </div>
 </template>
 <script>
-import {indexoeo} from '~/config/getData'
+import {indexoeo} from '~/config/Ajax'
 import AppLoad from '~/components/common/appLoad'
 import LogoHead from '~/components/common/header/logo_head'
 import Loading from '~/components/common/loading'

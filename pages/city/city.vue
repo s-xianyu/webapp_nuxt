@@ -98,7 +98,7 @@
 
 <script>
   import TitleHead from '~/components/common/header/title_head'
-  import { historyKeyAndHotKey,getprovinces,getAreaByCityCode,getAreaLevel3} from '~/config/getData'
+  import { historyKeyAndHotKey,getprovinces,getAreaByCityCode,getAreaLevel3} from '~/config/Ajax'
   import {mapState,mapMutations,mapActions} from 'vuex'
   export default {
     head(){
@@ -274,7 +274,7 @@
 
       //确认多选提交
       allSelectOn(){
-        this.ALL_CITY(this.allOption);
+        this.CITY_SAVE(this.allOption);
       },
       removeArray(arr,val){
         for (let i in arr) {

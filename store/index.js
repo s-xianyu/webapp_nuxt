@@ -31,7 +31,7 @@ export const state = () => ({
 
   //找车页筛选数据
   findCarVal:{
-    areaCode:'',
+    areaCode:'1000000',
     pageSize:10,
     currPage:0,
     order:'',
