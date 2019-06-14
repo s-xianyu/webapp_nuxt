@@ -77,7 +77,7 @@
       randomNum(){
         this.rnd = Math.random();
       },
-      ...mapMutations(['USER_SAVE','LOGIN_STATUS']),
+      ...mapMutations(['USER_SAVE','ALL_STATUS']),
       ...mapActions(['getUserInfo']),
 
       // 获取图片验证码
@@ -140,7 +140,7 @@
       },
       // 登录框返回
       back(){
-        this.LOGIN_STATUS();
+        this.ALL_STATUS('login');
       }
     }
   }

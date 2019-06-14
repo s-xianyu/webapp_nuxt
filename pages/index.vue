@@ -11,24 +11,21 @@
     <!--<FooterTab/>-->
     <BackTop/>
     <Loading v-if="loadingShow"/>
-    <Login
-      :isShow="isShow"
-      :afterFun="LoginAfterFun"/>
+    <Login :afterFun="LoginAfterFun"/>
   </div>
 </template>
 <script>
 import {indexoeo} from '~/config/Ajax'
-import AppLoad from '~/components/common/appLoad'
+import AppLoad from '~/components/common/appLoad/appLoad'
 import LogoHead from '~/components/common/header/logo_head'
-import Loading from '~/components/common/loading'
-import Swiper from '~/components/common/swiper'
+import Loading from '~/components/common/loading/loading'
+import Swiper from '~/components/common/swiper/swiper'
 import MyActive from '~/components/index/myactive'
 import Information from '~/components/index/information'
 import Mylike from '~/components/index/mylike'
 import FooterTab from '~/components/common/footer/footer'
 import Login from '~/components/common/login/login'
-import BackTop from '~/components/common/backTop'
-import axios from '~/plugins/axios'
+import BackTop from '~/components/common/backTop/backTop'
 import {mapActions,mapState} from 'vuex'
 export default {
   head () {

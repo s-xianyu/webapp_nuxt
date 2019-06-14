@@ -3,7 +3,7 @@ import {
   OUT_USER,
   ADD_LIKE,
   ADD_PAGE,
-  LOGIN_STATUS,
+  ALL_STATUS,
   WIN_HEIGHT,
   CITY_SAVE,
   GET_CITY,
@@ -18,6 +18,12 @@ import {
 } from './mutations-type';
 import {setStore,getStore,removeStore} from '../config/util/util';
 export default {
+  // 公共状态状态
+  [ALL_STATUS](state,val){
+    let name = `${val}Status`;
+    state[name] = !state[name];
+    preventDefault(state[name]);
+  },
 
   //城市信息获取
   [GET_CITY](state,val){
@@ -162,11 +168,6 @@ export default {
       case 'findCar' :  state.findCarVal.currPage+=1;
     }
     state.likePrevent = false;
-  },
-  // 登录框显示状态
-  [LOGIN_STATUS](state){
-    state.loginStatus = !state.loginStatus;
-    preventDefault(state.loginStatus);
   },
   // 全局浏览器高度设置、显示
   [WIN_HEIGHT](state,isTrue){

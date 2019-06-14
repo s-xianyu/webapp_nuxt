@@ -47,14 +47,14 @@
                     <i class="iconfont icon-xiayiye"></i>
                   </span>
                 </router-link>
-                <router-link v-if="menu.type === 'price'" class="li" to="/price/price" tag="div">
+                <div @click="getPrice" v-if="menu.type === 'price'" class="li">
                   <span class="left">价格</span>
                   <span class="right">
                     <em v-if="filtrateVal.priceInterval">{{filtrateVal.priceInterval}}万</em>
                     <em v-else>价格不限</em>
                     <i class="iconfont icon-xiayiye"></i>
                   </span>
-                </router-link>
+                </div>
                 <router-link v-if="menu.type === 'year'" class="li" tab="div" to="/brand/brand" tag="div">
                   <span class="left">车龄</span>
                   <span class="right">
@@ -233,6 +233,7 @@
         <div v-if="FNum > 0">查看{{FNum}}辆车源</div>
         <div v-else>暂无符合车辆</div>
       </div>
+      <Price/>
     </div>
   </div>
 </template>
@@ -241,9 +242,10 @@
   import Scroll from '~/components/better-scroll/scroll'
   import VueRange from '~/components/common/range/range'
   import TitleHead from '~/components/common/header/title_head'
+  import Price from '~/components/common/price/price'
   import { HX } from '~/config/util/pubData'
   import {filteData} from '~/config/Ajax'
-  import {mapState,mapActions} from 'vuex'
+  import {mapState,mapActions,mapMutations} from 'vuex'
   export default {
     data() {
       return {
@@ -304,7 +306,8 @@
     components: {
       TitleHead,
       Scroll,
-      VueRange
+      VueRange,
+      Price
     },
     computed: {
       ...mapState(['cityInfo','findCarVal']),
@@ -357,6 +360,7 @@
     },
     methods: {
       ...mapActions(['getCity','getFindCarVal']),
+      ...mapMutations(['ALL_STATUS']),
       refreshVal(){
         this.hackReset = false;
         this.filtrateVal = {};
@@ -480,6 +484,10 @@
         })
         // console.log(this.rightTops)
       },
+      // 获取价格弹框
+      getPrice(){
+        this.ALL_STATUS('price')
+      }
     },
   }
 </script>

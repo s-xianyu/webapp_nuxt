@@ -36,7 +36,7 @@
   </div>
 </template>
 <script>
-import Loading from '~/components/common/loading'
+import Loading from '~/components/common/loading/loading'
 import {mapState,mapMutations} from 'vuex'
 import {gainLike} from '~/config/Ajax'
 export default {

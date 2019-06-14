@@ -97,6 +97,7 @@
 </template>
 <script>
   import { Toast } from 'mint-ui';
+  import { HX } from '~/config/util/pubData'
   import {mapState,mapMutations,mapActions} from 'vuex'
   import {removeStore} from '~/config/util/util'
   export default {
@@ -108,41 +109,9 @@
           {name:'4s维保',id:'4s',type:'is4s'},
           {name:'批发',id:'1',type:'pifa'},
         ],
-        orderArr:[
-          {name:'默认排序',id:'',type:'order'},
-          {name:'最近更新',id:'0',type:'order'},
-          {name:'信誉最高',id:'1',type:'order'},
-          {name:'信誉最低',id:'2',type:'order'},
-          {name:'价格最高',id:'5',type:'order'},
-          {name:'价格最低',id:'6',type:'order'},
-          {name:'车龄最高',id:'7',type:'order'},
-          {name:'车龄最低',id:'8',type:'order'},
-          {name:'性价比最高',id:'3',type:'order'},
-        ],
-        priceArr: [
-          {name:'价格不限',id:'',type:'priceInterval'},
-          {name:'3万元以下',id:'0-3',type:'priceInterval'},
-          {name:'3-5万',id:'3-5',type:'priceInterval'},
-          {name:'5-10万',id:'5-10',type:'priceInterval'},
-          {name:'10-15万',id:'10-15',type:'priceInterval'},
-          {name:'15-20万',id:'15-20',type:'priceInterval'},
-          {name:'20-50万',id:'20-50',type:'priceInterval'},
-          {name:'50-100万',id:'50-100',type:'priceInterval'},
-          {name:'100万以上',id:'100-10000',type:'priceInterval'},
-        ],
-        ageArr: [
-          {name:`不限车龄`,id:'',type:'year'},
-          {name:`${this.$getYear(1)}年以内`,id:'0-1',type:'year'},
-          {name:`${this.$getYear(2)}年以内`,id:'0-2',type:'year'},
-          {name:`${this.$getYear(3)}年以内`,id:'0-3',type:'year'},
-          {name:`${this.$getYear(4)}年以内`,id:'0-4',type:'year'},
-          {name:`${this.$getYear(5)}年以内`,id:'0-5',type:'year'},
-          {name:`${this.$getYear(3)}-${this.$getYear(1)}年`,id:'1-3',type:'year'},
-          {name:`${this.$getYear(5)}-${this.$getYear(3)}年`,id:'3-4',type:'year'},
-          {name:`${this.$getYear(8)}-${this.$getYear(5)}年`,id:'5-8',type:'year'},
-          {name:`${this.$getYear(10)}-${this.$getYear(8)}年`,id:'8-10',type:'year'},
-          {name:`${this.$getYear(10)}年以前`,id:'10-100',type:'year'}
-        ],
+        orderArr:HX.orderArr,
+        priceArr: HX.priceArr,
+        ageArr: HX.ageArr,
         menuIndex:-1,  //新车、4s、批发车下标
         navIndex:-1, //当前点击导航下标,默认-1. -->重要值。
         navShow:false, //排序弹框

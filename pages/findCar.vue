@@ -20,12 +20,12 @@
   </div>
 </template>
 <script>
-  import Loading from '~/components/common/loading'
+  import Loading from '~/components/common/loading/loading'
   import List from '~/components/findCar/list'
   import ListNav from '~/components/findCar/listNav'
   import BackHead from '~/components/common/header/back_head'
   import FooterTab from '~/components/common/footer/footer'
-  import BackTop from '~/components/common/backTop'
+  import BackTop from '~/components/common/backTop/backTop'
   import Login from '~/components/common/login/login'
   import {filteData} from '~/config/Ajax'
   import {mapState,mapActions,mapMutations} from 'vuex'

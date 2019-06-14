@@ -35,10 +35,10 @@ export default {
     ...mapState(['isLogin','thisCity'])
   },
   methods:{
-    ...mapMutations(['LOGIN_STATUS']),
+    ...mapMutations(['ALL_STATUS']),
     // 登录弹框
     getLogin(){
-      this.LOGIN_STATUS(true);
+      this.ALL_STATUS('login');
     },
   },
 
