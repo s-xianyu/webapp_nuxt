@@ -443,9 +443,7 @@
           data[index].cur = !data[index].cur;
         }else{
           // 如何点击不限
-          data.map((key)=>{
-            return key.cur = false
-          });
+          data.map((key)=>{ return key.cur = false });
           // 清空数组
           data[0].cur = true;
           thisArr = [];
