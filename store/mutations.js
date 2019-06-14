@@ -109,7 +109,7 @@ export default {
       state.isLogin = false;
       state.userInfo = '';
     }
-
+    preventDefault(state.loginStatus);
     // 获取到窗口高度并保存
     // if(state.loginStatus === true){
     //   state.windowHeight = `${document.documentElement.clientHeight || document.body.clientHeight}px`

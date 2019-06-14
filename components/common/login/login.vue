@@ -53,6 +53,11 @@
         wrapperHeight:'',
       }
     },
+    props:{
+      'afterFun':{
+        type:Function,
+      },
+    },
     components:{
       Header,
       FooterTab
@@ -107,8 +112,10 @@
         };
         let { data } = await smallprogramlogin(params);
         // debugger;
-        console.log(data);
-        this.USER_SAVE(data);
+        if(data.message === 'success'){ //成功回调
+          this.afterFun();
+          this.USER_SAVE(data);
+        }
 
       },
 

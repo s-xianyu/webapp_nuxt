@@ -11,7 +11,9 @@
     <!--<FooterTab/>-->
     <BackTop/>
     <Loading v-if="loadingShow"/>
-    <Login/>
+    <Login
+      :isShow="isShow"
+      :afterFun="LoginAfterFun"/>
   </div>
 </template>
 <script>
@@ -99,7 +101,10 @@ export default {
         this.isFixed = false
       }
     },
-
+    // 成功回调执行函数
+    LoginAfterFun(){
+      console.log('ok');
+    }
   }
 }
 </script>
