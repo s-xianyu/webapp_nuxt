@@ -66,7 +66,7 @@
       ...mapState(['isLogin','loginStatus'])
     },
     mounted(){
-      this.getUserInfo();
+      this._getUserInfo();
       this.randomNum();
 
       // 获取页面高度
@@ -78,7 +78,7 @@
         this.rnd = Math.random();
       },
       ...mapMutations(['USER_SAVE','ALL_STATUS']),
-      ...mapActions(['getUserInfo']),
+      ...mapActions(['_getUserInfo']),
 
       // 获取图片验证码
       async getPhoneCode(){

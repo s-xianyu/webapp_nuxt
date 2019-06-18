@@ -1,17 +1,15 @@
 <template>
-  <div class="animated fadeInRight">
-    <Header :heads="header"/>
-    <h2>
-      范围：{{assessPrice}}</br>
-      <hr>
-      车辆ID:{{car.carId}}</br>
-      车辆名称:{{car.brandFullName}}
-    </h2>
+  <div class="detail">
+    <div class="animated fadeInRight">
+      <Header :heads="header"/>
+      <Swiper :imgList="car.bigPicList" :imgHeight="8.5" :showIndicators="false"/>
+    </div>
   </div>
 </template>
 
 <script>
 import { carDetail } from '~/config/Ajax'
+import Swiper from '~/components/common/swiper/swiper'
 import Header from '~/components/common/header/back_head';
 import axios from '~/plugins/axios'
 
@@ -31,7 +29,8 @@ import axios from '~/plugins/axios'
 
     },
     components:{
-      Header
+      Header,
+      Swiper
     }
   }
 </script>

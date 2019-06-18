@@ -9,7 +9,7 @@ import {getStore} from "../config/util/util";
 export default {
 
   //获取用户信息
-  async getUserInfo({commit}){
+  async _getUserInfo({commit}){
     let name = JSON.parse(
       getStore('userInfo')
     );
@@ -17,7 +17,7 @@ export default {
   },
 
   //获取当前城市信息
-  async getCity({commit}){
+  async _getCity({commit}){
 
     let name = JSON.parse(
       getStore('cityInfo')
@@ -26,20 +26,20 @@ export default {
   },
 
   //获取地区历史记录
-  async getHistoryCity({commit}){
+  async _getHistoryCity({commit}){
     let name = JSON.parse(
       getStore('historyCity')
     );
     commit(GET_HISTORYCITY,name);
   },
-  async getHistorySearch({commit}){
+  async _getHistorySearch({commit}){
     let name = JSON.parse(
       getStore('historySearch')
     );
     commit(HISTORYSEARCH_SAVE,name)
   },
   // 获取筛选信息
-  async getFindCarVal({commit}){
+  async _getFindCarVal({commit}){
     let name = JSON.parse(getStore('findCar'))
     commit(FINDCARVAL_SAVE,name);
   }

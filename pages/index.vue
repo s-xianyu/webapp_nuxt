@@ -4,7 +4,7 @@
     <div :class="{fixed:isFixed}">
       <LogoHead/>
     </div>
-    <Swiper :imgList="swiperList"/>
+    <Swiper :imgList="swiperList" :imgHeight="3.8"/>
     <MyActive :homeList="homeList.homerecommended"/>
     <Information :information="homeList.information"/>
     <Mylike/>
@@ -37,16 +37,11 @@ export default {
     return {
       loadingShow:false,
       swiperList:[
-        {bussinessman : '',id : '0',name : '', href : '', url : 'http://www.hx2car.com/upload/daily/normal/MobileIndexAds/MobileIndexTop/2019/20190304102629.jpg',smallUrl:'http://www.hx2car.com/upload/daily/normal/MobileIndexAds/MobileIndexTop/2019/20190304102629_0.jpg'}
-	 ,
-	 {bussinessman : '',id : '0',name : '个人会员', href : 'http://m.hx2car.com/mobile/weppersonalvipbuy.htm', url : 'http://www.hx2car.com/upload/daily/normal/MobileIndexAds/MobileIndexTop/2019/20190429112020.jpg',smallUrl:'http://www.hx2car.com/upload/daily/normal/MobileIndexAds/MobileIndexTop/2019/20190429112020_0.jpg'}
-	 ,
-	 {bussinessman : '',id : '0',name : '4S', href : 'http://m.hx2car.com/4s', url : 'http://www.hx2car.com/upload/daily/normal/MobileIndexAds/MobileIndexTop/2019/20190226104842.jpg',smallUrl:'http://www.hx2car.com/upload/daily/normal/MobileIndexAds/MobileIndexTop/2019/20190226104842_0.jpg'}
-	 ,
-	 {bussinessman : '',id : '0',name : '通讯录', href : 'http://m.hx2car.com/wap/fenghuimaillist.htm', url : 'http://www.hx2car.com/upload/daily/normal/MobileIndexAds/MobileIndexTop/2018/20181204141102.jpg',smallUrl:'http://www.hx2car.com/upload/daily/normal/MobileIndexAds/MobileIndexTop/2018/20181204141102_0.jpg'}
-	 ,
-	 {bussinessman : '',id : '0',name : '', href : 'http://m.hx2car.com/wap/waphuabi.htm', url : 'http://www.hx2car.com/upload/daily/normal/MobileIndexAds/MobileIndexTop/2019/20190416192142.png',smallUrl:'http://www.hx2car.com/upload/daily/normal/MobileIndexAds/MobileIndexTop/2019/20190416192142_0.png'}
-
+        'http://www.hx2car.com/upload/daily/normal/MobileIndexAds/MobileIndexTop/2019/20190304102629.jpg',
+        'http://www.hx2car.com/upload/daily/normal/MobileIndexAds/MobileIndexTop/2019/20190429112020.jpg',
+        'http://www.hx2car.com/upload/daily/normal/MobileIndexAds/MobileIndexTop/2019/20190226104842.jpg',
+        'http://www.hx2car.com/upload/daily/normal/MobileIndexAds/MobileIndexTop/2018/20181204141102.jpg',
+        'http://www.hx2car.com/upload/daily/normal/MobileIndexAds/MobileIndexTop/2019/20190416192142.png'
       ],
       type:'1',
       homeList:[],
@@ -79,7 +74,7 @@ export default {
   },
   mounted(){
     // this.getLike();
-    this.getCity();
+    this._getCity();
 
     window.addEventListener('scroll', this.scrollHead);
     // 获取screen至页面顶部的距离
@@ -88,7 +83,7 @@ export default {
 
   },
   methods:{
-    ...mapActions(['getCity']),
+    ...mapActions(['_getCity']),
     scrollHead(){
       // debugger
       let scrollTop = window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop

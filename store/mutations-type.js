@@ -13,4 +13,5 @@ export const FINDCARVAL_NAV ='FINDCARVAL_NAV';                  //找车页数�
 export const FINDCARVAL_MENU ='FINDCARVAL_MENU';                  //找车页数据传值-menu
 export const FINDCARVAL_SAVE ='FINDCARVAL_SAVE';                  //找车页数据获取
 export const FINDCARVAL_REMOVE ='FINDCARVAL_REMOVE';                  //找车页数据删除
+export const FINDCARVAL_ADD ='FINDCARVAL_ADD';                  //找车页数据删除
 export const ADD_LIST ='ADD_LIST';                  //保存列表数据

@@ -146,10 +146,10 @@
     },
     mounted(){
       this.getCityList();
-      this.getHistoryCity();
+      this._getHistoryCity();
     },
     methods:{
-      ...mapActions(['getHistoryCity']),
+      ...mapActions(['_getHistoryCity']),
       ...mapMutations(['CITY_SAVE','ALL_CITY','WIN_HEIGHT']),
 
       Scrolls(key){

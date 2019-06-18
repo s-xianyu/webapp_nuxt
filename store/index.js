@@ -12,6 +12,8 @@ export const state = () => ({
   lastCity:'',
   // 历史记录地区
   historyCity:[],
+  // 车龄框状态
+  yearStatus:false,
   // 价格框状态
   priceStatus:false,
   // 登录框状态

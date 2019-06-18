@@ -45,7 +45,7 @@
       }
     },
     created(){
-      this.getCity();
+      this._getCity();
     },
     mounted(){
       this.scrollHead();
@@ -70,7 +70,7 @@
       Login,
     },
     methods:{
-      ...mapActions(['getCity']),
+      ...mapActions(['_getCity']),
       ...mapMutations(['ADD_LIST','ADD_PAGE','FINDCARVAL_REMOVE','WIN_HEIGHT']),
       async loadermore(){
         this.loadingShow = !this.loadingShow;

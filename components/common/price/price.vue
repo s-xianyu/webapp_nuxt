@@ -12,7 +12,7 @@
               <input type="number" placeholder="请输入" v-model="ageLow">
               <span>到</span>
               <input type="number" placeholder="请输入" v-model="ageTall">
-              <button @click="commitBtnFun">确认</button>
+              <button @click="commitBtnFun('priceInterval')">确认</button>
             </div>
           </li>
           <li v-for="item in priceArr" @click="commitValFun(item)"><span class="span">{{item.name}}</span></li>
@@ -54,19 +54,27 @@
       TitleHead
     },
     methods:{
-      ...mapMutations(['ALL_STATUS','FINDCARVAL_NAV']),
+      ...mapMutations(['ALL_STATUS']),
       back(){
       this.ALL_STATUS('price');
       },
-      commitBtnFun(){
-
+      commitBtnFun(type){
+        let values = {
+          type:type,
+          key:`${this.ageLow}-${this.ageTall}`
+        };
+        this.$parent.doPriceYear(values);
+        this.ALL_STATUS('price');
       },
       commitValFun(item){
         let values = {
           type:item.type,
           key:item.id
         };
-        this.FINDCARVAL_NAV(values);
+        // this.FINDCARVAL_NAV(values);
+        this.ageLow = '';
+        this.ageTall = '';
+        this.$parent.doPriceYear(values);
         this.ALL_STATUS('price');
       }
     }

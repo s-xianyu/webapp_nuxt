@@ -62,7 +62,7 @@
     },
     mounted(){
       this.$refs.search.focus();
-      this.getHistorySearch();
+      this._getHistorySearch();
     },
     computed:{
       ...mapState(['historySearch'])
@@ -78,7 +78,7 @@
       }
     },
     methods:{
-      ...mapActions(['getHistorySearch']),
+      ...mapActions(['_getHistorySearch']),
       ...mapMutations(['HISTORYSEARCH_SAVE','FINDCARVAL_NAV']),
       async thisKeyUp(){
         let params = {

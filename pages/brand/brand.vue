@@ -256,11 +256,13 @@
       allUnlimited(){
         this.vuexVal.key = '';
         this.FINDCARVAL_NAV(this.vuexVal);
+        history.go(-1);
       },
       // 二级不限
       twoUnlimited(){
         this.vuexVal.key = this.brand;
         this.FINDCARVAL_NAV(this.vuexVal);
+        history.go(-1);
       },
       /* 一级确认提交
        * 二级确认提交
@@ -274,16 +276,19 @@
         }
         console.log(this.vuexVal);
         this.FINDCARVAL_NAV(this.vuexVal);
+        history.go(-1);
       },
       // 二级列表选择
       brandCommitVuex(item){
         this.vuexVal.key = item.completeCarSerial;
         this.FINDCARVAL_NAV(this.vuexVal);
+        history.go(-1);
       },
       // 三级列表选择
       brandCommitVuexTo(item){
         this.vuexVal.key = this.brandTo+' '+item.subject;
         this.FINDCARVAL_NAV(this.vuexVal);
+        history.go(-1);
       },
       // 一级列表多选按钮显示切换
       allSelectToggle(){

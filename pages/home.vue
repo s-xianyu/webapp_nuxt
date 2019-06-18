@@ -81,12 +81,12 @@
     computed:{
       ...mapState(['isLogin','userInfo'])
     },
-    mounted(){
-      this.getUserInfo();
+    created(){
+      this._getUserInfo();
     },
     methods:{
       ...mapMutations(['OUT_USER']),
-      ...mapActions(['getUserInfo']),
+      ...mapActions(['_getUserInfo']),
       backShowFun(data){
         this.backShow = data;
       },

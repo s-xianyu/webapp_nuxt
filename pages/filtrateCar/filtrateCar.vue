@@ -34,7 +34,7 @@
                 <router-link v-if="menu.type === 'city'" class="li" to="/city/city" tag="div">
                   <span class="left">{{menu.name}}</span>
                   <span class="right">
-                    <em v-if="cityArr">{{cityArr}}</em>
+                    <em v-if="thisCity">{{thisCity}}</em>
                     <em v-else>不限</em>
                     <i class="iconfont icon-xiayiye"></i>
                   </span>
@@ -47,7 +47,7 @@
                     <i class="iconfont icon-xiayiye"></i>
                   </span>
                 </router-link>
-                <div @click="getPrice" v-if="menu.type === 'price'" class="li">
+                <div @click="getPopup(menu.type)" v-if="menu.type === 'price'" class="li">
                   <span class="left">价格</span>
                   <span class="right">
                     <em v-if="filtrateVal.priceInterval">{{filtrateVal.priceInterval}}万</em>
@@ -55,14 +55,14 @@
                     <i class="iconfont icon-xiayiye"></i>
                   </span>
                 </div>
-                <router-link v-if="menu.type === 'year'" class="li" tab="div" to="/brand/brand" tag="div">
+                <div  @click="getPopup(menu.type)" v-if="menu.type === 'year'" class="li">
                   <span class="left">车龄</span>
                   <span class="right">
                     <em v-if="filtrateVal.year">{{filtrateVal.year}}年</em>
                     <em v-else>车龄不限</em>
                     <i class="iconfont icon-xiayiye"></i>
                   </span>
-                </router-link>
+                </div>
                 <div v-if="menu.type === 'mileage'" class="box-item">
                   <div class="item-title">
                     <span class="tit">公里数</span>
@@ -70,9 +70,9 @@
                   </div>
 
                   <VueRange
+                    v-if="hackReset"
                     :dataArr="[0,2,4,6,8,10]"
                     :width="90"
-                    v-if="hackReset"
                     :afterFun="mileageValFun"
                     :step="12"/>
                 </div>
@@ -203,6 +203,7 @@
                     <span class="rTxt">{{inventoryTimeText}}</span>
                   </div>
                   <VueRange
+                    v-if="hackReset"
                     :dataArr="[0,10,20,30]"
                     :width="96"
                     :afterFun="inventoryTimeValFun"
@@ -229,11 +230,13 @@
         </scroll>
       </div>
       <div class="footer">
-        <div @click="refreshVal">重置</div>
-        <div v-if="FNum > 0">查看{{FNum}}辆车源</div>
+        <div @click="refreshCar">重置</div>
+        <div v-if="FNum > 0" @click="lookCar">查看{{FNum}}辆车源</div>
         <div v-else>暂无符合车辆</div>
       </div>
+      <!--价格、车龄弹框-->
       <Price/>
+      <Year/>
     </div>
   </div>
 </template>
@@ -243,6 +246,7 @@
   import VueRange from '~/components/common/range/range'
   import TitleHead from '~/components/common/header/title_head'
   import Price from '~/components/common/price/price'
+  import Year from '~/components/common/year/year'
   import { HX } from '~/config/util/pubData'
   import {filteData} from '~/config/Ajax'
   import {mapState,mapActions,mapMutations} from 'vuex'
@@ -307,18 +311,12 @@
       TitleHead,
       Scroll,
       VueRange,
-      Price
+      Price,
+      Year
     },
     computed: {
-      ...mapState(['cityInfo','findCarVal']),
+      ...mapState(['thisCity','findCarVal']),
       // 地区
-      cityArr(){
-        let arr = this.cityInfo;
-        let name = arr.map(i=>{
-          return i.area_name
-        });
-        return name+'';
-      },
       // 品牌
       serialArr(){
         let arr = this.findCarVal.serial.split('or');
@@ -348,34 +346,19 @@
         this._calculateHeight()
       });
       // 获取vuex数据
-      this.getFindCarVal();
+      this._getFindCarVal();
+      // 获取地区信息
+      this._getCity();
     },
     mounted(){
       // 赋值到页面
       this.filtrateFun();
       // 获取车辆数
       this.getFindCarNum();
-      // 为筛选按钮添加cur
-      this.sortArrCur();
     },
     methods: {
-      ...mapActions(['getCity','getFindCarVal']),
-      ...mapMutations(['ALL_STATUS']),
-      refreshVal(){
-        this.hackReset = false;
-        this.filtrateVal = {};
-        this.getFindCarNum();
-        this.$nextTick(() => {
-          this.hackReset = true
-        })
-      },
-      // 为筛选按钮添加cur
-      sortArrCur(){
-        let arr = ['sort','structure','firm','letOut','color'];
-        arr.map((k)=>{
-
-        })
-      },
+      ...mapActions(['_getCity','_getFindCarVal']),
+      ...mapMutations(['ALL_STATUS','FINDCARVAL_NAV']),
       // 获取车辆数
       async getFindCarNum(){
         let { data } = await filteData(this.filtrateVal);
@@ -385,9 +368,14 @@
       filtrateFun(){
         // 筛选条件赋值
         let filtrateVal = this.filtrateVal;
+        // 地区
         filtrateVal.areaCode = this.findCarVal.areaCode;
-        filtrateVal.priceInterval = this.findCarVal.priceInterval
-        filtrateVal.year = this.findCarVal.year
+        // 品牌
+        filtrateVal.serial = this.findCarVal.serial;
+        // 金额
+        filtrateVal.priceInterval = this.findCarVal.priceInterval;
+        // 车龄
+        filtrateVal.year = this.findCarVal.year;
       },
       // 接收到子组件事件执行
       mileageValFun(low,tall){
@@ -446,12 +434,14 @@
           }
           data[index].cur = !data[index].cur;
         }else{
-          // 如何点击不限
+          // 如果点击不限
           data.map((key)=>{ return key.cur = false });
           // 清空数组
           data[0].cur = true;
           thisArr = [];
+          this[`${type}Arr`] = [];
         }
+        console.log(thisArr);
         this.filtrateVal[type] = thisArr+'';
         this.getFindCarNum();
       },
@@ -484,9 +474,80 @@
         })
         // console.log(this.rightTops)
       },
-      // 获取价格弹框
-      getPrice(){
-        this.ALL_STATUS('price')
+      // 获取价格、车龄弹框
+      getPopup(type){
+        this.ALL_STATUS(type)
+      },
+      // 价格回调
+      doPriceYear(val){
+        this.filtrateVal[val.type] = val.key;
+        this.getFindCarNum();
+      },
+      refreshCar(){
+        // 刷新滑块组件
+        this.hackReset = false;
+        this.$nextTick(()=>{
+          this.hackReset = true;
+          this.mileageText = this.inventoryTimeText = '不限';
+        });
+        // 清除筛选值
+        this.filtrateVal={
+          areaCode:this.findCarVal.areaCode,
+            pageSize:5,
+            currPage:1,
+            order:'',
+            priceInterval:'',
+            year:'',
+            serial:'',
+            carType:'',
+            standards:'',
+            dayInterval:'',
+            colors:'',
+            gears:'',
+            is4s:'',
+            pifa:'',
+            mileage:'',
+            carKinds:'',
+            bodType:'',
+            factory:'',
+            country:'',
+            motor:'',
+            devicetoken:'',
+            newCar:'',
+            appmobile:'',
+            apptoken:'',
+            keyword:''
+        },
+        this.getFindCarNum();
+
+        // 设置选中状态（单选）
+        this.carTypeIndex = this.gearsIndex = this.countryIndex = this.inventoryTimeIndex = 0;
+        // 设置选中状态（多选）
+        this.bodTypeArr = [];
+        this.menus.map((item,index)=>{
+          if(item.data.length > 0){
+            item.data.forEach(key=>{
+              if(key.name === '不限'){
+                return key.cur = true;
+              }else{
+                return key.cur = false;
+              }
+            });
+          }
+        })
+      },
+      lookCar(){
+        let arr = this.filtrateVal;
+        for(let i in arr){
+          console.log(i);
+          console.log(arr[i]);
+          let values = {
+            type:i,
+            key:arr[i]
+          }
+          this.FINDCARVAL_NAV(values);
+        }
+        history.go(-1);
       }
     },
   }
@@ -533,6 +594,11 @@
         }
         ul{
           li{
+            /*&:last-child{*/
+              /*.box-item{*/
+                /*padding-bottom:15rem;*/
+              /*}*/
+            /*}*/
             .li{
               background:$fff;
               padding:0 .5rem;

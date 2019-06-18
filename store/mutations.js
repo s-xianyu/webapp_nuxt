@@ -14,6 +14,7 @@ import {
   FINDCARVAL_MENU,
   FINDCARVAL_SAVE,
   FINDCARVAL_REMOVE,
+  FINDCARVAL_ADD,
   ADD_LIST
 } from './mutations-type';
 import {setStore,getStore,removeStore} from '../config/util/util';
@@ -192,29 +193,63 @@ export default {
   //  year ----车龄
   //  serial ----品牌
   //  keyword ----keyword筛选
+  //  carType ----
+  //  standards ----
+  //  dayInterval ----
+  //  colors ----
+  //  gears ----
+  //  mileage ----
+  //  carKinds ----
+  //  bodType ----
+  //  factory ----
+  //  country ----
+  //  motor ----
   //  removeSerial ----删除品牌
 
   //key --值
   [FINDCARVAL_NAV](state,val){
     switch (val.type){
       case 'order' : state.findCarVal.order = val.key;
-      break;
+        break;
       case 'priceInterval' : state.findCarVal.priceInterval = val.key;
-      break;
+        break;
       case 'year' : state.findCarVal.year = val.key;
-      break;
+        break;
       case 'serial' : state.findCarVal.serial = val.key;
-      break;
+        break;
       case 'keyword' : state.findCarVal.serial = '';state.findCarVal.keyword = val.key;
-      break;
+        break;
+      case 'carType' : state.findCarVal.carType = val.key;
+        break;
+      case 'standards' : state.findCarVal.standards = val.key;
+        break;
+      case 'dayInterval' : state.findCarVal.dayInterval = val.key;
+        break;
+      case 'colors' : state.findCarVal.colors = val.key;
+        break;
+      case 'gears' : state.findCarVal.gears = val.key;
+        break;
+      case 'mileage' : state.findCarVal.mileage = val.key;
+        break;
+      case 'carKinds' : state.findCarVal.carKinds = val.key;
+        break;
+      case 'bodType' : state.findCarVal.bodType = val.key;
+        break;
+      case 'factory' : state.findCarVal.factory = val.key;
+        break;
+      case 'country' : state.findCarVal.country = val.key;
+        break;
+      case 'motor' : state.findCarVal.motor = val.key;
+        break;
       case 'removeSerial' : state.findCarVal.serial = val.key;
       break;
     }
     // 如果是品牌、筛选、搜索，赋值后回退上一步
-    let navArr = ['serial','filtrate','keyword'];
-    if(navArr.includes(val.type)){
-      history.go(-1);
-    }
+    // let navArr = ['serial','keyword'];
+    // if(navArr.includes(val.type)){
+    //   debugger
+    //   history.go(-1);
+    // }
     // 清空列表
     state.findCarList = [];
     // 设置为第一页
@@ -262,6 +297,10 @@ export default {
       state.findCarVal = val;
     }
   },
+  [FINDCARVAL_ADD](state,val){
+
+  },
+  // 清空
   [FINDCARVAL_REMOVE](state){
       state.findCarVal.pageSize = 10;
       state.findCarVal.currPage = 0;
@@ -330,9 +369,9 @@ let cityInfo = (val)=>{
   }
 
   if(val[val.length-1].area_name){
-    position.push(val[val.length-1].area_name)
+    position.push(val[val.length-1].area_name);
   }else{
-    position.push(val[val.length-1].cityName)
+    position.push(val[val.length-1].cityName);
   }
   content = [...city,...position];
   return content;

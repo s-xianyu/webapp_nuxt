@@ -1,8 +1,8 @@
 <template>
-  <div class="swiper">
-    <mt-swipe :auto="4000">
+  <div class="swiper" :style="{height:imgHeight+'rem'}">
+    <mt-swipe :auto="4000" :showIndicators="showIndicators">
       <mt-swipe-item v-for="(item,index) in imgList" :key="index">
-        <img :src="item.url" :alt="item.name">
+        <img :src="item" :alt="item.name">
       </mt-swipe-item>
     </mt-swipe>
   </div>
@@ -15,7 +15,7 @@
         msg: 'swiper'
       }
     },
-    props:['imgList']
+    props:['imgList','imgHeight','showIndicators'],
   }
 </script>
 
