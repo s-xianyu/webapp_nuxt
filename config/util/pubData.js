@@ -14,12 +14,12 @@ const HX = {
     },
     {
       name:'品牌',
-      type:'brand',
+      type:'serial',
       data:[]
     },
     {
       name:'价格',
-      type:'price',
+      type:'priceInterval',
       data:[]
     },
     {

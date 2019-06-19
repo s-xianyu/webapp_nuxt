@@ -204,7 +204,6 @@ export default {
   //  factory ----
   //  country ----
   //  motor ----
-  //  removeSerial ----删除品牌
 
   //key --值
   [FINDCARVAL_NAV](state,val){
@@ -241,8 +240,6 @@ export default {
         break;
       case 'motor' : state.findCarVal.motor = val.key;
         break;
-      case 'removeSerial' : state.findCarVal.serial = val.key;
-      break;
     }
     // 如果是品牌、筛选、搜索，赋值后回退上一步
     // let navArr = ['serial','keyword'];
@@ -255,7 +252,11 @@ export default {
     // 设置为第一页
     state.findCarVal.currPage = 0;
     // 存储筛选数据
-    setStore('findCar',state.findCarVal);
+    setStore('findCar', state.findCarVal);
+    debugger 
+    if (state.filtrateStatus) {
+      history.go(-1);
+    }
   },
   //找车页传值--menu
   //  newCar ----新车

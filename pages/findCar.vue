@@ -3,7 +3,7 @@
     <div class="animated fadeInRight">
       <BackHead :back="true"/>
       <div :class="{fixeds:isFixed}">
-        <ListNav/>
+        <ListNav v-if="shows"/>
       </div>
       <div class="main">
         <div class="carList"
@@ -16,6 +16,7 @@
       <!-- <FooterTab/> -->
       <Loading v-if="loadingShow"/>
       <Login/>
+      <FiltrateCar/>
     </div>
   </div>
 </template>
@@ -27,6 +28,7 @@
   import FooterTab from '~/components/common/footer/footer'
   import BackTop from '~/components/common/backTop/backTop'
   import Login from '~/components/common/login/login'
+  import FiltrateCar from '~/components/common/filtrateCar/filtrateCar'
   import {filteData} from '~/config/Ajax'
   import {mapState,mapActions,mapMutations} from 'vuex'
 
@@ -38,6 +40,7 @@
     },
     data () {
       return {
+        shows:true,
         loadingShow:false,
         offsetTop:0,
         isFixed:false,
@@ -68,6 +71,7 @@
       FooterTab,
       ListNav,
       Login,
+      FiltrateCar
     },
     methods:{
       ...mapActions(['_getCity']),
@@ -86,7 +90,7 @@
       },
 
       scrollHead(){
-        let scrollTop = window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop
+        let scrollTop = window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop;
         if (scrollTop > this.offsetTop) {
           this.isFixed = true
         } else {
@@ -95,7 +99,13 @@
       },
       // 子组件改变后执行请求
       doParent(){
-        this.loadermore()
+        this.shows = false;
+        // 重新加载数据
+        this.loadermore();
+        // 更新组件
+        this.$nextTick(()=>{
+          this.shows = true;
+        })
       }
     }
   }

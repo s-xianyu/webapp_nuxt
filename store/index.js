@@ -13,9 +13,11 @@ export const state = () => ({
   // 历史记录地区
   historyCity:[],
   // 车龄框状态
+  filtrateStatus:false,
+  // 车龄框状态
   yearStatus:false,
   // 价格框状态
-  priceStatus:false,
+  priceIntervalStatus:false,
   // 登录框状态
   loginStatus:false,
   // 登录状态

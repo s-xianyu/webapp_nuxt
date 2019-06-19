@@ -36,21 +36,23 @@
         $startBar: '', // 左侧滑块
         $endBar: '', // 右侧滑块
         startX: '', // 左侧滑块位置
-        endX: '', // 右侧滑块位置
+        endX:  '', // 右侧滑块位置
         steps: '', // 滑竿在限定范围内可以分多少步
         intervalStart: 0,
         intervalEnd: this.step,
         startStep: 0,
         endStep: this.step,
         amountW: '', //  滑竿多长距离
-        lowVal:'0',
-        tallVal:'100',
+        lowVal:'',
+        tallVal:'',
       }
     },
     created() {
       this.$nextTick(() => {
         this.initSlider();
-      })
+        this.lowVal = this.XY.split('-')[0];
+        this.tallVal = this.XY.split('-')[1];
+      });
     },
     props:{
       'dataArr':{
@@ -64,7 +66,24 @@
       },
       'afterFun':{
         type:Function,
+      },
+      'XY':{
+        type:String,
       }
+    },
+    mounted(){
+      let xy1 =  this.XY.split('-')[0];
+      let xy2 =  this.XY.split('-')[1] === '100' ? this.step : this.XY.split('-')[1];
+      this.$ruler = this.$refs.ruler;
+      this.$inner = this.$refs.inner;
+      this.$startBar = this.$refs.startBar;
+      this.$endBar = this.$refs.endBar;
+      this.amountW = this.$ruler.clientWidth - this.$startBar.clientWidth;
+      this.steps = this.amountW / (this.intervalEnd - this.intervalStart); // 总共多少步
+      this.$startBar.style.left = this.steps * xy1 + 'px';
+      this.$inner.style.left = this.steps * xy1 + 'px';
+      this.$inner.style.right = this.steps * (this.step-xy2) + 'px';
+      this.$endBar.style.left = this.steps * xy2 + 'px';
     },
     methods: {
       initSlider(){
@@ -89,12 +108,14 @@
         let LWidth = this.winW - this.$ruler.clientWidth -  this.$ruler.offsetLeft;
 
         let slidedis = e.touches[0].pageX - LWidth - this.$ruler.offsetLeft; // 滑动距离=当前滑块x距离-最开始滑块距离
+        console.log(slidedis)
         let ste = Math.round(slidedis / this.steps);
         if(slidedis < 0){ //如果小于0，停留在初始位置
           this.$startBar.style.left = '0px';
           this.$inner.style.left = '0px';
           return;
-        }else if(slidedis > this.amountW){ //否则如果大于滑动的最大值停留在最大步数的前一步
+        }else if(slidedis > this.amountW){
+          //否则如果大于滑动的最大值停留在最大步数的前一步
           this.$startBar.style.left = ((this.endStep-1)*this.steps) + 'px';
           this.$inner.style.left = ((this.endStep-1)*this.steps) + 'px';
           return;
@@ -102,6 +123,7 @@
         if ((ste + this.intervalStart) >= this.endStep) {
           return;
         }
+        console.log(ste);
         this.startStep = ste + this.intervalStart;
         this.$startBar.style.left = (ste * this.steps) + 'px';
         this.$inner.style.left = (ste * this.steps) + 'px';

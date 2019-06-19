@@ -1,5 +1,5 @@
 <template>
-  <div class="price" :class="{cur:priceStatus}">
+  <div class="price" :class="{cur:priceIntervalStatus}">
     <div class="toFrom">
       <header>
         <h2>价格选择</h2>
@@ -48,7 +48,7 @@
       }
     },
     computed:{
-      ...mapState(['priceStatus']),
+      ...mapState(['priceIntervalStatus']),
     },
     components:{
       TitleHead
@@ -56,7 +56,7 @@
     methods:{
       ...mapMutations(['ALL_STATUS']),
       back(){
-      this.ALL_STATUS('price');
+      this.ALL_STATUS('priceInterval');
       },
       commitBtnFun(type){
         let values = {
@@ -64,7 +64,7 @@
           key:`${this.ageLow}-${this.ageTall}`
         };
         this.$parent.doPriceYear(values);
-        this.ALL_STATUS('price');
+        this.ALL_STATUS('priceInterval');
       },
       commitValFun(item){
         let values = {
@@ -75,7 +75,7 @@
         this.ageLow = '';
         this.ageTall = '';
         this.$parent.doPriceYear(values);
-        this.ALL_STATUS('price');
+        this.ALL_STATUS('priceInterval');
       }
     }
   }
