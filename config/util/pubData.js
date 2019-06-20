@@ -157,6 +157,11 @@ const HX = {
         {'name':'批发车源','val':'1'}
         ]
     },
+    {
+      name:'keyword',
+      type:'keyword',
+      data:[]
+    },
   ],
   orderArr:[
     {name:'默认排序',id:'',type:'order'},

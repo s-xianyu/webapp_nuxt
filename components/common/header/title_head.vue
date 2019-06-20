@@ -2,15 +2,19 @@
 // 接收一个对象heads
 // title  -->标题
 // position  -->true/false.是否fixed顶部
+// history  -->true:返回上一页。   false：弹框关闭。
+// name   --> 弹框staus前缀名
 
 <template>
   <header ref="titleHearder" :class="{cur : heads.position}">
     <h2>{{ heads.title }}</h2>
-    <span class="iconfont icon-prev" @click="$history(-1)"></span>
+    <span v-if="heads.history" class="iconfont icon-prev" @click="$history(-1)"></span>
+    <span v-else class="iconfont icon-prev" @click="getAllStatus"></span>
   </header>
 </template>
 
 <script>
+  import {mapMutations} from 'vuex'
   export default {
     data() {
       return {
@@ -21,6 +25,10 @@
     mounted(){
     },
     methods:{
+      ...mapMutations(['ALL_STATUS']),
+      getAllStatus(){
+        this.ALL_STATUS(this.heads.name);
+      }
     }
   }
 </script>

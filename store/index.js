@@ -12,6 +12,12 @@ export const state = () => ({
   lastCity:'',
   // 历史记录地区
   historyCity:[],
+  // 搜索
+  searchStatus:false,
+  // 城市
+  cityStatus:false,
+  // 品牌
+  brandStatus:false,
   // 车龄框状态
   filtrateStatus:false,
   // 车龄框状态

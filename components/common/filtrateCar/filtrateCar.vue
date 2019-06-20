@@ -1,10 +1,7 @@
 <template>
   <div class="filtrate" :class="{cur:filtrateStatus}">
     <div class="animated fadeInRight">
-      <header>
-        <h2>筛选车辆</h2>
-        <span class="iconfont icon-prev" @click="backGo"></span>
-      </header>
+      <TitleHead :heads="heads"/>
       <div class="cascad-menu" ref="cascadMenu">
         <scroll
           class="left-menu"
@@ -34,22 +31,22 @@
           <div class="right-menu-container">
             <ul>
               <li class="right-item" ref="rightItem" v-for="(menu, menuIndex) in menus" :key="menuIndex">
-                <router-link v-if="menu.type === 'city'" class="li" to="/city/city" tag="div">
+                <div v-if="menu.type === 'city'" class="li" @click="getCity">
                   <span class="left">{{menu.name}}</span>
                   <span class="right">
                     <em v-if="thisCity">{{thisCity}}</em>
                     <em v-else>不限</em>
                     <i class="iconfont icon-xiayiye"></i>
                   </span>
-                </router-link>
-                <router-link v-if="menu.type === 'serial'" class="li" to="/brand/brand" tag="div">
+                </div>
+                <div v-if="menu.type === 'serial'" class="li" @click="getBrand">
                   <span class="left">品牌</span>
                   <span class="right">
                     <em v-if="serialArr">{{serialArr}}</em>
                     <em v-else>不限</em>
                     <i class="iconfont icon-xiayiye"></i>
                   </span>
-                </router-link>
+                </div>
                 <div @click="getPopup(menu.type)" v-if="menu.type === 'priceInterval'" class="li">
                   <span class="left">价格</span>
                   <span class="right">
@@ -262,6 +259,8 @@
         heads:{
           title:'筛选车辆',
           position:true,
+          history:false,
+          name:'filtrate'
         },
         menus:HX.menus,
         rightTops: [],
@@ -390,13 +389,10 @@
       // 获取车辆数
       this.getFindCarNum();
 
-      if(this.filtrateStatus){
-        this.ALL_STATUS('filtrate');
-      }
     },
     methods: {
       ...mapActions(['_getCity','_getFindCarVal']),
-      ...mapMutations(['ALL_STATUS','FINDCARVAL_NAV']),
+      ...mapMutations(['ALL_STATUS','FINDCARVAL_NAV','FINDCARVAL_ADD']),
       backGo(){
         this.ALL_STATUS('filtrate')
       },
@@ -418,7 +414,7 @@
       allMileageInventory(type,low,tall,num){
         let values = '';
         if(low <= 0 && tall > num-1){
-          values = '0-100'
+          values = ''
         }else if(low<=0 && tall <= num-1){
           values = `0-${tall}`
         }else if(low > 0 && tall > num-1){
@@ -538,18 +534,27 @@
         })
       },
       lookCar(){
+        // 重新获取一下
+        this.filtrateVal.serial = this.findCarVal.serial;
         let arr = this.filtrateVal;
-        for(let i in arr){
-          console.log(i);
-          console.log(arr[i]);
-          let values = {
-            type:i,
-            key:arr[i]
-          };
-          this.FINDCARVAL_NAV(values);
-        }
+        // for(let i in arr){
+        //   let values = {
+        //     type:i,
+        //     key:arr[i]
+        //   };
+        //   this.FINDCARVAL_NAV(values);
+        // };
+        this.FINDCARVAL_ADD(this.filtrateVal);
+        // 执行关闭
         this.ALL_STATUS('filtrate');
+        // 更新子组件
         this.$parent.doParent();
+      },
+      getCity(){
+        this.ALL_STATUS('city');
+      },
+      getBrand(){
+        this.ALL_STATUS('brand');
       }
     },
   }
@@ -557,34 +562,6 @@
 
 <style lang="scss" scoped>
   @import "~static/style/mixin";
-  header{
-    position: relative;
-    z-index: 100;
-    @include wh(100%,1.8rem);
-    border-bottom:1px solid #e1e1e1;
-    background:$fff;
-    &.cur{
-      position: fixed;
-      top:0;
-      left:0;
-      right:0;
-    }
-    h2{
-      @include wh(100%,1.8rem);
-      @include flexCenter;
-      color:$c333;
-    }
-    span{
-      position:absolute;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      font-size:.7rem;
-      @include wh(1.6rem,1.8rem);
-      left:0;
-      top:0;
-    }
-  }
   .filtrate{
     z-index: 999;
     position: fixed;

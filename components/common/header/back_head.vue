@@ -13,7 +13,7 @@
         <span class="iconfont icon-prev"></span>
       </div>
       <div class="station">
-        <router-link tag="span" to="/city/city"><i class="iconfont icon-dingwei"></i>{{thisCity}}</router-link>
+        <span @click="getCity"><i class="iconfont icon-dingwei"></i>{{thisCity}}</span>
         <!--<i class="iconfont icon-jiantou9"></i>-->
       </div>
       <div class="mltSearch">
@@ -46,7 +46,7 @@
       ...mapState(['thisCity'])
     },
     methods:{
-      ...mapMutations(['WIN_HEIGHT','FINDCARVAL_REMOVE']),
+      ...mapMutations(['WIN_HEIGHT','FINDCARVAL_REMOVE','ALL_STATUS']),
       navEvent(){
         this.navShow = !this.navShow;
         this.WIN_HEIGHT(this.navShow);
@@ -58,6 +58,9 @@
       backGo(){
         this.FINDCARVAL_REMOVE();
         this.$history(-1);
+      },
+      getCity(){
+        this.ALL_STATUS('city');
       }
     },
 

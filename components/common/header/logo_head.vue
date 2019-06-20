@@ -4,10 +4,10 @@
   <div class="logo-header">
     <div class="content">
       <router-link tag="div" to="/" class="logo"></router-link>
-      <router-link tag="div" to="/city/city" class="station">
+      <div @click="getCity" class="station">
         <span>{{thisCity}}</span>
         <i class="iconfont icon-jiantou9"></i>
-      </router-link>
+      </div>
       <div class="mltSearch">
         <router-link tag="span" to="/search/search">我要找车</router-link>
       </div>
@@ -40,6 +40,9 @@ export default {
     getLogin(){
       this.ALL_STATUS('login');
     },
+    getCity(){
+      this.ALL_STATUS('city');
+    }
   },
 
 }

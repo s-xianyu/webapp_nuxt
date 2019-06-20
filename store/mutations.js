@@ -75,7 +75,6 @@ export default {
     setStore('historyCity',state.historyCity);
     // 存储筛选数据
     setStore('findCar',state.findCarVal);
-    window.history.go(-1);
   },
 
   //获取历史记录信息
@@ -253,10 +252,6 @@ export default {
     state.findCarVal.currPage = 0;
     // 存储筛选数据
     setStore('findCar', state.findCarVal);
-    debugger 
-    if (state.filtrateStatus) {
-      history.go(-1);
-    }
   },
   //找车页传值--menu
   //  newCar ----新车
@@ -299,7 +294,11 @@ export default {
     }
   },
   [FINDCARVAL_ADD](state,val){
-
+    if(val){
+      state.findCarVal = val;
+      // 存储筛选数据
+      setStore('findCar', state.findCarVal);
+    }
   },
   // 清空
   [FINDCARVAL_REMOVE](state){

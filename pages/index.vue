@@ -8,10 +8,10 @@
     <MyActive :homeList="homeList.homerecommended"/>
     <Information :information="homeList.information"/>
     <Mylike/>
-    <!--<FooterTab/>-->
     <BackTop/>
     <Loading v-if="loadingShow"/>
     <Login :afterFun="LoginAfterFun"/>
+    <City/>
   </div>
 </template>
 <script>
@@ -23,9 +23,9 @@ import Swiper from '~/components/common/swiper/swiper'
 import MyActive from '~/components/index/myactive'
 import Information from '~/components/index/information'
 import Mylike from '~/components/index/mylike'
-import FooterTab from '~/components/common/footer/footer'
 import Login from '~/components/common/login/login'
 import BackTop from '~/components/common/backTop/backTop'
+import City from '~/components/common/city/city'
 import {mapActions,mapState} from 'vuex'
 export default {
   head () {
@@ -59,7 +59,7 @@ export default {
     Information,
     Mylike,
     Login,
-    FooterTab
+    City
   },
   async asyncData () {
     let { data } = await indexoeo();

@@ -1,10 +1,7 @@
 <!--公用弹框登录模块-->
 <template>
   <div class="logoFixed" ref="login" :class="{cur:loginStatus}">
-    <header>
-      <h2>手机验证</h2>
-      <span class="iconfont icon-prev" @click="back"></span>
-    </header>
+    <TitleHead :heads="heads"/>
     <div class="main">
       <div class="_login_box_logo">
         <img src="../../../static/img/checkmobile.png" alt="">
@@ -38,6 +35,7 @@
 
 <script>
   import { Toast } from 'mint-ui';
+  import TitleHead from '~/components/common/header/title_head'
   import Header from '~/components/common/header/back_head';
   import FooterTab from '~/components/common/footer/footer';
   import {mapMutations,mapState,mapActions} from 'vuex';
@@ -51,6 +49,12 @@
         phoneCode:'',
         codeText:'获取验证码',
         wrapperHeight:'',
+        heads:{
+          title:'登录',
+          position:true,
+          history:false,
+          name:'login'
+        },
       }
     },
     props:{
@@ -60,6 +64,7 @@
     },
     components:{
       Header,
+      TitleHead,
       FooterTab
     },
     computed:{

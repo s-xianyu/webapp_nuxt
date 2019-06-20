@@ -2,7 +2,7 @@
   <div class="body">
     <div class="animated fadeInRight">
       <BackHead :back="true"/>
-      <div :class="{fixeds:isFixed}">
+      <div class="listMenu" :class="{fixeds:isFixed}">
         <ListNav v-if="shows"/>
       </div>
       <div class="main">
@@ -17,6 +17,8 @@
       <Loading v-if="loadingShow"/>
       <Login/>
       <FiltrateCar/>
+      <City/>
+      <Brand :afterFun="doParent"/>
     </div>
   </div>
 </template>
@@ -29,6 +31,8 @@
   import BackTop from '~/components/common/backTop/backTop'
   import Login from '~/components/common/login/login'
   import FiltrateCar from '~/components/common/filtrateCar/filtrateCar'
+  import City from '~/components/common/city/city'
+  import Brand from '~/components/common/brand/brand'
   import {filteData} from '~/config/Ajax'
   import {mapState,mapActions,mapMutations} from 'vuex'
 
@@ -71,7 +75,9 @@
       FooterTab,
       ListNav,
       Login,
-      FiltrateCar
+      FiltrateCar,
+      City,
+      Brand
     },
     methods:{
       ...mapActions(['_getCity']),
@@ -106,7 +112,7 @@
         this.$nextTick(()=>{
           this.shows = true;
         })
-      }
+      },
     }
   }
 </script>

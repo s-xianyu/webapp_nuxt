@@ -296,16 +296,21 @@
           key:'',
           name:''
         };
-        data.map(i=>{
-          if(i.type === type){
-            i.data.forEach(j=>{
-              if(j.val === key){
-                sbyArr.key = j.val;
-                sbyArr.name = j.name;
-              }
-            });
-          }
-        });
+        if(type === 'keyword'){
+          sbyArr.key = key;
+          sbyArr.name = key;
+        }else{
+          data.map(i=>{
+            if(i.type === type){
+              i.data.forEach(j=>{
+                if(j.val === key){
+                  sbyArr.key = j.val;
+                  sbyArr.name = j.name;
+                }
+              });
+            }
+          });
+        }
         this.subscriptionArr.push(sbyArr);
       },
       // 筛选宽度设置
@@ -326,7 +331,7 @@
       },
       //列表导航切換
       navToggle(index){
-        if(this.navIndex === index || index === 4){
+        if(this.navIndex === index || index === 4 || index === 1){
           [this.navShow,this.navIndex] = [!this.navShow, -1];
           this.WIN_HEIGHT(false)
         }else{
@@ -341,9 +346,10 @@
         if(index === 0 || index === 2 || index === 3){  //下标为0、2、3弹框显示
         }else if(index === 1){  //为1跳转到品牌选择页
           this.navShow = false;
-          this.$router.push({
-            path:'/brand/brand'
-          })
+          // this.$router.push({
+          //   path:'/brand/brand'
+          // })
+          this.ALL_STATUS('brand')
 
         }else{ //否则为4跳转到筛选页
           this.navShow = false;
