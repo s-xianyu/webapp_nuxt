@@ -54,9 +54,10 @@ export default {
   ** Plugins to load before mounting the App
   */
   plugins: [
-    {src:'@/plugins/mint-ui',ssr:true},
-    {src:'@/plugins/router',ssr:true},
-    {src:'@/config/util/filters',ssr:false}
+    { src: '@/plugins/mint-ui', ssr: true},
+    { src: '@/plugins/router', ssr: true},
+    { src: '@/config/util/filters', ssr: false},
+    { src: '~plugins/baidu.js', ssr: false },
   ],
 
   /*

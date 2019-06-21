@@ -19,9 +19,6 @@ $fff:#fff;
 @mixin borRadius($radius){
   border-radius: $radius;
   -webkit-border-radius: $radius;
-  -moz-border-radius: $radius;
-  -ms-border-radius: $radius;
-  -o-border-radius: $radius;
 }
 //定位居中
 @mixin center{

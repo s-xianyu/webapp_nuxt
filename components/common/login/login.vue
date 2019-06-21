@@ -4,7 +4,7 @@
     <TitleHead :heads="heads"/>
     <div class="main">
       <div class="_login_box_logo">
-        <img src="../../../static/img/checkmobile.png" alt="">
+        <img src="~static/img/checkmobile.png" alt="">
       </div>
       <div class="_login_box_form">
         <ul>
