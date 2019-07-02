@@ -285,7 +285,6 @@
             }
           }
         }
-        console.log(this.subscriptionArr)
 
         this.subRightWidth();
       },

@@ -10,7 +10,9 @@ export const gainLike = (params) => get(`${api}/mobile/guessYouLike.json`,params
 /**
  * 详情页车辆信息
  */
-export  const carDetail = id => get(`${api}/mobile/carDetail.json`,id);
+export  const carDetail = params => get(`${api}/mobile/carDetail.json`,params);
+
+export  const carContrast = params => get(`${api}/mobile/carContrast.json?carids`,params);
 
 /**
  * 获取验证码

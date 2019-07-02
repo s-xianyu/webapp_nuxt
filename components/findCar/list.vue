@@ -1,7 +1,7 @@
 <template>
   <div>
     <ul v-if="findCarList.length > 0" class="list">
-      <router-link :to="{path:'/detail/'+item.id}" tag="li" v-for="(item,index) in findCarList" :key="index" :id="item.id">
+      <router-link :to="{path:'/detail/'+item.id+'?position=0300'+(index < 9 ? '0'+(index+1) : index+1)}" tag="li" v-for="(item,index) in findCarList" :key="index" :id="item.id">
         <div class="listLeft"><img v-lazy="item.photoAddress" alt=""></div>
         <div class="listRight">
           <h2>{{item.buyDate}}&nbsp;&nbsp;{{item.seriesBrandCarStyle | emptyVal}}</h2>
@@ -32,6 +32,15 @@ export default {
   data (){
     return {
       msg:'list'
+    }
+  },
+  computed:{
+    indexS(val){
+      if(val<9){
+        return '0'+(val+1)
+      }else{
+        return (val+1)
+      }
     }
   },
   props:['findCarList'],

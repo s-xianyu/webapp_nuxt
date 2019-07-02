@@ -56,7 +56,7 @@ export default {
   plugins: [
     { src: '@/plugins/mint-ui', ssr: true},
     { src: '@/plugins/router', ssr: true},
-    { src: '@/config/util/filters', ssr: false},
+    { src: '@/config/util/filters', ssr: true},
     { src: '~plugins/baidu.js', ssr: false },
   ],
 
