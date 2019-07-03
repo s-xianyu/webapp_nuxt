@@ -12,6 +12,11 @@ export const gainLike = (params) => get(`${api}/mobile/guessYouLike.json`,params
  */
 export  const carDetail = params => get(`${api}/mobile/carDetail.json`,params);
 
+/**
+ *价格趋势图表
+ */
+export const getcardata = params => get(`${api}/mobile/getcardata.json`,params);
+
 export  const carContrast = params => get(`${api}/mobile/carContrast.json?carids`,params);
 
 /**

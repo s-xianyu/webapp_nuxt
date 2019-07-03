@@ -36,6 +36,29 @@ let removeArrSame = (arr,val) =>{
   })
 };
 Vue.prototype.$removeArrSame = removeArrSame;
+/**
+ * 字符窜转时间
+ * 传值方式： YYYY-MM-DD HH:mm -->2019-07-03 15:00
+ * 传值方式： YYYY-MM-DD -->2019-07-03
+ */
+let forTime = (formater,t) =>{
+  let date = t ? new Date(t) : new Date(),
+    Y = date.getFullYear() + '',
+    M = date.getMonth() + 1,
+    D = date.getDate(),
+    H = date.getHours(),
+    m = date.getMinutes(),
+    s = date.getSeconds();
+  return formater.replace(/YYYY|yyyy/g,Y)
+    .replace(/YY|yy/g,Y.substr(2,2))
+    .replace(/MM/g,(M<10?'0':'') + M)
+    .replace(/DD/g,(D<10?'0':'') + D)
+    .replace(/HH|hh/g,(H<10?'0':'') + H)
+    .replace(/mm/g,(m<10?'0':'') + m)
+    .replace(/ss/g,(s<10?'0':'') + s)
+};
+Vue.prototype.$forTime = forTime;
+
 
 /**
  * APP下载

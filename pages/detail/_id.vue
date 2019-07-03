@@ -148,6 +148,25 @@
           </div>
           <div class="msgBtn">咨询车况</div>
         </div>
+        <div class="car_bright">
+          <div class="list"
+               v-if="index < brightNum"
+               v-for="(item,index) in brightFilter(carInfo.spotshows)"
+               :key="index">
+            <h2>{{item.title}}</h2>
+            <div class="content">
+              <p v-for="li in item.key">{{li}}</p>
+            </div>
+          </div>
+          <div v-if="brightNum === 2">
+            <div class="btn"
+                 v-if="brightFilter(carInfo.spotshows).length > 2"
+                 @click="brightFun">查看更多</div>
+          </div>
+          <div v-else>
+            <router-link tag="div" :to="{path:'/detail/peizi/'+carInfo.car.carId}" class="btn">查看详细配置</router-link>
+          </div>
+        </div>
         <div class="car_tel">
           <div class="left">
             <h2>不知道什么车适合自己？</h2>
@@ -168,12 +187,10 @@
             <!--<button class="btn">立即查看</button>-->
           <!--</div>-->
         <!--</div>-->
-        <div class="car_bright">
-          <div class="list" v-for="(item,index) in carInfo.spotshows" :key="index">
-            <h2>{{item.title}}</h2>
-            <div class="content">
-              <p v-for="li in item.key">{{li}}</p>
-            </div>
+        <div class="car_data" ref="carData">
+          <p>价格趋势</p>
+          <div class="data">
+            <canvas id="container" :width="carDataWidth+'px'" :height="carDataHeight+'px'"></canvas>
           </div>
         </div>
       </div>
@@ -182,7 +199,7 @@
 </template>
 
 <script>
-import { carDetail } from '~/config/Ajax'
+import { carDetail,getcardata } from '~/config/Ajax'
 import Swiper from '~/components/common/swiper/swiper'
 import Header from '~/components/common/header/back_head';
 import {mapState,mapActions} from 'vuex'
@@ -201,19 +218,29 @@ import axios from '~/plugins/axios'
           text:'查看更多'
         },
         carConfHide:false,
+        brightNum:2, //亮点配置默认展示2大类
+        carDataWidth:'', // 图表宽度
+        carDataHeight:'', // 图表高度
       }
     },
     async asyncData ( res ) {
-      let params = {
-        id:res.params.id,
+      let params = {  // 车辆信息传值
+        // id:res.params.id,
+        id:'168221264',
         position:res.query.position,
-      }
-      // params = { id : 167331326 };
-      const { data } = await carDetail(params);
-      // this.carInfo = data;
-      return {carInfo:data};
-      console.log(this.carInfo);
-
+      },
+        params2 = {  // 行情趋势传值
+          id:'168221264',
+          flag: 'hqqs'
+        };
+      let [carDetailInfo,getcardataInfo] = await Promise.all([
+        carDetail(params),
+        getcardata(params2)
+      ]);
+      return {
+        carInfo:carDetailInfo.data,
+        cardataInfo:getcardataInfo.data
+      };
     },
     components:{
       Header,
@@ -238,8 +265,98 @@ import axios from '~/plugins/axios'
           return '不能'
         }
       },
+    },
+    created(){
+      this._getUserInfo();
+    },
+    mounted(){
+      // 设置canvas宽、高
+      this.carDataWidth = this.$refs.carData.clientWidth;
+      this.carDataHeight = this.$refs.carData.clientWidth/1.33;
+
+      // 绘制图表
+      this.getEcharts();
+    },
+    methods:{
+      ...mapActions(['_getUserInfo']),
+      getEcharts(){
+        let dom = document.getElementById("container");
+        let myChart = echarts.init(dom);
+        let app = {};
+        let option = null;
+        //获取数据
+        let getcardataInfo = this.cardataInfo;
+        let infos = getcardataInfo.infos;
+        let list = []; //列表
+        let date = []; //时间
+        let money = []; //金额
+        for(let key in infos){
+          list = infos[key].split('~');
+        }
+        if(list && list.length > 0){
+          for(let m in list){
+            if(list[m]){
+              let li = list[m].split(',');
+              let time = this.$forTime('YYYY-MM',(+li[0]));
+              let money = (+li[1]).toFixed(2);
+              date = [...date,time];
+              money = [...money,money];
+            }
+          }
+        }
+
+        option = {
+          tooltip : {
+            trigger: 'axis',
+            axisPointer: {
+              type: 'cross',
+              label: {
+                backgroundColor: '#f60'
+              }
+            }
+          },
+          xAxis : [
+            {
+              type : 'category',
+              boundaryGap : false,
+              data : ['周一','周二','周三','周四','周五','周六','周日']
+            }
+          ],
+          yAxis: {
+            type: 'value'
+          },
+          grid: {
+            left: '3%',
+            right: '4%',
+            bottom: '3%',
+            containLabel: true
+          },
+          series : [
+
+            {
+              name:'搜索引擎',
+              type:'line',
+              stack: '总量',
+              label: {
+                normal: {
+                  show: true,
+                  position: 'top'
+                }
+              },
+              areaStyle: {normal: {}},
+              data:[820, 932, 901, 934, 1290, 1330, 1320],
+              smooth: true,
+
+            }
+          ]
+        };
+
+        if (option && typeof option === "object") {
+          myChart.setOption(option, true);
+        }
+
+      },
       brightFilter(val){
-        debugger
         let arr = {
           'gkjpz':'高科技配置',
           'czpz':'操作配置',
@@ -251,24 +368,21 @@ import axios from '~/plugins/axios'
         for(let i in arr){
           for(let m in val){
             if(i === m){
-              let ketArr = spotshows[m].split(',');
               brightArr.push({
                 title:arr[i],
-                key:ketArr,
+                key:val[m].split(','),
               })
             }
           }
         }
         return brightArr;
-      }
-    },
-    created(){
-      this._getUserInfo();
-    },
-    methods:{
-      ...mapActions(['_getUserInfo']),
+      },
       handleChange(index){
         this.swiperIndex = index+1;
+      },
+      brightFun(){
+        this.brightNum = 20;
+        console.log(this.brightNum)
       },
       decFun(){
         if(this.dec.text === '查看更多'){
@@ -292,6 +406,15 @@ import axios from '~/plugins/axios'
   margin:0 .5rem .5rem;
   @include borRadius(.16rem);
   overflow: hidden;
+}
+.carTitle{
+  @include wh(100%,1.6rem);
+  font-size:.56rem;
+  @include flexCenter;
+  color:$f60;
+  font-weight: bolder;
+  background: url('http://static.hx2cars.com/resource/web/dist/static/mobile/car/mdetail/images/title.png') no-repeat center;
+  background-size: 3.2rem;
 }
 .detail{
   background:#f1eef6;
@@ -464,13 +587,7 @@ import axios from '~/plugins/axios'
     .car_des{
       @extend .boxShow;
       p{
-        @include wh(100%,1.6rem);
-        font-size:.56rem;
-        @include flexCenter;
-        color:$f60;
-        font-weight: bolder;
-        background: url('http://static.hx2cars.com/resource/web/dist/static/mobile/car/mdetail/images/title.png') no-repeat center;
-        background-size: 3.2rem;
+       @extend .carTitle;
       }
       .text{
         margin: 0 .52rem;
@@ -498,6 +615,46 @@ import axios from '~/plugins/axios'
         font-size:.51rem;
         color:#fff;
         position:relative;
+      }
+    }
+    .car_bright{
+      @extend .boxShow;
+      padding: 0 .6rem;
+      .list{
+        border-bottom:1px solid #e1e1e1;
+        padding-bottom:.4rem;
+        &:last-child{border:0;}
+        h2{
+          color: #f60;
+          font-size: .42rem;
+          line-height: 1.6rem;
+          font-weight: 700;
+        }
+        .content{
+          p{
+            @include wh(50%,.8rem);
+            line-height: .8rem;
+            display: inline-block;
+            padding-left:.5rem;
+            &:before{
+              content: '';
+              display: inline-block;
+              width: .24rem;
+              height: .24rem;
+              background: #fe9c47;
+              border-radius: .2rem;
+              -webkit-transform: scale(.5);
+              transform: scale(.5);
+              margin-right: .2rem;
+            }
+          }
+        }
+      }
+      .btn{
+        @include wh(100%,1.5rem);
+        color:#f60;
+        font-size: .45rem;
+        @include flexCenter;
       }
     }
     .car_4s{
@@ -534,7 +691,7 @@ import axios from '~/plugins/axios'
     }
     .car_tel{
       @include flexCenter;
-      padding:.5rem 1.1rem 0;
+      padding:.5rem 1.1rem .8rem;
       .left{
         flex:2;
         h2{
@@ -558,6 +715,21 @@ import axios from '~/plugins/axios'
           color:#fff;
           font-size:.45rem;
         }
+      }
+    }
+    .car_data{
+      @extend .boxShow;
+      p{
+        @extend .carTitle;
+      }
+      .data{
+        position: relative;
+        @include wh(100%,100%);
+        overflow: hidden;
+        padding: 0;
+        margin: 0;
+        border-width: 0;
+        cursor: default;
       }
     }
   }

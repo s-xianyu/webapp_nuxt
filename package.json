@@ -32,6 +32,7 @@
     "ava": "^1.0.1",
     "better-scroll": "^1.15.2",
     "browser-env": "^3.2.5",
+    "echarts": "^4.2.1",
     "mint-ui": "^2.2.13",
     "nodemon": "^1.18.9",
     "require-extension-hooks": "^0.3.3",

@@ -34,7 +34,9 @@ export default {
       { rel: 'stylesheet',  href: '/iconFont/iconfont.css' }
     ],
     script:[
-      { src: '/js/rem.js' }
+      { src: 'https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.min.js' },
+      { src: 'http://static.hx2cars.com/resource/web/dist/static/gbpage/js/common/highcharts.js' },
+      { src: 'https://cdnjs.cloudflare.com/ajax/libs/echarts/4.1.0/echarts-en.common.min.js' }
     ]
   },
 
@@ -54,10 +56,11 @@ export default {
   ** Plugins to load before mounting the App
   */
   plugins: [
+    {src:'~plugins/ViewportPixel',ssr:false}, //配置只在客户端运行的插件
+    { src: '~plugins/baidu.js', ssr: false },
     { src: '@/plugins/mint-ui', ssr: true},
     { src: '@/plugins/router', ssr: true},
     { src: '@/config/util/filters', ssr: true},
-    { src: '~plugins/baidu.js', ssr: false },
   ],
 
   /*
