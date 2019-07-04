@@ -189,8 +189,60 @@
         <!--</div>-->
         <div class="car_data" ref="carData">
           <p>价格趋势</p>
-          <div class="data">
-            <canvas id="container" :width="carDataWidth+'px'" :height="carDataHeight+'px'"></canvas>
+          <div id="container" style="width:11.4rem;height:10rem;"></div>
+          <div class="hint">
+            <div class="kjBtn">砍价</div>
+            <div class="szBtn">私人助理</div>
+          </div>
+        </div>
+        <div class="car_shop">
+          <div class="user">
+            <div class="left" :class="carInfo.evaluateScore > 0 ? '' : 'cur'">
+              <div class="img">
+                <img :src="carInfo.user.headPic" alt="">
+              </div>
+              <div class="info">
+                <h2>{{carInfo.user.companyName}}</h2>
+                <div class="mid">
+                  <!--<span v-if="carInfo.verifycompany == 1">认证车商</span>-->
+                  <span v-if="carInfo.business">工商认证</span>
+                  <span v-if="carInfo.user.creditValue != 0">信誉值：{{carInfo.user.creditValue}}</span>
+                </div>
+                <div class="bot">
+                  <span>在售：{{carInfo.user.noSaleCount}}</span>
+                  <span>已售：{{carInfo.user.carHadSale}}</span>
+                </div>
+                <div class="nextGo">
+                  <i class="iconfont icon-xiayiye1"></i>
+                </div>
+              </div>
+            </div>
+            <div class="right" v-if="carInfo.evaluateScore > 0">
+              <h2>商家评分</h2>
+              <span>{{(carInfo.evaluateScore).toFixed(1)}}</span>
+            </div>
+          </div>
+          <div class="btn">
+            <span>预约到店看车</span>
+          </div>
+        </div>
+        <div class="car_complaint">
+          <div class="left">
+            <span class="iconfont icon-icon-warning"></span>
+          </div>
+          <div class="center">
+            <h2>车辆图文描述信息不符？</h2>
+            <span>点此我要报错</span>
+          </div>
+          <div class="right">
+            <span class="iconfont icon-xiayiye1"></span>
+          </div>
+        </div>
+        <div class="car_order">
+          <h2>持续关注此类车型</h2>
+          <div class="content">
+            <div class="left"></div>
+            <div class="right"></div>
           </div>
         </div>
       </div>
@@ -219,19 +271,20 @@ import axios from '~/plugins/axios'
         },
         carConfHide:false,
         brightNum:2, //亮点配置默认展示2大类
-        carDataWidth:'', // 图表宽度
-        carDataHeight:'', // 图表高度
       }
     },
     async asyncData ( res ) {
+      // let carId = res.params.id;
+      let carId = '166431138';
       let params = {  // 车辆信息传值
-        // id:res.params.id,
-        id:'168221264',
-        position:res.query.position,
+          position:res.query.position,
+          id:carId,
+          // id:'168221264',
       },
         params2 = {  // 行情趋势传值
-          id:'168221264',
-          flag: 'hqqs'
+          flag: 'hqqs',
+          id:carId,
+          // id:'168221264',
         };
       let [carDetailInfo,getcardataInfo] = await Promise.all([
         carDetail(params),
@@ -247,7 +300,7 @@ import axios from '~/plugins/axios'
       Swiper
     },
     computed:{
-      ...mapState(['isLogin','userInfo'])
+      ...mapState(['isLogin','userInfo']),
     },
     filters:{
       installmentMoneyS(val){
@@ -270,10 +323,6 @@ import axios from '~/plugins/axios'
       this._getUserInfo();
     },
     mounted(){
-      // 设置canvas宽、高
-      this.carDataWidth = this.$refs.carData.clientWidth;
-      this.carDataHeight = this.$refs.carData.clientWidth/1.33;
-
       // 绘制图表
       this.getEcharts();
     },
@@ -282,6 +331,7 @@ import axios from '~/plugins/axios'
       getEcharts(){
         let dom = document.getElementById("container");
         let myChart = echarts.init(dom);
+        window.onresize = myChart.resize;
         let app = {};
         let option = null;
         //获取数据
@@ -289,7 +339,7 @@ import axios from '~/plugins/axios'
         let infos = getcardataInfo.infos;
         let list = []; //列表
         let date = []; //时间
-        let money = []; //金额
+        let price = []; //金额
         for(let key in infos){
           list = infos[key].split('~');
         }
@@ -300,11 +350,16 @@ import axios from '~/plugins/axios'
               let time = this.$forTime('YYYY-MM',(+li[0]));
               let money = (+li[1]).toFixed(2);
               date = [...date,time];
-              money = [...money,money];
+              price = [...price,money];
             }
           }
         }
-
+        // 切割数据保持16
+        if(price.length > 16){
+          let num = date.length;
+          date = date.splice(num-16,num);
+          price = price.splice(num-16,num);
+        }
         option = {
           tooltip : {
             trigger: 'axis',
@@ -315,38 +370,42 @@ import axios from '~/plugins/axios'
               }
             }
           },
+          grid: {
+            left: '10%',
+            right: '5%',
+            bottom: '12%',
+            // containLabel: true
+          },
           xAxis : [
             {
               type : 'category',
               boundaryGap : false,
-              data : ['周一','周二','周三','周四','周五','周六','周日']
+              data : date,
             }
           ],
-          yAxis: {
-            type: 'value'
-          },
-          grid: {
-            left: '3%',
-            right: '4%',
-            bottom: '3%',
-            containLabel: true
-          },
-          series : [
-
+          yAxis : [
             {
-              name:'搜索引擎',
+              type : 'value'
+            }
+          ],
+          series : [
+            {
+              name:'价格',
               type:'line',
-              stack: '总量',
-              label: {
-                normal: {
-                  show: true,
-                  position: 'top'
+              areaStyle: {
+                backgroundColor:'#e1e1e1',
+                color:'#eaf1f5'
+              },
+              itemStyle : {
+                normal : {
+                  color:'#97bbcd',
+                  lineStyle:{
+                    // color:'#97bbcd'
+                  }
                 }
               },
-              areaStyle: {normal: {}},
-              data:[820, 932, 901, 934, 1290, 1330, 1320],
               smooth: true,
-
+              data: price
             }
           ]
         };
@@ -392,6 +451,12 @@ import axios from '~/plugins/axios'
           this.dec.height = '2.4rem';
           this.dec.text = '查看更多';
         }
+      },
+      hintShowStart(){
+        console.log('1')
+      },
+      hintShowEnd(){
+        console.log('2')
       }
     }
   }
@@ -718,18 +783,163 @@ import axios from '~/plugins/axios'
       }
     }
     .car_data{
+      position: relative;
       @extend .boxShow;
       p{
         @extend .carTitle;
+        position: absolute;
+        top:0;
+        left:0;
+        right:0;
       }
-      .data{
-        position: relative;
-        @include wh(100%,100%);
-        overflow: hidden;
-        padding: 0;
-        margin: 0;
-        border-width: 0;
-        cursor: default;
+      .hint{
+        @include wh(100%,auto);
+        @include flexCenter;
+        font-family: '微软雅黑';
+        position:relative;
+        padding: 0 .5rem .5rem;
+        & > div{
+          @include flexCenter;
+          height:1.25rem;
+          @include borRadius(1rem);
+          color:#fff;
+          font-size:.45rem;
+        }
+        .kjBtn{
+          flex:1.5;
+          background:rgba(69,129,239,1);
+          margin-right:.8rem;
+        }
+        .szBtn{
+          flex:1;
+          background:$f60;
+        }
+      }
+    }
+    .car_shop{
+      @extend .boxShow;
+      .user{
+        @include flexCenter;
+        padding:.6rem 0 .6rem .53rem;
+        .left{
+          width:75%;
+          @include flexCenter;
+          &.cur{
+            width:100%;
+          }
+          .img{
+            @include wh(2rem,2rem);
+            @include borRadius(.08rem);
+            overflow: hidden;
+          }
+          .info{
+            @include wh(70%,auto);
+            margin-left:.6rem;
+            position:relative;
+            h2{
+              display:inline-block;
+              font-size:.51rem;
+              width:90%;
+              overflow:hidden;
+              text-overflow:ellipsis;
+              white-space:nowrap;
+
+            }
+            .mid{
+              span{
+                display:inline-block;
+                height:.55rem;
+                line-height: .55rem;
+                text-align: center;
+                border-radius:.1rem;
+                padding:0 .15rem;
+                font-size:.25rem;
+                color:#fff;
+                /*&:nth-child(1){*/
+                  /*background:linear-gradient(107deg,rgba(255,174,0,1),rgba(253,105,15,1))*/
+                /*}*/
+                &:nth-child(1){
+                  background:linear-gradient(90deg,rgba(255,184,71,1),rgba(255,153,71,1));
+                }
+                &:nth-child(2){
+                  background:linear-gradient(90deg,rgba(137,245,178,1),rgba(51,198,155,1));
+                  margin-left:.2rem;
+                }
+              }
+            }
+            .nextGo{
+              position:absolute;
+              right:0;
+              top:50%;
+              margin-top:-.25rem;
+              @include wh(.5rem,.5rem);
+              i{
+                font-size:.4rem;
+                color:$f60;
+              }
+            }
+          }
+        }
+        .right{
+          @include flexCenter;
+          flex-direction: column;
+          flex:1;
+          height:2.22rem;
+          border-left:1px solid #e1e1e1;
+          h2{
+            font-size:.51rem;
+          }
+          span{
+            font-size: .9rem;
+            color:$f60;
+            font-weight: bold;
+          }
+        }
+      }
+      .btn{
+        @include wh(100%,1.6rem);
+        background:$f60;
+        span{
+          @include wh(100%,100%);
+          @include flexCenter;
+          font-size:.48rem;
+          color:$fff;
+        }
+      }
+    }
+    .car_complaint{
+      @include flexCenter;
+      padding:0 .5rem .8rem;
+      .left{
+        flex:1;
+        @include flexCenter;
+        span{
+          font-size: 1.5rem;
+          color:$f60;
+        }
+      }
+      .center{
+        flex:3;
+        h2{
+          font-size:.6rem;
+          font-weight: bold;
+          padding:.1rem 0;
+        }
+      }
+      .right{
+        flex:1;
+        display: flex;
+        justify-content: flex-end;
+        span{
+          font-size:.45rem;
+          color:$f60;
+        }
+      }
+    }
+    .car_order{
+      background: $fff;
+      h2{
+        @include wh(100%,1.5rem);
       }
     }
   }

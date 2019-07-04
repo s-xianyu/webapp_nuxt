@@ -56,7 +56,7 @@ export default {
   ** Plugins to load before mounting the App
   */
   plugins: [
-    {src:'~plugins/ViewportPixel',ssr:false}, //配置只在客户端运行的插件
+    { src: '@/plugins/ViewportPixel', ssr:false }, //配置只在客户端运行的插件
     { src: '~plugins/baidu.js', ssr: false },
     { src: '@/plugins/mint-ui', ssr: true},
     { src: '@/plugins/router', ssr: true},

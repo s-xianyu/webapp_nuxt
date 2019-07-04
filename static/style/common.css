@@ -3,7 +3,7 @@ html * {
   outline: 0;
   -webkit-text-size-adjust: none;
   -webkit-tap-highlight-color: transparent;
-  font-family: "黑体", arial;
+  font-family: sans-serif;
   margin: 0 auto;
   padding: 0;
 }
@@ -41,13 +41,13 @@ input:hover,select:hover,figure:hover,figcaption:hover{outline:none}
 
 @media screen and (max-width: 375px) {
   html {
-    font-size:30.1932px
+    font-size:30.1932px;
   }
 }
 
 @media screen and (min-width: 376px) {
   html {
-    font-size:33.33px
+    font-size:33.33px;
   }
 }
 .fade-enter-active, .fade-leave-active {
