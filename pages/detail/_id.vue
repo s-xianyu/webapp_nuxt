@@ -148,7 +148,7 @@
           </div>
           <div class="msgBtn">咨询车况</div>
         </div>
-        <div class="car_bright">
+        <div class="car_bright" v-if="!carInfo.detailConfDes">
           <div class="list"
                v-if="index < brightNum"
                v-for="(item,index) in brightFilter(carInfo.spotshows)"
@@ -166,6 +166,9 @@
           <div v-else>
             <router-link tag="div" :to="{path:'/detail/peizi/'+carInfo.car.carId}" class="btn">查看详细配置</router-link>
           </div>
+        </div>
+        <div class="car_bright" :class="carInfo.detailConfDes ? 'cur' : ''" v-else>
+          <router-link tag="div" :to="{path:'/detail/peizi/'+carInfo.car.carId}" class="pzBtn">查看详细配置</router-link>
         </div>
         <div class="car_tel">
           <div class="left">
@@ -202,11 +205,11 @@
                 <img :src="carInfo.user.headPic" alt="">
               </div>
               <div class="info">
-                <h2>{{carInfo.user.companyName}}</h2>
+                <h2>{{carInfo.user.companyName || carInfo.user.mobliePhone}}</h2>
                 <div class="mid">
-                  <!--<span v-if="carInfo.verifycompany == 1">认证车商</span>-->
-                  <span v-if="carInfo.business">工商认证</span>
-                  <span v-if="carInfo.user.creditValue != 0">信誉值：{{carInfo.user.creditValue}}</span>
+                  <!--<span class=. v-if="carInfo.verifycompany == 1">认证车商</span>-->
+                  <span class="gsrz" v-if="carInfo.business">工商认证</span>
+                  <span class="xyz" v-if="carInfo.user.creditValue != 0">信誉值：{{carInfo.user.creditValue}}</span>
                 </div>
                 <div class="bot">
                   <span>在售：{{carInfo.user.noSaleCount}}</span>
@@ -241,19 +244,57 @@
         <div class="car_order">
           <h2>持续关注此类车型</h2>
           <div class="content">
-            <div class="left"></div>
-            <div class="right"></div>
+            <div class="left">
+              <ul>
+                <li v-for="(item,index) in carInfo.subscribeCondision"
+                    :data-t="item.type"
+                    :data-v="item.value"
+                    :key="index">{{item.title}}</li>
+              </ul>
+            </div>
+            <div class="right">
+              <span class="iconfont icon-jia"></span>
+            </div>
           </div>
+          <div class="bot">
+            <span class="iconfont icon-xinfeng"></span>
+            <span>订阅上新通知</span>
+          </div>
+        </div>
+        <div class="car_sim">
+          <div class="title">
+            <div v-for="(item,index) in simTitle"
+                 @click="simCarFun(index)"
+                  :class="index === simCarIndex ? 'cur' : ''">
+              <span>同{{item}}</span>
+            </div>
+          </div>
+          <div class="oddList">
+            <List v-if="!loadding" :listInfo="simCarInfoSplice"/>
+          </div>
+        </div>
+        <div class="car_load">
+          <div class="btn" @click="$hxWaptoapp()">去华夏APP查看更多优质车辆</div>
+        </div>
+      </div>
+      <div class="footer">
+        <div class="left">
+          <span class="iconfont icon-aixin"></span>收藏
+        </div>
+        <div class="center">
+          <span class="iconfont icon-kanjia"></span>我要砍价
+        </div>
+        <div class="right">
+          <span class="iconfont icon-weibiaoti-1"></span>拨打电话
         </div>
       </div>
     </div>
   </div>
 </template>
-
 <script>
-import { carDetail,getcardata } from '~/config/Ajax'
-import Swiper from '~/components/common/swiper/swiper'
+import { carDetail,getcardata,getsimcar } from '~/config/Ajax'
 import Header from '~/components/common/header/back_head';
+import List from '~/components/common/oddList/oddList'
 import {mapState,mapActions} from 'vuex'
 import axios from '~/plugins/axios'
 
@@ -261,9 +302,7 @@ import axios from '~/plugins/axios'
     data() {
       return {
         msg: '_id',
-        header: {
-          title:'详情页'
-        },
+        header:true,
         swiperIndex:1, //默认swiper下标位置
         dec:{
           height:'2.4rem',
@@ -271,11 +310,18 @@ import axios from '~/plugins/axios'
         },
         carConfHide:false,
         brightNum:2, //亮点配置默认展示2大类
+        simTitle:['品牌','类型','价位','地区'],
+        simCarData:{}, //传值
+        simCarInfo:[], //保存数据
+        simCarInfoSplice:[], //展示的数据
+        simCarIndex:0,
+        simCarNum:4, //分类默认展示4条
+        loadding:false,
       }
     },
     async asyncData ( res ) {
-      // let carId = res.params.id;
-      let carId = '166431138';
+      let carId = res.params.id;
+      // let carId = '166431138';
       let params = {  // 车辆信息传值
           position:res.query.position,
           id:carId,
@@ -297,7 +343,7 @@ import axios from '~/plugins/axios'
     },
     components:{
       Header,
-      Swiper
+      List,
     },
     computed:{
       ...mapState(['isLogin','userInfo']),
@@ -325,6 +371,12 @@ import axios from '~/plugins/axios'
     mounted(){
       // 绘制图表
       this.getEcharts();
+      // 请求分类数据
+      this.simCarData ={
+        title:this.carInfo.car.serial,
+        brandStr:'brand'
+      };
+      this.getSimCar();
     },
     methods:{
       ...mapActions(['_getUserInfo']),
@@ -452,11 +504,65 @@ import axios from '~/plugins/axios'
           this.dec.text = '查看更多';
         }
       },
-      hintShowStart(){
-        console.log('1')
+      async getSimCar(){
+        let obj = null;
+        let values = [];
+        let { data } = await getsimcar(this.simCarData);
+        let carList = data.carsbrand ||   //同品牌
+                          data.carsserial ||  //同类型
+                          data.carsmoney ||   //同金额
+                          data.carsareacode;   //同地区
+        if(carList){
+          for(let i of carList){
+            obj = {
+              id:i.id,
+              title:i.title,
+              price: i.money,
+              areaName:i.areaName,
+              brand:i.shortTitle,
+              image:i.firstSmallPic,
+              journey:i.journey,
+              standard:i.standard,
+              time:this.$forTime('YYYY-MM-DD',i.createTime),
+            };
+            values.push(obj);
+          }
+          this.simCarInfo = values;
+          this.simCarListDataPush();
+        }
       },
-      hintShowEnd(){
-        console.log('2')
+      simCarListDataPush(){
+        let bit = this.simCarNum;
+        this.simCarInfoSplice = this.simCarInfo.slice(bit-4,bit);
+      },
+      simCarFun(index){
+        if(index === 0){
+          this.simCarData = {
+            title:this.carInfo.car.serial,
+            brandStr:'brand'
+          };
+        }else if(index === 1){
+          this.simCarData = {
+            carKind:this.carInfo.car.carKind || this.carInfo.car.type,
+            CarKindStr:'kind'
+          };
+        }else if(index === 2){
+          this.simCarData = {
+            money:this.carInfo.car.price,
+            priceStr:'money'
+          };
+        }else{
+          this.simCarData = {
+            areacode:this.carInfo.car.areaCode,
+            carCode:'areacode'
+          };
+        }
+        this.simCarIndex = index;
+        // 切换分类重置数据
+        [
+          this.simCarNum,
+        ] = [ 4] ;
+        this.getSimCar();
       }
     }
   }
@@ -586,6 +692,7 @@ import axios from '~/plugins/axios'
   }
   .carBox{
     position: relative;
+    padding-bottom:2.4rem;
     .topBg{
       @include wh(100%,3rem);
       background: -webkit-linear-gradient(top ,#fff,#f1eef6);
@@ -685,6 +792,7 @@ import axios from '~/plugins/axios'
     .car_bright{
       @extend .boxShow;
       padding: 0 .6rem;
+      &.cur{padding:0;}
       .list{
         border-bottom:1px solid #e1e1e1;
         padding-bottom:.4rem;
@@ -720,6 +828,14 @@ import axios from '~/plugins/axios'
         color:#f60;
         font-size: .45rem;
         @include flexCenter;
+      }
+      .pzBtn{
+        @include flexCenter;
+        @include wh(100%,1.4rem);
+        background:rgba(69,129,239,1);
+        font-size:.51rem;
+        color:#fff;
+        position:relative;
       }
     }
     .car_4s{
@@ -848,20 +964,20 @@ import axios from '~/plugins/axios'
             .mid{
               span{
                 display:inline-block;
-                height:.55rem;
-                line-height: .55rem;
+                height:.6rem;
+                line-height: .6rem;
                 text-align: center;
                 border-radius:.1rem;
                 padding:0 .15rem;
                 font-size:.25rem;
                 color:#fff;
-                /*&:nth-child(1){*/
+                /*&.rzcs{*/
                   /*background:linear-gradient(107deg,rgba(255,174,0,1),rgba(253,105,15,1))*/
                 /*}*/
-                &:nth-child(1){
+                &.gsrz{
                   background:linear-gradient(90deg,rgba(255,184,71,1),rgba(255,153,71,1));
                 }
-                &:nth-child(2){
+                &.xyz{
                   background:linear-gradient(90deg,rgba(137,245,178,1),rgba(51,198,155,1));
                   margin-left:.2rem;
                 }
@@ -938,9 +1054,134 @@ import axios from '~/plugins/axios'
     }
     .car_order{
       background: $fff;
+      padding-bottom:.48rem;
       h2{
-        @include wh(100%,1.5rem);
+        @include wh(100%,1.64rem);
+        font-size:.51rem;
+        font-weight: bold;
+        padding-left:.5rem;
+        @include flexCenter;
+        justify-content: flex-start;
       }
+      .content{
+        @include flexCenter;
+        margin:0 .5rem;
+        .left{
+          flex: 4;
+          ul{
+            box-sizing: border-box;
+            li{
+              display: inline-block;
+              @include wh(31.33%,1rem);
+              text-align: center;
+              line-height: 1rem;
+              border:1px solid #d3d3d3;
+              background:#f8f8f8;
+              border-radius: .1rem;
+              overflow:hidden;
+              text-overflow:ellipsis;
+              white-space:nowrap;
+              margin:.1rem 0;
+              &:nth-child(3n-1){
+                margin:.1rem 3%;
+              }
+            }
+          }
+        }
+        .right{
+          flex: 1;
+          @include flexCenter;
+          height:100%;
+          span{
+            color:$f60;
+            font-size: .75rem;
+          }
+        }
+      }
+      .bot{
+        margin:.48rem .5rem 0;
+        @include flexCenter;
+        @include wh(auto,1.35rem);
+        background:$f60;
+        border-radius: .08rem;
+        color:#fff;
+        span{
+          font-size:.51rem;
+        }
+        .iconfont{
+          font-size:.55rem;
+          margin-right:.2rem;
+        }
+      }
+    }
+    .car_sim{
+      .title{
+        @include wh(80%,1.8rem);
+        @include flexCenter;
+        padding-left:.5rem;
+        div{
+          flex:1;
+          @include flexCenter;
+          height:100%;
+          &.cur{
+            span{
+              font-size:.65rem;
+              border-bottom:.02rem solid $f60;
+              font-weight: bolder;
+            }
+          }
+        }
+      }
+      .oddList{
+        @extend .boxShow;
+      }
+    }
+    .car_load{
+      .btn{
+        @include flexCenter;
+        margin:0 .5rem;
+        @include wh(auto,1.6rem);
+        background:$f60;
+        @include borRadius(.2rem);
+        color:#fff;
+        font-size:.5rem;
+      }
+    }
+  }
+  .footer{
+    @include flexCenter;
+    position:fixed;
+    bottom:0;
+    left:0;
+    right:0;
+    @include wh(100%,1.6rem);
+    background:#fff;
+    box-shadow: 0 -2px 3px #f4f4f4;
+    & > div{
+      @include wh(100%,100%);
+      @include flexCenter;
+      color:#fff;
+      font-size: .48rem;
+    }
+    .left{
+      flex:1;
+      background:#fff;
+      color:#444;
+      font-size:.4rem;
+      flex-direction: column;
+      span{
+        font-size: .8rem;
+      }
+    }
+    .center{
+      flex:2;
+      background:#fe9c47;
+      span{margin-right:.2rem;}
+    }
+    .right{
+      flex:2;
+      background:$f60;
+      span{margin-right:.2rem;}
     }
   }
 </style>

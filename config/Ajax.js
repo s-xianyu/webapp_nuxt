@@ -16,6 +16,10 @@ export  const carDetail = params => get(`${api}/mobile/carDetail.json`,params);
  *价格趋势图表
  */
 export const getcardata = params => get(`${api}/mobile/getcardata.json`,params);
+/**
+ * 品牌、类型、价格、地区分类接口
+ */
+export const getsimcar = params => get(`${api}/mobile/getsimcar.json`,params);
 
 export  const carContrast = params => get(`${api}/mobile/carContrast.json?carids`,params);
 
