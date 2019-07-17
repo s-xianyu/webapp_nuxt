@@ -384,11 +384,18 @@
       this._getCity();
     },
     mounted(){
-      // 赋值到页面
-      this.filtrateFun();
-      // 获取车辆数
-      this.getFindCarNum();
+    
 
+    },
+    watch:{
+      filtrateStatus(){
+        if(this.filtrateStatus){
+          // 赋值到页面
+          this.filtrateFun();
+          // 获取车辆数
+          this.getFindCarNum();
+        }
+      }
     },
     methods: {
       ...mapActions(['_getCity','_getFindCarVal']),

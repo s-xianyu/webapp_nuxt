@@ -10,12 +10,24 @@ export const gainLike = (params) => get(`${api}/mobile/guessYouLike.json`,params
 /**
  * 详情页车辆信息
  */
-export  const carDetail = params => get(`${api}/mobile/carDetail.json`,params);
+export  const carDetail = ({position,id,flag}) => {
+  let params ={
+    id:id,
+    position:position
+  };
+  return get(`${api}/mobile/carDetail.json`,params);
+};
 
 /**
  *价格趋势图表
  */
-export const getcardata = params => get(`${api}/mobile/getcardata.json`,params);
+export const getcardata = ({position,id,flag}) =>{
+  let params = {
+    id:id,
+    flag:flag
+  };
+  return get(`${api}/mobile/getcardata.json`,params);
+};
 /**
  * 品牌、类型、价格、地区分类接口
  */

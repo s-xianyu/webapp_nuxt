@@ -101,11 +101,11 @@
   import { historyKeyAndHotKey,getprovinces,getAreaByCityCode,getAreaLevel3} from '~/config/Ajax'
   import {mapState,mapMutations,mapActions} from 'vuex'
   export default {
-    head(){
-      return{
-        title:'地区选择'
-      }
-    },
+    // head(){
+    //   return{
+    //     title:'地区选择'
+    //   }
+    // },
     data() {
       return {
         msg: 'city',
@@ -147,10 +147,17 @@
     //   let { data } = await historyKeyAndHotKey(params);
     //   return {locationCity:data};
     // },
+    watch:{
+      cityStatus(){
+        if(this.cityStatus){
+          this.getCityList();
+          this._getHistoryCity();
+          this.getLocation();
+        }
+      }
+    },
     mounted(){
-      this.getCityList();
-      this._getHistoryCity();
-      this.getLocation();
+    
     },
     methods:{
       ...mapActions(['_getHistoryCity']),

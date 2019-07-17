@@ -14,12 +14,13 @@
                 <span class="allSelect" @click="allSelectToggle">我要{{allSelectText}}</span>
               </div>
             </div>
-            <div class="brand-list" v-for="item in brandList">
+            <div class="brand-list" v-for="(item,index) in brandList" :key="index">
               <p :id="item.key">{{item.key}}</p>
               <div
                 class="brand-lis"
                 :class="brand === li.title ? 'cur' : ''"
-                v-for="li in item.value">
+                v-for="(li,index) in item.value" 
+                :key="index">
                 <div class="leftBtn" @click="brandFun(li)">
                   <img v-lazy="li.mobileLogo" src="" alt="">
                   <span>{{li.title}}</span>
@@ -55,7 +56,7 @@
                    v-for="(item,key) in stair2List">
                 <p class="title">{{key}}</p>
                 <ul>
-                  <li v-for="chi in item">
+                  <li v-for="(chi,index) in item" :key="index">
                     <span @click.stop="brandCommitVuex(chi)" class="name">{{chi.title}}</span>
                     <span class="rightBtnTo" v-show="selectShowTo">
                       <b class="animated fadeInRight"></b>
@@ -90,13 +91,16 @@
                 <span
                   @click="modelFun(item,index)"
                   :class="stair3Index === index ? 'cur' : ''"
-                  v-for="(item,index) in stair3List.titles">{{item}}</span>
+                  v-for="(item,index) in stair3List.titles" 
+                  :key="index">{{item}}</span>
               </div>
               <div class="right" :style="{height:stair3Height}">
-                <div class="right-li" v-for="(item,index) in stair3List.maps">
+                <div class="right-li" v-for="(item,index) in stair3List.maps" :key="index">
                   <p>{{item.key}}</p>
                   <ul>
-                    <li v-for="chi in item.value" @click="brandCommitVuexTo(chi)">{{chi.subject}}</li>
+                    <li v-for="(chi,index) in item.value"
+                    :key="index"
+                     @click="brandCommitVuexTo(chi)">{{chi.subject}}</li>
                   </ul>
                 </div>
               </div>
@@ -106,7 +110,9 @@
       </div>
       <!--menu-->
       <div class="brand-menu">
-        <a @click="Scrolls(item.key)" v-for="item in brandList">{{item.key}}</a>
+        <a @click="Scrolls(item.key)" 
+        v-for="(item,index) in brandList" 
+        :key="index">{{item.key}}</a>
       </div>
 
     </div>
@@ -123,11 +129,11 @@
   } from '~/config/Ajax'
   import {mapMutations,mapState} from 'vuex'
   export default {
-    head(){
-      return{
-        title:'品牌选择'
-      }
-    },
+    // head(){
+    //   return{
+    //     title:'品牌选择'
+    //   }
+    // },
     data() {
       return {
         msg: 'brand',
@@ -182,7 +188,14 @@
       this.stair3Height = height-titleHeight-brand3TitleHeight+'px';
     },
     mounted(){
-      this.getBrandList();
+    
+    },
+    watch:{
+      brandStatus(){
+        if(this.brandStatus){
+          this.getBrandList();
+        }
+      }
     },
     computed:{
       ...mapState(['brandStatus']),

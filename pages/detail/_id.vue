@@ -3,7 +3,7 @@
     <div class="animated fadeInRight">
       <Header :heads="header"/>
       <div class="swiper">
-        <mt-swipe :auto="4000" :showIndicators="false" @change="handleChange">
+        <mt-swipe :auto="3000" :showIndicators="false" @change="handleChange">
           <mt-swipe-item v-for="(item,index) in carInfo.car.bigPicList" :key="index">
             <img :src="item" :alt="item.name">
           </mt-swipe-item>
@@ -139,7 +139,9 @@
               <span @click="decFun">{{carInfo.car.describle}}</span>
             </div>
             <div
-              v-if="carInfo.car.describle && carInfo.car.describle !== '未知'"
+              v-if="carInfo.car.describle &&
+                carInfo.car.describle !== '未知' ||
+                carInfo.car.describle !== '暂无填写车辆具体描述'"
               class="decBtn"
               @click="decFun">
               {{dec.text}}
@@ -150,12 +152,12 @@
         </div>
         <div class="car_bright" v-if="!carInfo.detailConfDes">
           <div class="list"
-               v-if="index < brightNum"
                v-for="(item,index) in brightFilter(carInfo.spotshows)"
-               :key="index">
+               :key="index"
+               v-if="index < brightNum">
             <h2>{{item.title}}</h2>
             <div class="content">
-              <p v-for="li in item.key">{{li}}</p>
+              <p v-for="(li,index) in item.key" :key="index">{{li}}</p>
             </div>
           </div>
           <div v-if="brightNum === 2">
@@ -263,9 +265,10 @@
         </div>
         <div class="car_sim">
           <div class="title">
-            <div v-for="(item,index) in simTitle"
-                 @click="simCarFun(index)"
-                  :class="index === simCarIndex ? 'cur' : ''">
+            <div v-for="(item,index) in simTitle" 
+                :key="index" 
+                @click="simCarFun(index)" 
+                :class="index === simCarIndex ? 'cur' : ''">
               <span>同{{item}}</span>
             </div>
           </div>
@@ -324,17 +327,13 @@ import axios from '~/plugins/axios'
       // let carId = '166431138';
       let params = {  // 车辆信息传值
           position:res.query.position,
-          id:carId,
-          // id:'168221264',
-      },
-        params2 = {  // 行情趋势传值
           flag: 'hqqs',
           id:carId,
-          // id:'168221264',
-        };
+        // id:'168221264',
+      };
       let [carDetailInfo,getcardataInfo] = await Promise.all([
         carDetail(params),
-        getcardata(params2)
+        getcardata(params)
       ]);
       return {
         carInfo:carDetailInfo.data,
