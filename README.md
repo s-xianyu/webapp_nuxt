@@ -1,4 +1,4 @@
-# nuxt开发的wenapp项目
+# nuxt开发的WEB项目
 
 > 这是一个基于nuxt、vuex、vue2、mint-ui、开发的个人项目。
 
