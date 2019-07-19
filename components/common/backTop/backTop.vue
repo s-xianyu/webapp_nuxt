@@ -16,7 +16,7 @@
     mounted(){
     },
     methods:{
-      stickScrollTop:function(){
+      stickScrollTop(){
         const currentY = document.documentElement.scrollTop || document.body.scrollTop;
         this.$scrollTop(currentY, 0)
       }

@@ -30,7 +30,7 @@ import {mapActions,mapState} from 'vuex'
 export default {
   head () {
     return{
-      title:'咸鱼-中国第一品牌',
+      title:'中国第一品牌',
     }
   },
   data () {
