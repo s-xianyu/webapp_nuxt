@@ -13,24 +13,12 @@
         four:null,
       }
     },
+    mounted(){
+    },
     methods:{
       stickScrollTop:function(){
-        this.four=setInterval(this.FourscrollBy,10);
-      },
-      FourscrollBy:function () {
-        if(document.documentElement && document.documentElement.scrollTop) { //IE
-          if (document.documentElement.scrollTop <= 0) {
-            clearInterval(this.four);
-          } else {
-            document.documentElement.scrollBy(0, -30);
-          }
-        } else { //Chrome不支持documentElement.scrollTop
-          if (document.body.scrollTop <= 0) {
-            clearInterval(this.four);
-          } else {
-            document.documentElement.scrollBy(0, -30);
-          }
-        }
+        const currentY = document.documentElement.scrollTop || document.body.scrollTop;
+        this.$scrollTop(currentY, 0)
       }
     }
   }
@@ -48,6 +36,7 @@
     right:1rem;
     box-shadow: 0 0 1rem #bbb;
     cursor: pointer;
+    z-index: 1000;
     i{
       display: flex;
       height:100%;
