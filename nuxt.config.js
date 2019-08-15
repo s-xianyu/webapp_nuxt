@@ -49,7 +49,8 @@ export default {
   ** Global CSS
   */
   css: [
-    'mint-ui/lib/style.css'
+    'mint-ui/lib/style.css',
+    'vant/lib/index.css'
   ],
 
   /*
@@ -61,6 +62,7 @@ export default {
     { src: '@/plugins/mint-ui', ssr: true},
     { src: '@/plugins/router', ssr: true},
     { src: '@/config/util/filters', ssr: true},
+    { src: '@/plugins/vant-ui', ssr: true},
   ],
 
   /*
